@@ -101,14 +101,38 @@ Referências (15/09/2026): [neobrutalism.dev](https://www.neobrutalism.dev/docs)
 | Branco gesso | `#FBFBF9` | Fundo |
 | Ardósia | `#4E5166` | Texto corrido |
 | Ardósia escura | `#1B1D26` | Títulos, texto sobre o céu, **tinta da borda/sombra neobrutalista** |
-| Céu | `#5299D3` | **Primária**: ações |
-| Névoa azul | `#C9DDF0` | Secundária |
+| Céu | `#5299D3` | Etiqueta categórica (`--tag-sky`) — **deixou de ser a primária** nesta branch, ver "Redesign sidebar.io" abaixo |
+| Névoa azul | `#C9DDF0` | Só `--accent` do tema escuro agora — **deixou de ser a secundária** nesta branch |
 | Marinho | `#1E3550` | Etiquetas e foco do teclado |
 | Coral | `#CB5A2A` | **Marca**: logo, símbolos, blocos de destaque |
 | Mostarda | `#E8A93A` | Só categorizar cartões/etiquetas — nunca botão de ação |
-| Tomate | `#C8322A` | Erro e ações destrutivas |
+| Tomate | `#C8322A` | Sem uso em nenhum token nesta branch — **deixou de ser o `--destructive`**, ver abaixo |
 
-Proporção: **60%** branco gesso · **30%** ardósia/marinho/névoa · **10%** céu/coral/mostarda/tomate.
+Proporção original: **60%** branco gesso · **30%** ardósia/marinho/névoa · **10%** céu/coral/mostarda/tomate. Nesta branch (`sidebar-io-redesign`), duas cores novas entram na fatia de 10% — ver "Redesign sidebar.io" logo abaixo.
+
+### Redesign sidebar.io (17/09/2026, branch `sidebar-io-redesign`)
+
+Pedido do usuário: "faca o redesing de todos os componentes com a cor do site sidebario.io". Cores extraídas do CSS compilado do site (filtradas as cores default do Bootstrap 4, que o site usa por baixo — só os hex específicos DO site entraram):
+
+| Cor crua do site | Hex | Onde o sidebar.io usa |
+|---|---|---|
+| Laranja | `#F36C3D` | Links, botões, logo — a cor de ação principal do site |
+| Laranja claro | `#F5906E` | Hover/variante clara do laranja |
+| Céu (sidebar.io) | `#60C0F0` | Acento/secundária |
+| Cinza-azulado | `#79878E` | Texto secundário, datas |
+| Névoa (sidebar.io) | `#E3E8EB` | Bordas/fundos sutis |
+
+Decisão de mapeamento (perguntado ao usuário, três rodadas de pergunta antes de mexer em código — ver decisões de interface): laranja assume o papel de **primária**, céu (sidebar.io) assume o papel de **secundária** — inverte os papéis que o Adinkra tinha (onde céu/#5299D3 antigo era a primária). Troca aplicada **em todos os tokens, não como tema alternativo** — os 20 pacotes de componente não mudaram código, só o valor dos tokens em `@adinkra/tokens` (regra S1, seção 7: "Componentes usam tokens, nunca hex" — é exatamente esse desacoplamento que tornou a troca de um arquivo só).
+
+**Fora do escopo, de propósito:** `--brand`/`--feature` (coral, marca), `--tag-*` (etiquetas categóricas) e `--accent` (marinho) não mudaram — o pedido foi sobre a paleta de ação (primária/secundária/erro), não sobre a identidade de marca.
+
+**Valores crus do site não passam AA como texto/fundo de botão** (regra 1, "contraste calculado, não estimado" — verificado com script, não no olho):
+- Branco sobre `#F36C3D` (laranja cru): 2.99:1 — reprova. Texto escuro (`--heading`) sobre o mesmo laranja: 5.62:1 — aprova. Por isso `--primary-foreground` continua escuro, mesmo padrão de quando a primária era o céu.
+- Branco sobre `#EF1642` (vermelho de erro cru do site): 4.32:1 — reprova por pouco. Escurecido pra `#CB1338` (mesmo matiz, canal × 0.85): 5.69:1.
+- `#79878E` (cinza-azulado cru) sobre `--background`: 3.58:1 — insuficiente pra texto corrido (precisa 4.5). Escurecido pra `#616C72` (× 0.8): 5.20:1.
+- `#60C0F0` (céu do site) com `--secondary-foreground` marinho `#1E3550`: 6.13:1 — aprova direto, sem precisar escurecer.
+
+Sem dado do próprio site pro tema escuro (sidebar.io não tem dark mode) — `--link`/`--destructive` escuros foram recalculados a partir dos valores novos, mesma lógica que o arquivo já usava pro céu antigo (clarear pra ler bem no fundo escuro, texto continua escuro quando o fundo fica claro o bastante). `--secondary`/`--muted-foreground`/`--border` no escuro **não mudaram** — sem equivalente no site pra adaptar, mantidos os valores que já existiam.
 
 ### Tokens semânticos
 
@@ -121,21 +145,23 @@ Componentes usam sempre tokens, nunca hex direto.
 | `--card` | `#FFFFFF` | `#20222C` | — |
 | `--foreground` | `#4E5166` | `#F0EFF3` | 7.5 (AAA) |
 | `--heading` | `#1B1D26` | `#FFFFFF` | 16.2 |
-| `--muted-foreground` | `#65687A` | `#A6A9B8` | 5.3 |
-| `--border` | `#808393` | `#75788B` | 3.6 |
-| `--hairline` | `#E1E2E4` | `#30333F` | só decorativo |
+| `--muted-foreground` | `#616C72` (17/09, era `#65687A`) | `#A6A9B8` | 5.20 |
+| `--border` | `#4C595F` (17/09, era `#808393`) | `#75788B` | 6.99 |
+| `--hairline` | `#E3E8EB` (17/09, era `#E1E2E4`) | `#30333F` | só decorativo |
 | `--brand` | `#CB5A2A` | `#E0784A` | gráfico |
-| `--primary` | `#5299D3` | `#5299D3` | — |
-| `--primary-foreground` | `#1B1D26` | `#1B1D26` | 5.5 |
-| `--primary-hover` | `#6AA9DC` | `#6AA9DC` | 6.7 |
-| `--link` | `#2B6395` | `#7DB3E3` | 6.1 |
-| `--secondary` | `#C9DDF0` | `#2C3A52` | — |
-| `--secondary-foreground` | `#1E3550` | `#F0EFF3` | 9.0 |
+| `--primary` | `#F36C3D` (17/09, era `#5299D3`) | `#F36C3D` | — |
+| `--primary-foreground` | `#1B1D26` | `#1B1D26` | 5.62 |
+| `--primary-hover` | `#F5906E` (17/09, era `#6AA9DC`) | `#F5906E` | — |
+| `--link` | `#924125` (17/09, era `#2B6395`) | `#F5906E` (era `#7DB3E3`) | 6.74 |
+| `--secondary` | `#60C0F0` (17/09, era `#C9DDF0`) | `#2C3A52` | — |
+| `--secondary-foreground` | `#1E3550` | `#F0EFF3` | 6.13 |
 | `--accent` | `#1E3550` | `#C9DDF0` | — |
 | `--accent-foreground` | `#FFFFFF` | `#1B1D26` | 12.5 |
-| `--destructive` | `#C8322A` | `#EE6B5A` | 5.1 |
-| `--destructive-foreground` | `#FFFFFF` | `#1B1D26` | 5.3 |
+| `--destructive` | `#CB1338` (17/09, era `#C8322A`) | `#F35071` (era `#EE6B5A`) | 5.69 |
+| `--destructive-foreground` | `#FFFFFF` | `#1B1D26` | 5.69 |
 | `--ring` | `#1E3550` | `#F0EFF3` | 12.1 |
+
+Linhas marcadas "17/09" vêm do redesign sidebar.io (ver subseção acima) — valores de dia mudaram, noite só mudou onde havia dado do site pra adaptar (`--primary`/`--primary-hover`/`--link`/`--destructive`).
 
 Bloco de destaque, iguais nos dois temas: `--feature: #CB5A2A`, `--feature-foreground: #FFFFFF`, `--chip-bg: #FFFFFF`, `--chip-foreground: #1B1D26`.
 
@@ -155,27 +181,29 @@ Tokens de etiqueta (categorizar cartões), fixos nos dois temas:
 | Token | Valor | Uso |
 |---|---|---|
 | `--ink` | = `--heading` | Cor única de borda/sombra em qualquer tema |
-| `--border-width` | `3px` | Toda superfície interativa (menos `ghost`) |
-| `--shadow-brutal` | `4px 4px 0 0 var(--ink)` | Sombra dura, deslocada, sem desfoque |
+| `--border-width` | `2px` (suavizado 17/09, era `3px`) | Toda superfície interativa (menos `ghost`) |
+| `--shadow-brutal` | `2px 2px 0 0 var(--ink)` (suavizado 17/09, era `4px 4px 0 0`) | Sombra dura, deslocada, sem desfoque |
 | `--radius-control` | `4px` (reduzido de 8px→6px→4px em duas rodadas de "mais quadrado", 15/09) | Botão, input, badge, etiqueta |
 | `--radius-card` | `6px` (reduzido de 16px→10px→6px, mesmas rodadas) | Cartão, painel, bloco de destaque |
 
+**Neobrutalismo suavizado** (17/09/2026, branch `sidebar-io-redesign`, mesma sessão do redesign de cor — perguntado ao usuário se a revisão de mecânica ia até virar liso feito o sidebar.io ou só perder peso; escolhida a opção do meio): borda e sombra reduzidas pela metade, gesto de subir/afundar reduzido na mesma proporção. Mudança em dois lugares: os tokens (`--border-width`/`--shadow-brutal`/`--shadow-brutal-hover`, acima) cobrem sozinhos os 19 arquivos que só referenciam `var(--border-width)`/`shadow-brutal` via classe Tailwind — mas a distância do `translate()` de hover/pressionado está hardcoded como classe Tailwind (`hover:-translate-x-0.5` etc.) em cada componente, não vem de token; precisou editar à parte `button.tsx`, `card.tsx`, `toggle.tsx` e `pagination.tsx` (os únicos com esse gesto).
+
 **Três estados de interação, sempre os três:**
 1. **Padrão:** borda `--border-width` em `--ink`, sombra `--shadow-brutal`.
-2. **Hover:** sobe (`translate(-2px,-2px)`), sombra cresce pra `6px 6px 0 0`.
-3. **Pressionado (`:active`):** desce a distância da sombra (`translate(4px,4px)`), sombra some — a marca registrada do neobrutalismo.
+2. **Hover:** sobe (`translate(-1px,-1px)`, era `-2px,-2px`), sombra cresce pra `3px 3px 0 0` (era `6px 6px 0 0`).
+3. **Pressionado (`:active`):** desce a distância da sombra (`translate(2px,2px)`, era `4px,4px`), sombra some — a marca registrada do neobrutalismo.
 
 Todas as transições respeitam `prefers-reduced-motion`. **Exceção de propósito:** a variante `ghost` fica sem borda/sombra — válvula de escape pra ação terciária.
 
 ### Regras de uso da cor
 
 1. Todo texto passa no WCAG 2.2 AA (contrastes calculados, não estimados).
-2. Céu com texto escuro, nunca branco (branco reprova a 3.1:1).
+2. Primária (laranja sidebar.io, `#F36C3D`, 17/09) com texto escuro, nunca branco (branco reprova a 2.99:1).
 3. Coral só com texto grande (branco a 4.2:1, só vale ≥24px).
-4. Ardósia `#4E5166` nunca sobre o céu (2.5:1).
-5. Coral, tomate e céu nunca ficam um sobre o outro (luminosidades próximas, vibram).
-6. Um só botão em céu por tela — secundária é névoa azul, resto usa contorno/ghost.
-7. Tomate só pra erro/destrutivo, nunca sozinho — sempre com ícone+borda+texto explicando.
+4. Ardósia `#4E5166` nunca sobre a primária (contraste insuficiente, mesmo raciocínio de quando a primária era o céu).
+5. Coral, `--destructive` e a primária nunca ficam um sobre o outro (luminosidades próximas, vibram).
+6. Um só botão na cor primária por tela — secundária é o céu do sidebar.io (`#60C0F0`, 17/09), resto usa contorno/ghost.
+7. `--destructive` (vermelho sidebar.io, `#CB1338`, 17/09) só pra erro/destrutivo, nunca sozinho — sempre com ícone+borda+texto explicando.
 8. Mostarda nunca em botão de ação (15/09) — só categorizar.
 9. Toda superfície interativa leva borda+sombra+os três estados (15/09), exceto `ghost` — tudo-ou-nada.
 
@@ -273,6 +301,8 @@ Ritmo de teste: **três pessoas por mês** (Krug). Cada componente novo nasce co
 | Componentes preenchidos sem borda própria | Neobrutalismo pede borda+sombra+pressionado em toda superfície (exceto `ghost`) |
 | Neobrutalismo "clássico" cru | Adaptado: mecânica mantida, cantos arredondados, paleta própria |
 | Cor verde/vermelho por sinal em valores numéricos (`--positive`) | Testada no `@adinkra/data-table` (16/09) e revertida a pedido — token removido do sistema |
+| Céu `#5299D3` como `--primary` / névoa azul `#C9DDF0` como `--secondary` / tomate `#C8322A` como `--destructive` (17/09, branch `sidebar-io-redesign`) | Redesign pedido pelo usuário com a paleta extraída de sidebar.io — laranja `#F36C3D` primária, céu do site `#60C0F0` secundária, vermelho do site `#CB1338` destrutiva. Ver "Redesign sidebar.io", seção 4 |
+| Borda `3px`/sombra `4px 4px 0 0` (neobrutalismo "cheio", 17/09) | Suavizado pra `2px`/`2px 2px 0 0` na mesma branch — mecânica mantida, menos peso visual |
 
 ## 10. Referências
 
@@ -292,6 +322,8 @@ Ritmo de teste: **três pessoas por mês** (Krug). Cada componente novo nasce co
 ## 11. Estado atual e próximos passos
 
 **Neobrutalismo (seções 4 e 5) implementado** (15/09) em `@adinkra/tokens` e em todos os pacotes de componente — build/typecheck/SSG confirmados, style tile republicado. `bun install && bun run build && bun run typecheck` passam 100% (verificado de novo em 17/09: 20 pacotes + docs, full turbo cache).
+
+**Redesign sidebar.io (17/09) vive só na branch/worktree `sidebar-io-redesign`** (`.claude/worktrees/sidebar-io-redesign`), não está na `master` — `bun run build && bun run typecheck` passam 100% nessa branch (20/20 pacotes). Ver "Redesign sidebar.io", seção 4, pros detalhes de cor/contraste e a mecânica suavizada.
 
 ### Pacotes de componente (ordem de criação)
 

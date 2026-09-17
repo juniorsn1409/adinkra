@@ -19,8 +19,8 @@ import { cn } from "@adinkra/core";
  */
 const brutal =
   "border-[length:var(--border-width)] border-ink shadow-brutal " +
-  "hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal-hover " +
-  "active:translate-x-1 active:translate-y-1 active:shadow-none";
+  "hover:-translate-x-px hover:-translate-y-px hover:shadow-brutal-hover " +
+  "active:translate-x-0.5 active:translate-y-0.5 active:shadow-none";
 
 const buttonVariants = cva(
   [

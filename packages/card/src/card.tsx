@@ -24,8 +24,8 @@ const cardVariants = cva(
       interactive: {
         true: [
           "cursor-pointer",
-          "hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal-hover",
-          "active:translate-x-1 active:translate-y-1 active:shadow-none",
+          "hover:-translate-x-px hover:-translate-y-px hover:shadow-brutal-hover",
+          "active:translate-x-0.5 active:translate-y-0.5 active:shadow-none",
           "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
         ],
         false: "",

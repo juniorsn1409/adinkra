@@ -31,25 +31,44 @@
   --card: #FFFFFF;
   --foreground: #4E5166;
   --heading: #1B1D26;
-  --muted-foreground: #65687A;
-  --border: #808393;
-  --hairline: #E1E2E4;
+  /*
+   * --muted-foreground/--border/--hairline: escurecidos (os dois primeiros)
+   * ou aproximados a partir dos neutros crus do sidebar.io (#79878E,
+   * #4C595F, #E3E8EB) pelo mesmo motivo/fórmula do bloco "Ações" abaixo —
+   * o cru #79878E dá só 3.58:1 sobre --background, insuficiente pra texto.
+   */
+  --muted-foreground: #616C72;
+  --border: #4C595F;
+  --hairline: #E3E8EB;
 
   /* Marca: logo, símbolos, blocos de destaque */
   --brand: #CB5A2A;
 
-  /* Ações */
-  --primary: #5299D3;
+  /*
+   * Ações — paleta extraída de sidebar.io (17/09/2026, pedido do usuário:
+   * "redesign de todos os componentes com a cor do site sidebario", laranja
+   * assume o papel de primária, céu vira secundária — inverte os papéis que
+   * o Adinkra tinha). Valores crus do CSS do site: #F36C3D (laranja) e
+   * #60C0F0 (céu). --link/--muted-foreground/--border/--destructive abaixo
+   * são versões ESCURECIDAS desses crus — testadas, não estimadas (rule 1,
+   * seção 4 do DECISOES.md): o laranja/vermelho crus do site não passam AA
+   * como texto (branco em #F36C3D dá 2.99:1; branco em #EF1642, o vermelho
+   * de erro do site, dá 4.32:1 — os dois abaixo de 4.5). Fórmula: canal RGB
+   * × fator, sem trocar de matiz. --brand/--feature/etiquetas (--tag-…)/
+   * --accent (marinho) ficam de fora dessa troca — não fazem parte do
+   * que foi pedido.
+   */
+  --primary: #F36C3D;
   --primary-foreground: #1B1D26;
-  --primary-hover: #6AA9DC;
-  --link: #2B6395;
-  --secondary: #C9DDF0;
+  --primary-hover: #F5906E;
+  --link: #924125;
+  --secondary: #60C0F0;
   --secondary-foreground: #1E3550;
   --accent: #1E3550;
   --accent-foreground: #FFFFFF;
 
   /* Estado */
-  --destructive: #C8322A;
+  --destructive: #CB1338;
   --destructive-foreground: #FFFFFF;
   --ring: #1E3550;
 
@@ -90,27 +109,15 @@
    * valores para manter sincronizado.
    */
   --ink: var(--heading);
-  --border-width: 3px;
-
   /*
-   * Paleta experimental, extraída de sidebar.io (17/09/2026, pedido do
-   * usuário — "extrair as cores desse site e colocar no token"). NÃO
-   * substitui nada da paleta oficial (seção 4, DECISOES.md) e não entra no
-   * @theme abaixo — sem isso, nenhuma classe Tailwind (`bg-sidebario-*`
-   * etc.) é gerada, então nada no site usa isso por padrão. Fica
-   * disponível só via `var(--sidebario-*)` pra quem quiser experimentar.
-   * Prefixo "sidebario" (não "sidebar") de propósito — evita colidir com
-   * @adinkra/sidebar, o componente de navegação do próprio sistema.
-   * Valores fixos (não têm par dia/noite) — extraídos direto do CSS
-   * compilado do site, não adaptados ao tema do Adinkra.
+   * Neobrutalismo suavizado (17/09/2026, pedido do usuário, na mesma sessão
+   * do redesign de cor acima) — 3px→2px. Sombra em --shadow-brutal/
+   * --shadow-brutal-hover (bloco @theme inline abaixo) e o deslocamento de
+   * hover/pressionado em cada componente (ex. button.tsx) reduzidos junto,
+   * na mesma proporção: mantém a linguagem (borda+sombra+afundar), só com
+   * menos peso visual.
    */
-  --sidebario-accent: #F36C3D;
-  --sidebario-accent-tint: #F5906E;
-  --sidebario-hover: #60C0F0;
-  --sidebario-muted: #79878E;
-  --sidebario-muted-dark: #4C595F;
-  --sidebario-border: #E3E8EB;
-  --sidebario-danger: #EF1642;
+  --border-width: 2px;
 }
 
 /* Tema explícito — qualquer elemento, não só :root (ver o comentário no topo do arquivo). */
@@ -122,22 +129,22 @@
   --card: #FFFFFF;
   --foreground: #4E5166;
   --heading: #1B1D26;
-  --muted-foreground: #65687A;
-  --border: #808393;
-  --hairline: #E1E2E4;
+  --muted-foreground: #616C72;
+  --border: #4C595F;
+  --hairline: #E3E8EB;
 
   --brand: #CB5A2A;
 
-  --primary: #5299D3;
+  --primary: #F36C3D;
   --primary-foreground: #1B1D26;
-  --primary-hover: #6AA9DC;
-  --link: #2B6395;
-  --secondary: #C9DDF0;
+  --primary-hover: #F5906E;
+  --link: #924125;
+  --secondary: #60C0F0;
   --secondary-foreground: #1E3550;
   --accent: #1E3550;
   --accent-foreground: #FFFFFF;
 
-  --destructive: #C8322A;
+  --destructive: #CB1338;
   --destructive-foreground: #FFFFFF;
   --ring: #1E3550;
 
@@ -158,16 +165,25 @@
 
   --brand: #E0784A;
 
-  --primary: #5299D3;
+  /*
+   * --primary/--primary-hover não invertem por tema (mesmo padrão de antes
+   * do redesign, quando --primary era o céu #5299D3 — também fixo nos dois
+   * temas). --link/--destructive recalculados pro fundo escuro: #F5906E
+   * (mesmo tom do --primary-hover claro) dá 7.28:1 sobre #1B1D26; o
+   * vermelho clareado dá 4.96:1 sobre o fundo e 4.67:1 sobre --card, com
+   * texto --destructive-foreground escuro (mesma lógica de --primary-
+   * foreground: bg claro o bastante pra pedir texto escuro, não claro).
+   */
+  --primary: #F36C3D;
   --primary-foreground: #1B1D26;
-  --primary-hover: #6AA9DC;
-  --link: #7DB3E3;
+  --primary-hover: #F5906E;
+  --link: #F5906E;
   --secondary: #2C3A52;
   --secondary-foreground: #F0EFF3;
   --accent: #C9DDF0;
   --accent-foreground: #1B1D26;
 
-  --destructive: #EE6B5A;
+  --destructive: #F35071;
   --destructive-foreground: #1B1D26;
   --ring: #F0EFF3;
 
@@ -222,9 +238,10 @@
   --color-tag-navy-foreground: var(--tag-navy-foreground);
 
   /* Sombra dura, sem desfoque, deslocada — a marca do neobrutalismo. A cor
-     vem de --ink, então já reage ao tema sozinha. */
-  --shadow-brutal: 4px 4px 0 0 var(--ink);
-  --shadow-brutal-hover: 6px 6px 0 0 var(--ink);
+     vem de --ink, então já reage ao tema sozinha. Suavizada (17/09/2026,
+     era 4px/6px) junto com --border-width, mesma proporção. */
+  --shadow-brutal: 2px 2px 0 0 var(--ink);
+  --shadow-brutal-hover: 3px 3px 0 0 var(--ink);
 }
 
 /* Tipografia e raio: valores fixos, iguais nos dois temas — não precisam da

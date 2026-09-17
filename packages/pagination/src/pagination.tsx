@@ -76,7 +76,7 @@ const paginationLinkVariants = cva(
     "border-[length:var(--border-width)] border-transparent",
     "font-display text-sm font-medium text-foreground",
     "transition-[transform,box-shadow,background-color,border-color] duration-150",
-    "hover:border-ink hover:bg-surface hover:shadow-brutal hover:-translate-x-0.5 hover:-translate-y-0.5",
+    "hover:border-ink hover:bg-surface hover:shadow-brutal hover:-translate-x-px hover:-translate-y-px",
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
     "aria-disabled:pointer-events-none aria-disabled:opacity-45",
   ],

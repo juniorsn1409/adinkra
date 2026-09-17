@@ -28,7 +28,7 @@ const toggleVariants = cva(
     "disabled:pointer-events-none disabled:opacity-45 disabled:shadow-none disabled:translate-x-0 disabled:translate-y-0",
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
     "data-[state=on]:border-ink data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground",
-    "data-[state=on]:translate-x-1 data-[state=on]:translate-y-1 data-[state=on]:shadow-none",
+    "data-[state=on]:translate-x-0.5 data-[state=on]:translate-y-0.5 data-[state=on]:shadow-none",
   ],
   {
     variants: {
@@ -36,12 +36,12 @@ const toggleVariants = cva(
         default: [
           "border-transparent bg-transparent text-foreground",
           "data-[state=off]:hover:border-ink data-[state=off]:hover:bg-surface data-[state=off]:hover:shadow-brutal",
-          "data-[state=off]:hover:-translate-x-0.5 data-[state=off]:hover:-translate-y-0.5",
+          "data-[state=off]:hover:-translate-x-px data-[state=off]:hover:-translate-y-px",
         ],
         outline: [
           "border-ink bg-transparent text-foreground shadow-brutal",
           "data-[state=off]:hover:bg-surface data-[state=off]:hover:shadow-brutal-hover",
-          "data-[state=off]:hover:-translate-x-0.5 data-[state=off]:hover:-translate-y-0.5",
+          "data-[state=off]:hover:-translate-x-px data-[state=off]:hover:-translate-y-px",
         ],
       },
       size: {
