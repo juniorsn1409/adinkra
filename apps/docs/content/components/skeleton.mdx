@@ -1,0 +1,59 @@
+---
+title: Skeleton
+description: Um placeholder de carregamento — o formato do que está vindo, antes de o conteúdo chegar.
+---
+
+<Preview>
+  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+    <Skeleton className="h-10 w-10 rounded-full" />
+    <div style={{ display: "grid", gap: "0.5rem" }}>
+      <Skeleton className="h-4 w-40" />
+      <Skeleton className="h-3 w-24" />
+    </div>
+  </div>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/skeleton
+```
+
+```tsx
+import { Skeleton } from "@adinkra/skeleton";
+
+<Skeleton className="h-4 w-40" />;
+```
+
+Não tem variante: forma e tamanho vêm inteiros de `className`, igual à referência do shadcn/ui — um retângulo vira `h-4 w-40`, um avatar vira `h-10 w-10 rounded-full`.
+
+## Um cartão de exemplo
+
+<Preview>
+  <div style={{ display: "grid", gap: "0.75rem", width: "16rem" }}>
+    <Skeleton className="h-32 w-full" />
+    <Skeleton className="h-4 w-3/4" />
+    <Skeleton className="h-4 w-1/2" />
+  </div>
+</Preview>
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "...props",
+      type: "HTMLAttributes<HTMLDivElement>",
+      description: "Qualquer atributo nativo de <div> — normalmente só className.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- Leva `aria-hidden="true"`: é só um efeito visual, não deve ser anunciado por leitor de tela.
+- Quem usa o Skeleton é responsável por marcar a região que está carregando com `aria-busy="true"` (ou um `role="status"` com texto tipo "Carregando"), para quem usa leitor de tela saber que algo está em andamento.
+
+## Tokens usados
+
+`--hairline` (preenchimento) — reaproveitado por já ser um neutro decorativo na paleta (regra 3, `DECISOES.md`); a paleta não tem um tom dedicado só para isso.

@@ -1,0 +1,111 @@
+---
+title: Toggle
+description: Um botão de dois estados que persiste — ligado ou desligado, não uma ação disparada.
+---
+
+<Preview>
+  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
+    <Toggle aria-label="Negrito" defaultPressed>
+      <strong>N</strong>
+    </Toggle>
+    <Toggle aria-label="Itálico">
+      <em>I</em>
+    </Toggle>
+    <Toggle aria-label="Sublinhado" variant="outline">
+      <span style={{ textDecoration: "underline" }}>S</span>
+    </Toggle>
+  </div>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/toggle
+```
+
+```tsx
+import { Toggle } from "@adinkra/toggle";
+
+<Toggle aria-label="Negrito" defaultPressed>
+  <strong>N</strong>
+</Toggle>;
+```
+
+Controlado, quando o estado precisa viver fora do componente:
+
+```tsx
+const [pressed, setPressed] = useState(false);
+
+<Toggle pressed={pressed} onPressedChange={setPressed}>
+  Favoritar
+</Toggle>;
+```
+
+## O gesto persistido
+
+O mesmo "sobe no hover, afunda ao pressionar" do `Button` (seção 4, `DECISOES.md`) — só que aqui o "afundado" não passa quando solta o clique, ele fica enquanto `pressed` for `true`. Desligado, o variant `default` descansa sem borda (como o `ghost` do Button) até o hover convidar ao clique.
+
+<StatesGrid>
+  <State label="desligado">
+    <Toggle>Notificar</Toggle>
+  </State>
+  <State label="ligado">
+    <Toggle pressed>Notificar</Toggle>
+  </State>
+  <State label="outline, desligado">
+    <Toggle variant="outline">Notificar</Toggle>
+  </State>
+  <State label="desativado">
+    <Toggle disabled>Notificar</Toggle>
+  </State>
+</StatesGrid>
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "pressed",
+      type: "boolean",
+      description: "Estado controlado. Presente, quem usa decide o próximo valor via onPressedChange.",
+    },
+    {
+      prop: "defaultPressed",
+      type: "boolean",
+      default: "false",
+      description: "Estado inicial, quando não controlado.",
+    },
+    {
+      prop: "onPressedChange",
+      type: "(pressed: boolean) => void",
+      description: "Chamado a cada clique com o próximo valor.",
+    },
+    {
+      prop: "variant",
+      type: '"default" | "outline"',
+      default: '"default"',
+      description: "Descansa sem borda (default) ou sempre com borda + sombra (outline).",
+    },
+    {
+      prop: "size",
+      type: '"sm" | "md" | "lg"',
+      default: '"md"',
+      description: "Mesma escala de altura do Button.",
+    },
+    {
+      prop: "...props",
+      type: "ButtonHTMLAttributes<HTMLButtonElement>",
+      description: "Qualquer atributo nativo de <button>, incluindo aria-label para toggles só com ícone.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- É um `<button aria-pressed>` de verdade — funciona com Enter e Espaço, entra na ordem de tabulação sozinho, e leitores de tela anunciam "pressionado"/"não pressionado" a cada clique.
+- Sem texto visível (só um ícone/letra), passe `aria-label` — como no exemplo de Negrito/Itálico/Sublinhado acima.
+- `disabled` tira o toggle da ordem de tabulação, igual ao Button.
+
+## Tokens usados
+
+`--secondary` · `--secondary-foreground` · `--surface` · `--ink` · `--border-width` · `--foreground` · `--ring`

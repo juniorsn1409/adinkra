@@ -1,0 +1,161 @@
+---
+title: Table
+description: Uma tabela de dados com borda e sombra dura no contêiner, e linhas que alternam de cor para facilitar a leitura.
+---
+
+<Preview>
+  <Table>
+    <TableCaption>Ensaios publicados nas últimas duas semanas.</TableCaption>
+    <TableHeader>
+      <TableRow>
+        <TableHead>Título</TableHead>
+        <TableHead>Categoria</TableHead>
+        <TableHead>Status</TableHead>
+        <TableHead style={{ textAlign: "right" }}>Leitores</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      <TableRow>
+        <TableCell>Sankofa e o design de sistemas</TableCell>
+        <TableCell>Ensaio</TableCell>
+        <TableCell>Publicado</TableCell>
+        <TableCell style={{ textAlign: "right" }}>1.284</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Notas sobre a paleta</TableCell>
+        <TableCell>Nota</TableCell>
+        <TableCell>Publicado</TableCell>
+        <TableCell style={{ textAlign: "right" }}>642</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Por que cantos arredondados</TableCell>
+        <TableCell>Ensaio</TableCell>
+        <TableCell>Rascunho</TableCell>
+        <TableCell style={{ textAlign: "right" }}>—</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Arquitetura de pacotes isolados</TableCell>
+        <TableCell>Nota</TableCell>
+        <TableCell>Publicado</TableCell>
+        <TableCell style={{ textAlign: "right" }}>903</TableCell>
+      </TableRow>
+    </TableBody>
+    <TableFooter>
+      <TableRow>
+        <TableCell colSpan={3}>Total de leitores</TableCell>
+        <TableCell style={{ textAlign: "right" }}>2.829</TableCell>
+      </TableRow>
+    </TableFooter>
+  </Table>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/table
+```
+
+```tsx
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@adinkra/table";
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Título</TableHead>
+      <TableHead>Status</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Sankofa e o design de sistemas</TableCell>
+      <TableCell>Publicado</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>;
+```
+
+## Composição
+
+Sete peças, no espírito do [table do neobrutalism.dev](https://www.neobrutalism.dev/docs/table) (mesma composição do shadcn) — use só as que precisar:
+
+- **`Table`** — o contêiner: borda + sombra dura + cantos arredondados (a mecânica padrão de todo componente único do sistema), com rolagem horizontal própria em telas estreitas.
+- **`TableHeader`** / **`TableBody`** / **`TableFooter`**
+- **`TableRow`** — uma linha; dentro de `TableBody`, listra sozinha (ver abaixo).
+- **`TableHead`** / **`TableCell`**
+- **`TableCaption`** — legenda abaixo da tabela.
+
+## Linhas alternadas
+
+`TableRow` listra as linhas pares dentro de `TableBody` automaticamente, com CSS puro (`even:`, o seletor nativo do Tailwind para `nth-child`) — nenhum índice é contado nem passado por prop. O cabeçalho e o rodapé não listram, só o corpo.
+
+<StatesGrid>
+  <State label="ímpar (bg-card)">
+    <div style={{ width: "100%", padding: "0.75rem", fontSize: "0.8125rem" }}>Fundo padrão da tabela</div>
+  </State>
+  <State label="par (bg-surface)">
+    <div style={{ width: "100%", padding: "0.75rem", fontSize: "0.8125rem", background: "var(--surface)" }}>
+      Um tom mais fosco
+    </div>
+  </State>
+</StatesGrid>
+
+## Linhas de grade entre colunas
+
+`columnLines` liga uma borda vertical entre colunas — **ligado por padrão** (a tabela do preview no topo desta página já está com elas). Como as listras, é CSS puro: uma borda à direita em todo `TableHead`/`TableCell` via seletor no próprio `<table>`, removida na última coluna — nenhuma célula precisa saber em qual coluna está. A espessura e a cor são as mesmas do contêiner/header/footer (`--border-width`/`--ink`), não a linha fina entre as linhas (`--hairline`) — é a borda estrutural da tabela, só que na vertical. Desligue com `columnLines={false}` para uma tabela só com as linhas horizontais.
+
+<StatesGrid>
+  <State label="columnLines (padrão)">
+    <div
+      style={{
+        width: "100%",
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        fontSize: "0.8125rem",
+      }}
+    >
+      <span style={{ padding: "0.5rem", borderRight: "var(--border-width) solid var(--ink)" }}>Título</span>
+      <span style={{ padding: "0.5rem" }}>Status</span>
+    </div>
+  </State>
+  <State label="columnLines={false}">
+    <div
+      style={{
+        width: "100%",
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        fontSize: "0.8125rem",
+      }}
+    >
+      <span style={{ padding: "0.5rem" }}>Título</span>
+      <span style={{ padding: "0.5rem" }}>Status</span>
+    </div>
+  </State>
+</StatesGrid>
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "Table columnLines",
+      type: "boolean",
+      default: "true",
+      description: "Liga a borda vertical entre colunas.",
+    },
+    {
+      prop: "...props",
+      type: "HTMLAttributes<HTMLTableElement | HTMLTableSectionElement | HTMLTableRowElement | HTMLTableCellElement>",
+      description: "Qualquer atributo nativo — em todas as peças (Table, TableRow, TableCell...), incluindo className.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- `Table` renderiza um `<table>` de verdade — leitores de tela anunciam linhas e colunas nativamente, sem precisar de `role` nenhum.
+- Use `<TableHead scope="col">` (prop nativa do `<th>`) quando o cabeçalho não for óbvio pelo contexto, para leitores de tela associarem célula e coluna corretamente.
+- `TableCaption` é a legenda semântica da tabela — prefira ela a um parágrafo solto acima, porque leitores de tela a anunciam como parte da própria tabela.
+
+## Tokens usados
+
+`--card` · `--surface` · `--ink` · `--border-width` · `--radius-card` · `--hairline` · `--secondary` · `--foreground` · `--heading` · `--muted-foreground`

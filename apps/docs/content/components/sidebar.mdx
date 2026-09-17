@@ -1,0 +1,318 @@
+---
+title: Sidebar
+description: A navegação lateral colapsável do site — a mesma que você está usando agora.
+---
+
+<Preview>
+  <div style={{ width: "100%", maxWidth: "26rem", height: "22rem", overflow: "hidden", margin: "0 auto", display: "flex" }}>
+    <SidebarShowcase />
+  </div>
+</Preview>
+
+Mock — dados fabricados ("Painel", "Equipe"), não a navegação de verdade deste site (isso evita misturar a demonstração com a própria página que a exibe). Mesmo espírito dos exemplos mais abaixo. Arraste o mouse até a borda direita (ou clique nela) pra recolher — é a `SidebarRail`, descrita mais abaixo.
+
+## Como usar
+
+```bash
+bun add @adinkra/sidebar
+```
+
+```tsx
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@adinkra/sidebar";
+
+export default function Layout({ children }) {
+  return (
+    <SidebarProvider>
+      <Sidebar>
+        <SidebarHeader>{/* logo */}</SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Primitivos</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton isActive render={<Link href="/button" />}>
+                    Button
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarTrigger />
+        </SidebarFooter>
+      </Sidebar>
+      <main>{children}</main>
+    </SidebarProvider>
+  );
+}
+```
+
+`render` troca o `<button>` nativo por outro elemento (um `<Link>`, por exemplo) — no mesmo espírito do prop `render` do Base UI, mas sem depender dele: `@adinkra/sidebar` não tem essa dependência.
+
+## Item ativo
+
+Revisado contra o [sidebar do neobrutalism.dev](https://www.neobrutalism.dev/docs/sidebar): o item ativo leva um **contorno** (`outline`) de tinta ao redor, não um preenchimento em céu. Duas razões:
+
+- `outline` não entra na caixa do elemento — ao contrário de uma borda, ele não desloca nada quando aparece. O item não "pula" ao virar ativo.
+- O céu fica reservado à ação principal da tela (regra 6, `DECISOES.md`) — usá-lo aqui também competiria com ele.
+
+<StatesGrid>
+  <State label="normal">
+    <span
+      style={{
+        display: "inline-flex",
+        padding: "6px 10px",
+        borderRadius: "var(--radius-control)",
+        fontFamily: "var(--font-display)",
+        fontSize: "0.875rem",
+        color: "var(--foreground)",
+      }}
+    >
+      Item
+    </span>
+  </State>
+  <State label="ativo (outline)">
+    <span
+      style={{
+        display: "inline-flex",
+        padding: "6px 10px",
+        borderRadius: "var(--radius-control)",
+        background: "var(--card)",
+        outline: "var(--border-width) solid var(--ink)",
+        fontFamily: "var(--font-display)",
+        fontSize: "0.875rem",
+        fontWeight: 500,
+        color: "var(--heading)",
+      }}
+    >
+      Item
+    </span>
+  </State>
+</StatesGrid>
+
+## Modos de recolhimento
+
+`collapsible="icon"` (o padrão) recolhe a sidebar para uma faixa só de ícones — o rótulo some, o ícone e o contorno do item ativo continuam. `collapsible="offcanvas"` recolhe até largura zero (nada fica visível) — pensado pra navegações sem ícone por item, onde uma faixa de ícones vazios não faria sentido; é o modo usado pela sidebar real deste site (veja o preview no topo desta página, com `<SidebarRail/>` na borda). `collapsible="none"` deixa sempre expandida, sem nenhuma das duas opções.
+
+## Submenu
+
+Um grupo que abre e fecha, com uma lista por baixo — clique em "Componentes" pra ver.
+
+<Preview>
+  <div style={{ width: "100%", maxWidth: "18rem" }}>
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <SidebarMenuCollapsible defaultOpen>
+          <SidebarMenuCollapsibleTrigger>Componentes</SidebarMenuCollapsibleTrigger>
+          <SidebarMenuSub>
+            <SidebarMenuSubItem>
+              <SidebarMenuSubButton isActive>Button</SidebarMenuSubButton>
+            </SidebarMenuSubItem>
+            <SidebarMenuSubItem>
+              <SidebarMenuSubButton>Input</SidebarMenuSubButton>
+            </SidebarMenuSubItem>
+            <SidebarMenuSubItem>
+              <SidebarMenuSubButton>Badge</SidebarMenuSubButton>
+            </SidebarMenuSubItem>
+          </SidebarMenuSub>
+        </SidebarMenuCollapsible>
+      </SidebarMenuItem>
+    </SidebarMenu>
+  </div>
+</Preview>
+
+```tsx
+<SidebarMenuItem>
+  <SidebarMenuCollapsible defaultOpen>
+    <SidebarMenuCollapsibleTrigger icon={<FolderIcon />}>Componentes</SidebarMenuCollapsibleTrigger>
+    <SidebarMenuSub>
+      <SidebarMenuSubItem>
+        <SidebarMenuSubButton isActive render={<Link href="/button" />}>
+          Button
+        </SidebarMenuSubButton>
+      </SidebarMenuSubItem>
+    </SidebarMenuSub>
+  </SidebarMenuCollapsible>
+</SidebarMenuItem>
+```
+
+É `<details>`/`<summary>` nativo por baixo, não `useState` — abrir, fechar, teclado (Enter e Espaço) e o estado pra leitor de tela já vêm de graça do navegador. A seta gira com `group-open/collapsible:rotate-90`.
+
+**Uma limitação conhecida:** com a sidebar recolhida a ícones, o grupo ainda abre e fecha ao clicar, mas o submenu continua escondido — ele não vira um menu flutuante. Deixar assim foi uma escolha de escopo, não um esquecimento.
+
+## Badge e ação de item
+
+`SidebarMenuBadge` mostra um contador (ou etiqueta curta) à direita de um item; `SidebarMenuAction` é um botão secundário no mesmo lugar — os dois ficam sobrepostos ao `SidebarMenuButton`, então o item precisa estar dentro de um `SidebarMenuItem` (ele já é `relative` por baixo, de propósito, pra isso funcionar).
+
+<Preview>
+  <div style={{ width: "100%", maxWidth: "18rem" }}>
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <SidebarMenuButton>Notificações</SidebarMenuButton>
+        <SidebarMenuBadge>12</SidebarMenuBadge>
+      </SidebarMenuItem>
+      <SidebarMenuItem>
+        <SidebarMenuButton>Projetos</SidebarMenuButton>
+        <SidebarMenuAction showOnHover aria-label="Mais opções">
+          ···
+        </SidebarMenuAction>
+      </SidebarMenuItem>
+    </SidebarMenu>
+  </div>
+</Preview>
+
+```tsx
+<SidebarMenuItem>
+  <SidebarMenuButton>Notificações</SidebarMenuButton>
+  <SidebarMenuBadge>12</SidebarMenuBadge>
+</SidebarMenuItem>
+
+<SidebarMenuItem>
+  <SidebarMenuButton>Projetos</SidebarMenuButton>
+  <SidebarMenuAction showOnHover aria-label="Mais opções">
+    <EllipsisIcon />
+  </SidebarMenuAction>
+</SidebarMenuItem>
+```
+
+`showOnHover` deixa a ação invisível (`opacity-0`) até o item ganhar hover ou foco — útil quando ela é secundária e não deveria competir visualmente com o botão principal o tempo todo. Sem esse prop, a ação fica sempre visível.
+
+## Rail
+
+`SidebarRail` é uma faixa fina e sempre visível na borda da sidebar (desktop) que também alterna expandido/recolhido ao clicar — um alvo maior que o `SidebarTrigger`, útil quando ele não está por perto (ex.: rodapé longe do header). Renderiza como filho direto de `<Sidebar>`:
+
+```tsx
+<Sidebar>
+  <SidebarHeader>{/* ... */}</SidebarHeader>
+  <SidebarContent>{/* ... */}</SidebarContent>
+  <SidebarRail />
+</Sidebar>
+```
+
+Em mobile ele não renderiza nada — lá quem fecha a gaveta é o fundo escurecido atrás dela ou a tecla `Esc`.
+
+## Mobile
+
+Abaixo de 768px (o mesmo breakpoint de `useIsMobile`, exportado pelo pacote), `Sidebar` vira uma gaveta: fixa na tela, começa **fechada**, desliza com `translate-x` e ganha um fundo escurecido atrás (`bg-ink/40`) que fecha ao ser tocado. `Ctrl`/`Cmd` + `B`, `SidebarTrigger` e `Esc` (só quando a gaveta já está aberta) continuam funcionando do mesmo jeito.
+
+Isso é automático — o mesmo `<Sidebar>` que renderiza a faixa fixa no desktop passa a renderizar a gaveta sozinho, sem nenhuma prop nova. Só é preciso garantir que exista algum `SidebarTrigger` visível em telas pequenas pra reabrir a gaveta depois de fechada (neste próprio site, ele mora numa barra que só aparece abaixo de `md`, já que a navegação em si — `collapsible="none"` — não tem gatilho embutido).
+
+## Exemplos de uso
+
+Todos os jeitos de montar uma `@adinkra/sidebar` num lugar só — básico, submenu, badge/ação e os três modos de recolhimento lado a lado. Cada bloco é o próprio `SidebarProvider`, então dá pra copiar um isolado sem arrastar os outros: veja `apps/docs/components/sidebar.tsx` (`SidebarUsageExamples`) pelo código-fonte de cada mock.
+
+<SidebarUsageExamples />
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "SidebarProvider defaultOpen",
+      type: "boolean",
+      default: "true",
+      description: "Estado inicial quando não controlado.",
+    },
+    {
+      prop: "SidebarProvider open / onOpenChange",
+      type: "boolean / (open) => void",
+      description: "Modo controlado, se você quiser guardar o estado em outro lugar.",
+    },
+    {
+      prop: "Sidebar collapsible",
+      type: '"icon" | "offcanvas" | "none"',
+      default: '"icon"',
+      description: "Recolhe para ícones, recolhe até largura zero, ou fica sempre expandida.",
+    },
+    {
+      prop: "SidebarMenuButton isActive",
+      type: "boolean",
+      description: "Ativa o contorno de tinta e aria-current=\"page\".",
+    },
+    {
+      prop: "SidebarMenuButton icon",
+      type: "ReactNode",
+      description: "Fica visível mesmo com a sidebar recolhida a ícones.",
+    },
+    {
+      prop: "SidebarMenuButton tooltip",
+      type: "string",
+      description: "Vira title do elemento só quando a sidebar está recolhida.",
+    },
+    {
+      prop: "SidebarMenuButton render",
+      type: "ReactElement",
+      description: "Troca o <button> nativo por outro elemento (ex.: <Link>).",
+    },
+    {
+      prop: "useSidebar()",
+      type: "{ state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar }",
+      description: "Hook para ler ou controlar o estado de qualquer lugar dentro do Provider. toggleSidebar() já decide sozinho se alterna open (desktop) ou openMobile (gaveta), conforme isMobile.",
+    },
+    {
+      prop: "SidebarMenuCollapsible defaultOpen",
+      type: "boolean",
+      default: "false",
+      description: "Se o grupo começa aberto.",
+    },
+    {
+      prop: "SidebarMenuCollapsibleTrigger icon",
+      type: "ReactNode",
+      description: "Mesmo papel do icon do SidebarMenuButton.",
+    },
+    {
+      prop: "SidebarMenuSubButton isActive / render",
+      type: "boolean / ReactElement",
+      description: "Mesmo papel do SidebarMenuButton, numa escala menor.",
+    },
+    {
+      prop: "SidebarMenuBadge",
+      type: "ComponentPropsWithoutRef<\"span\">",
+      description: "Contador/etiqueta sobreposto ao item; some quando a sidebar recolhe a ícones.",
+    },
+    {
+      prop: "SidebarMenuAction showOnHover",
+      type: "boolean",
+      default: "false",
+      description: "Some até o item (SidebarMenuItem) ganhar hover ou foco.",
+    },
+    {
+      prop: "SidebarRail",
+      type: "ComponentPropsWithoutRef<\"button\">",
+      description: "Faixa fina clicável na borda; alterna a sidebar. Não renderiza nada em mobile.",
+    },
+    {
+      prop: "useIsMobile()",
+      type: "() => boolean",
+      description: "true abaixo de 768px. Exportado pelo pacote para uso fora do Provider, se precisar.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- O item ativo leva `aria-current="page"` — não só o contorno visual.
+- `Ctrl`/`Cmd` + `B` alterna a sidebar pelo teclado, em qualquer lugar da página.
+- Recolhida a ícones, cada item ganha `title` (o `tooltip`) — quem passa o mouse ainda sabe o que cada ícone significa.
+- O estado fica salvo em cookie (`adinkra_sidebar_state`), lido de novo só depois de montar no cliente — de propósito, pra manter a página estática (SSG); ver `DECISOES.md`, seção 3.
+- Em mobile, o fundo escurecido atrás da gaveta é um `<button aria-label="Fechar menu">` (não uma `<div>` com `onClick`) — dá pra fechar com o teclado também, não só tocando fora.
+- `Esc` fecha a gaveta mobile quando ela está aberta.
+
+## Tokens usados
+
+`--surface` · `--card` · `--hairline` · `--ink` · `--border-width` · `--radius-control` · `--heading` · `--muted-foreground`

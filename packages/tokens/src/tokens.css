@@ -1,0 +1,267 @@
+/**
+ * @adinkra/tokens
+ *
+ * Tokens semânticos do design system Adinkra. O porquê de cada valor, os
+ * contrastes WCAG medidos e a mecânica neobrutalista (borda, sombra, raio)
+ * estão em DECISOES.md, seções 4 e 5 — este arquivo é só a implementação.
+ *
+ * Três blocos:
+ *   1. :root — valores de dia, e é sempre o padrão: de propósito não existe
+ *      um @media (prefers-color-scheme: dark) aqui. Quem chega pela
+ *      primeira vez vê o site claro, mesmo com o sistema operacional no
+ *      escuro — só uma escolha explícita (o clique em @adinkra/theme-toggle,
+ *      guardado no localStorage) muda isso. Ver DECISOES.md.
+ *   2. [data-theme="light"|"dark"] — um tema explícito, e funciona em
+ *      QUALQUER elemento, não só no <html> raiz: uma variável declarada
+ *      localmente sempre vence a herdada de um ancestral, então isso deixa
+ *      uma caixa de preview forçar dia ou noite sozinha, mesmo com a página
+ *      no tema oposto (é o que o toggle do <Preview> usa). Os valores de
+ *      dia aparecem duas vezes (aqui e no :root) de propósito — sem
+ *      repetir, uma caixa aninhada não teria como voltar a ficar clara
+ *      dentro de uma página no escuro.
+ *   3. @theme (inline) — registra tudo isso como tema do Tailwind v4
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Base */
+  --background: #FBFBF9;
+  --surface: #F2F2EF;
+  --card: #FFFFFF;
+  --foreground: #4E5166;
+  --heading: #1B1D26;
+  --muted-foreground: #65687A;
+  --border: #808393;
+  --hairline: #E1E2E4;
+
+  /* Marca: logo, símbolos, blocos de destaque */
+  --brand: #CB5A2A;
+
+  /* Ações */
+  --primary: #5299D3;
+  --primary-foreground: #1B1D26;
+  --primary-hover: #6AA9DC;
+  --link: #2B6395;
+  --secondary: #C9DDF0;
+  --secondary-foreground: #1E3550;
+  --accent: #1E3550;
+  --accent-foreground: #FFFFFF;
+
+  /* Estado */
+  --destructive: #C8322A;
+  --destructive-foreground: #FFFFFF;
+  --ring: #1E3550;
+
+  /* Bloco de destaque em coral: fixo nos dois temas (regra 3, DECISOES.md) */
+  --feature: #CB5A2A;
+  --feature-foreground: #FFFFFF;
+  --chip-bg: #FFFFFF;
+  --chip-foreground: #1B1D26;
+
+  /*
+   * Etiquetas de categoria (regra 8, DECISOES.md), fixas nos dois temas —
+   * cartões coloridos por assunto, não por ação. --tag-coral NÃO é
+   * --brand: nem texto branco nem escuro passam no AA em cima do coral de
+   * marca em tamanho pequeno (comum em etiqueta), então esta é uma versão
+   * mais escura, só para isso.
+   */
+  --tag-coral: #B54D22;
+  --tag-coral-foreground: #FFFFFF;
+  --tag-sky: #5299D3;
+  --tag-sky-foreground: #1B1D26;
+  --tag-mustard: #E8A93A;
+  --tag-mustard-foreground: #1B1D26;
+  /*
+   * 4ª etiqueta (16/09/2026, pedido do @adinkra/progress — "tem que ser
+   * cores diferentes": 3 cores repetiam cedo demais numa barra de 5+
+   * segmentos). Mesmo hex do --accent claro (marinho), mas fixo nos dois
+   * temas igual as outras --tag-* — não o token --accent em si, que
+   * inverte por tema (viraria névoa azul claro no escuro, perdendo a
+   * identidade "esta é sempre a cor 4" que uma série categórica precisa).
+   */
+  --tag-navy: #1E3550;
+  --tag-navy-foreground: #FFFFFF;
+
+  /*
+   * Direção neobrutalista (seção 4, DECISOES.md): --ink é a cor única da
+   * borda e da sombra em qualquer tema — reaproveita --heading, que já
+   * inverte sozinho entre dia e noite, em vez de criar mais um par de
+   * valores para manter sincronizado.
+   */
+  --ink: var(--heading);
+  --border-width: 3px;
+
+  /*
+   * Paleta experimental, extraída de sidebar.io (17/09/2026, pedido do
+   * usuário — "extrair as cores desse site e colocar no token"). NÃO
+   * substitui nada da paleta oficial (seção 4, DECISOES.md) e não entra no
+   * @theme abaixo — sem isso, nenhuma classe Tailwind (`bg-sidebario-*`
+   * etc.) é gerada, então nada no site usa isso por padrão. Fica
+   * disponível só via `var(--sidebario-*)` pra quem quiser experimentar.
+   * Prefixo "sidebario" (não "sidebar") de propósito — evita colidir com
+   * @adinkra/sidebar, o componente de navegação do próprio sistema.
+   * Valores fixos (não têm par dia/noite) — extraídos direto do CSS
+   * compilado do site, não adaptados ao tema do Adinkra.
+   */
+  --sidebario-accent: #F36C3D;
+  --sidebario-accent-tint: #F5906E;
+  --sidebario-hover: #60C0F0;
+  --sidebario-muted: #79878E;
+  --sidebario-muted-dark: #4C595F;
+  --sidebario-border: #E3E8EB;
+  --sidebario-danger: #EF1642;
+}
+
+/* Tema explícito — qualquer elemento, não só :root (ver o comentário no topo do arquivo). */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --background: #FBFBF9;
+  --surface: #F2F2EF;
+  --card: #FFFFFF;
+  --foreground: #4E5166;
+  --heading: #1B1D26;
+  --muted-foreground: #65687A;
+  --border: #808393;
+  --hairline: #E1E2E4;
+
+  --brand: #CB5A2A;
+
+  --primary: #5299D3;
+  --primary-foreground: #1B1D26;
+  --primary-hover: #6AA9DC;
+  --link: #2B6395;
+  --secondary: #C9DDF0;
+  --secondary-foreground: #1E3550;
+  --accent: #1E3550;
+  --accent-foreground: #FFFFFF;
+
+  --destructive: #C8322A;
+  --destructive-foreground: #FFFFFF;
+  --ring: #1E3550;
+
+  --ink: var(--heading);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --background: #1B1D26;
+  --surface: #242733;
+  --card: #20222C;
+  --foreground: #F0EFF3;
+  --heading: #FFFFFF;
+  --muted-foreground: #A6A9B8;
+  --border: #75788B;
+  --hairline: #30333F;
+
+  --brand: #E0784A;
+
+  --primary: #5299D3;
+  --primary-foreground: #1B1D26;
+  --primary-hover: #6AA9DC;
+  --link: #7DB3E3;
+  --secondary: #2C3A52;
+  --secondary-foreground: #F0EFF3;
+  --accent: #C9DDF0;
+  --accent-foreground: #1B1D26;
+
+  --destructive: #EE6B5A;
+  --destructive-foreground: #1B1D26;
+  --ring: #F0EFF3;
+
+  --ink: var(--heading);
+}
+
+/*
+ * Tema do Tailwind v4. "inline" faz o Tailwind referenciar a variável (não
+ * copiar o valor) — então trocar de tema em runtime (dark mode, [data-theme])
+ * já atualiza as classes, sem rebuild. Nomes à esquerda (--color-*) são
+ * sempre diferentes dos tokens à direita (var(--*)): usar o mesmo nome nos
+ * dois lados vira uma referência circular que o navegador não resolve.
+ */
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-heading: var(--heading);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-hairline: var(--hairline);
+  --color-ink: var(--ink);
+
+  --color-brand: var(--brand);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-link: var(--link);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-ring: var(--ring);
+
+  --color-feature: var(--feature);
+  --color-feature-foreground: var(--feature-foreground);
+  --color-chip-bg: var(--chip-bg);
+  --color-chip-foreground: var(--chip-foreground);
+
+  --color-tag-coral: var(--tag-coral);
+  --color-tag-coral-foreground: var(--tag-coral-foreground);
+  --color-tag-sky: var(--tag-sky);
+  --color-tag-sky-foreground: var(--tag-sky-foreground);
+  --color-tag-mustard: var(--tag-mustard);
+  --color-tag-mustard-foreground: var(--tag-mustard-foreground);
+  --color-tag-navy: var(--tag-navy);
+  --color-tag-navy-foreground: var(--tag-navy-foreground);
+
+  /* Sombra dura, sem desfoque, deslocada — a marca do neobrutalismo. A cor
+     vem de --ink, então já reage ao tema sozinha. */
+  --shadow-brutal: 4px 4px 0 0 var(--ink);
+  --shadow-brutal-hover: 6px 6px 0 0 var(--ink);
+}
+
+/* Tipografia e raio: valores fixos, iguais nos dois temas — não precisam da
+   indireção acima, então entram direto como tema (não-inline). */
+@theme {
+  --font-display: "Jost", "Century Gothic", "Avenir Next", sans-serif;
+  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  /* Fonte de exibição (não pra texto corrido) que mapeia letras latinas pra
+     símbolos Adinkra — Adinkra Alphabet, de Charles Korankye (MIT,
+     github.com/adinkraalphabet/font). Só pro wordmark "Adinkra" do próprio
+     site (sidebar/home) — quem consome este token precisa declarar o
+     próprio `@font-face` (este pacote só nomeia a fonte, não carrega
+     arquivo nenhum — mesmo padrão de --font-display/sans/mono acima, que
+     dependem do site carregar Jost/Inter/IBM Plex Mono via Google Fonts).
+     Fallback pro Jost: sem o arquivo carregado, o wordmark ainda lê como
+     texto normal, só sem o efeito de símbolo. */
+  --font-adinkra: "Adinkra Alphabet", "Jost", sans-serif;
+
+  /* Dois níveis, não um raio único: controle (botão, input, badge) e
+     cartão (painel, bloco de destaque) — ver DECISOES.md, seção 4. */
+  --radius-control: 4px;
+  --radius-card: 6px;
+}
+
+/*
+ * O gesto de "subir no hover, afundar ao pressionar" (seção 4, DECISOES.md)
+ * é o coração da mecânica neobrutalista — mas quem pediu menos movimento ao
+ * sistema operacional não deveria ver nada se deslocando. Troca de estado
+ * continua instantânea, só sem a transição animada.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

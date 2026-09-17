@@ -1,0 +1,135 @@
+---
+title: Navigation Menu
+description: Menu de navegação com dropdowns flutuantes — para links agrupados por seção.
+---
+
+<Preview>
+  <NavigationMenu>
+    <NavigationMenuList>
+      <NavigationMenuItem>
+        <NavigationMenuTrigger>Componentes</NavigationMenuTrigger>
+        <NavigationMenuContent>
+          <ul className="grid w-[320px] gap-1 sm:w-[400px] sm:grid-cols-2">
+            <li>
+              <NavigationMenuLink href="/components/button">
+                <p className="font-display text-sm font-medium text-heading">Button</p>
+                <p className="text-xs text-muted-foreground">Ação principal, secundária ou destrutiva.</p>
+              </NavigationMenuLink>
+            </li>
+            <li>
+              <NavigationMenuLink href="/components/card">
+                <p className="font-display text-sm font-medium text-heading">Card</p>
+                <p className="text-xs text-muted-foreground">Superfície com borda, raio e sombra.</p>
+              </NavigationMenuLink>
+            </li>
+            <li>
+              <NavigationMenuLink href="/components/sidebar">
+                <p className="font-display text-sm font-medium text-heading">Sidebar</p>
+                <p className="text-xs text-muted-foreground">Navegação lateral colapsável.</p>
+              </NavigationMenuLink>
+            </li>
+            <li>
+              <NavigationMenuLink href="/components/table">
+                <p className="font-display text-sm font-medium text-heading">Table</p>
+                <p className="text-xs text-muted-foreground">Linhas alternadas, sem depender de CSS externo.</p>
+              </NavigationMenuLink>
+            </li>
+          </ul>
+        </NavigationMenuContent>
+      </NavigationMenuItem>
+      <NavigationMenuItem>
+        <NavigationMenuTrigger>Recursos</NavigationMenuTrigger>
+        <NavigationMenuContent>
+          <ul className="grid w-[220px] gap-1">
+            <li>
+              <NavigationMenuLink href="/symbols">
+                <p className="font-display text-sm font-medium text-heading">Símbolos</p>
+                <p className="text-xs text-muted-foreground">Os 101 símbolos Adinkra.</p>
+              </NavigationMenuLink>
+            </li>
+            <li>
+              <NavigationMenuLink href="/getting-started">
+                <p className="font-display text-sm font-medium text-heading">Getting started</p>
+                <p className="text-xs text-muted-foreground">Instalação e primeiros passos.</p>
+              </NavigationMenuLink>
+            </li>
+          </ul>
+        </NavigationMenuContent>
+      </NavigationMenuItem>
+    </NavigationMenuList>
+  </NavigationMenu>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/navigation-menu
+```
+
+```tsx
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@adinkra/navigation-menu";
+
+<NavigationMenu>
+  <NavigationMenuList>
+    <NavigationMenuItem>
+      <NavigationMenuTrigger>Componentes</NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <NavigationMenuLink href="/components/button">Button</NavigationMenuLink>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+  </NavigationMenuList>
+</NavigationMenu>;
+```
+
+## Composição
+
+Baseado no [Navigation Menu do neobrutalism.dev](https://www.neobrutalism.dev/docs/navigation-menu) (mesma base técnica — [Base UI](https://base-ui.com)) — primeira peça do design system a depender de uma lib de UI externa: o posicionamento flutuante entre painéis é complexo demais pra reconstruir do zero, diferente do `@adinkra/sidebar`.
+
+- **`NavigationMenu`** — a raiz; já inclui o `Viewport` (portal + painel flutuante), não precisa declarar à parte.
+- **`NavigationMenuList`** — a lista de itens de topo.
+- **`NavigationMenuItem`** — um item da lista; pode ser só um link (`NavigationMenuLink` direto) ou ter dropdown (`NavigationMenuTrigger` + `NavigationMenuContent`).
+- **`NavigationMenuTrigger`** — abre/fecha o dropdown do item; já vem com a seta que gira.
+- **`NavigationMenuContent`** — o conteúdo do dropdown (o que aparece dentro do painel flutuante).
+- **`NavigationMenuLink`** — um link, dentro ou fora de um dropdown; `navigationMenuTriggerStyle()` dá a ele a mesma aparência de um `NavigationMenuTrigger`, para item de topo sem dropdown.
+
+## Estados
+
+Vocabulário reaproveitado do resto do sistema, não inventado aqui: hover usa o mesmo `bg-card` do `SidebarMenuButton`; aberto/ativo usa `bg-secondary`/`text-secondary-foreground`, o mesmo "isto está ligado" do `Toggle` e do grupo aberto da `Sidebar` — o céu (`--primary`) fica reservado à ação principal (regra 6, DECISOES.md). Sem borda/sombra no trigger (é navegação, tratamento ghost) — só o painel flutuante leva borda + raio + sombra, como qualquer cartão único do sistema.
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "NavigationMenuContent side/align",
+      type: '"top" | "bottom" | "left" | "right" / "start" | "center" | "end"',
+      default: 'side="bottom", align="start"',
+      description: "Repassado pro NavigationMenu (raiz) via NavigationMenuViewport interno — onde o painel flutuante aparece em relação ao trigger.",
+    },
+    {
+      prop: "NavigationMenuLink href",
+      type: "string",
+      description: "Para onde o link leva. Qualquer outro atributo de <a> também passa direto.",
+    },
+    {
+      prop: "...props",
+      type: "ComponentProps<typeof BaseUI...>",
+      description: "Qualquer prop do primitivo Base UI correspondente passa direto — className, render, etc.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+Vem do [Base UI](https://base-ui.com/react/components/navigation-menu): navegação por teclado (setas entre itens, Enter/Espaço abre o dropdown, Esc fecha), foco preso dentro do painel aberto, e `aria`s corretos (`aria-expanded`, `aria-current`) geridos pelo primitivo — não reimplementados aqui.
+
+## Tokens usados
+
+`--ink` · `--surface` · `--foreground` · `--secondary`/`--secondary-foreground` · `--card` · `--ring` · `--shadow-brutal`

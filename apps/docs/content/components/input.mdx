@@ -1,0 +1,71 @@
+---
+title: Input
+description: Um campo de formulário com rótulo, ajuda e erro já resolvidos.
+---
+
+<Preview>
+  <div style={{ display: "grid", gap: "1rem", width: "20rem" }}>
+    <Input label="Nome" placeholder="Ana Souza" />
+    <Input label="E-mail" defaultValue="ana@estudio" error="Falta o final do e-mail, como ana@estudio.com.br" />
+  </div>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/input
+```
+
+```tsx
+import { Input } from "@adinkra/input";
+
+<Input label="E-mail" placeholder="voce@exemplo.com.br" />;
+```
+
+## Estados
+
+<StatesGrid>
+  <State label="padrão">
+    <Input label="Nome" placeholder="Ana Souza" />
+  </State>
+  <State label="com ajuda">
+    <Input label="E-mail" help="Enviamos uma edição por mês." />
+  </State>
+  <State label="com erro">
+    <Input label="E-mail" defaultValue="ana@estudio" error="Falta o final do e-mail, como ana@estudio.com.br" />
+  </State>
+  <State label="desativado">
+    <Input label="Nome" defaultValue="Ana Souza" disabled />
+  </State>
+</StatesGrid>
+
+O erro nunca depende só da cor: vem com um selo "!" e um texto que diz como resolver (decisão 6, `DECISOES.md`) — nunca "e-mail inválido".
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "label", type: "string", description: "Rótulo acima do campo, ligado por htmlFor/id." },
+    { prop: "help", type: "string", description: "Texto de ajuda abaixo do campo. Some quando há erro." },
+    {
+      prop: "error",
+      type: "string",
+      description: "Mensagem de erro: ativa aria-invalid e a borda dupla em tomate.",
+    },
+    {
+      prop: "...props",
+      type: "InputHTMLAttributes<HTMLInputElement>",
+      description: "Qualquer atributo nativo de <input>.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- `label` é sempre ligado ao campo por `htmlFor`/`id` — clicar no texto foca o campo.
+- Com `error`, o campo ganha `aria-invalid="true"` e `aria-describedby` apontando para o texto do erro, então leitores de tela o anunciam.
+- O `id` é gerado sozinho com `useId()` quando você não passa um — rótulo e campo nunca ficam sem ligação.
+
+## Tokens usados
+
+`--card` · `--border` · `--foreground` · `--muted-foreground` · `--ring` · `--destructive` · `--destructive-foreground` · `--heading`

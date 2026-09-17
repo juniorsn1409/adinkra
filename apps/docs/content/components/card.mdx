@@ -1,0 +1,101 @@
+---
+title: Card
+description: Um contêiner de conteúdo — cabeçalho, corpo e rodapé, com a borda e a sombra dura de todo cartão do sistema.
+---
+
+<Preview>
+  <div style={{ width: "100%", maxWidth: "20rem" }}>
+    <Card>
+      <CardHeader>
+        <CardTitle>Publicar ensaio</CardTitle>
+        <CardDescription>Revisão automática antes de ir ao ar.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p style={{ fontSize: "0.875rem" }}>Sankofa: voltar para buscar o que ficou para trás.</p>
+      </CardContent>
+      <CardFooter>
+        <Button size="sm">Publicar</Button>
+        <Button size="sm" variant="ghost">
+          Cancelar
+        </Button>
+      </CardFooter>
+    </Card>
+  </div>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/card
+```
+
+```tsx
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@adinkra/card";
+
+<Card>
+  <CardHeader>
+    <CardTitle>Publicar ensaio</CardTitle>
+    <CardDescription>Revisão automática antes de ir ao ar.</CardDescription>
+  </CardHeader>
+  <CardContent>Sankofa: voltar para buscar o que ficou para trás.</CardContent>
+  <CardFooter>
+    <Button size="sm">Publicar</Button>
+  </CardFooter>
+</Card>;
+```
+
+## Composição
+
+Seis peças, todas opcionais — use só as que precisar:
+
+- **`CardHeader`** — título e descrição. É uma grade de duas colunas por baixo, pra `CardAction` encaixar no canto sem precisar de `position: absolute`.
+- **`CardTitle`** / **`CardDescription`**
+- **`CardAction`** — um slot no canto superior direito do cabeçalho (um menu, um botão de fechar).
+- **`CardContent`** — o corpo.
+- **`CardFooter`** — ações, alinhadas em linha.
+
+## Cartão interativo
+
+`interactive` liga os mesmos três estados do Button (sobe no hover, afunda ao pressionar) — para um cartão que na prática é um link grande, não um contêiner passivo. Sem essa prop, o cartão não reage a clique nenhum.
+
+<StatesGrid>
+  <State label="padrão">
+    <Card style={{ width: "100%", padding: "0" }}>
+      <CardContent style={{ padding: "1rem", fontSize: "0.8125rem" }}>Não clicável</CardContent>
+    </Card>
+  </State>
+  <State label="interactive">
+    <Card interactive style={{ width: "100%", padding: "0" }}>
+      <CardContent style={{ padding: "1rem", fontSize: "0.8125rem" }}>Passe o mouse / clique</CardContent>
+    </Card>
+  </State>
+</StatesGrid>
+
+Quando `interactive`, o cartão vira um alvo de foco pelo teclado sozinho (`tabIndex={0}`) — se ele representa uma navegação de verdade, embrulhe o conteúdo com `render`-like num `<a>`/`<Link>` em vez de depender só do `tabIndex`, do mesmo jeito que `Button`/`SidebarMenuButton` fazem com a prop `render`. `Card` ainda não tem essa prop — é `tabIndex` + `onClick` simples por enquanto.
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "Card interactive",
+      type: "boolean",
+      default: "false",
+      description: "Liga a mecânica de hover/pressionado e tabIndex=0.",
+    },
+    {
+      prop: "...props",
+      type: "HTMLAttributes<HTMLDivElement>",
+      description: "Qualquer atributo nativo — em todas as peças (Card, CardHeader, CardTitle...).",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- Sem `interactive`, o `Card` é só uma `<div>` — não entra na ordem de tabulação nem tem papel semântico próprio. O significado vem do conteúdo (`CardTitle` é uma `<div>` estilizada, não um `<h2>` — use o nível de título certo pro contexto da página onde o cartão aparecer).
+- Com `interactive`, o foco pelo teclado mostra o anel padrão (`--ring`) — mesma regra de todo componente do sistema (S2, `DECISOES.md`).
+
+## Tokens usados
+
+`--card` · `--ink` · `--border-width` · `--radius-card` · `--foreground` · `--heading` · `--muted-foreground` · `--ring`

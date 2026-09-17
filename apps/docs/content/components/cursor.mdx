@@ -1,0 +1,337 @@
+---
+title: Cursor
+description: Substitui o cursor nativo por um cursor customizado — seis variantes (Arrow Pointer, Big Circle, Ring & Dot, Circle & Dot, Glitch, Motion Blur), inspiradas no Curzr de fuzionix.
+---
+
+Os seis componentes deste pacote são `position: fixed` e escutam o `document` inteiro de propósito — pensados pra ficar montados UMA VEZ na raiz do app (ou de uma página específica), cobrindo a área inteira. As demonstrações abaixo são versões à parte, contidas na caixa, só pra mostrar o efeito sem sequestrar o cursor da página de documentação inteira.
+
+## Arrow Pointer
+
+Seta que gira pra acompanhar a direção do movimento — parado, mantém a última direção. Só rotação, sem crescer/encolher nem reagir a hover/clique.
+
+<Preview>
+  <ArrowPointerCursorDemo />
+</Preview>
+
+```bash
+bun add @adinkra/cursor
+```
+
+```tsx
+// app/layout.tsx
+import { ArrowPointerCursor } from "@adinkra/cursor";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="pt-BR">
+      <body>
+        <ArrowPointerCursor />
+        {children}
+      </body>
+    </html>
+  );
+}
+```
+
+### Props — Arrow Pointer
+
+<PropsTable
+  rows={[
+    {
+      prop: "size",
+      type: "number",
+      default: "20",
+      description: "Tamanho do ícone (largura = altura), em px.",
+    },
+    {
+      prop: "color",
+      type: "string",
+      default: "var(--ink)",
+      description: "Cor do contorno da seta. Aceita qualquer valor CSS válido (token, hex, rgb()...). O miolo continua sempre var(--background).",
+    },
+    {
+      prop: "className",
+      type: "string",
+      description: "Classes extras no container fixo.",
+    },
+  ]}
+/>
+
+## Big Circle
+
+Círculo grande (com blend por `backdrop-filter: invert()+grayscale()`, funciona sobre qualquer cor de fundo) + um pontinho central — cresce sobre elementos interativos, encolhe no clique.
+
+<Preview>
+  <BigCircleCursorDemo />
+</Preview>
+
+```tsx
+import { BigCircleCursor } from "@adinkra/cursor";
+
+<BigCircleCursor />;
+```
+
+### Props — Big Circle
+
+<PropsTable
+  rows={[
+    {
+      prop: "size",
+      type: "number",
+      default: "157",
+      description: "Diâmetro do círculo grande, em px. O pontinho central é sempre 6px, fixo.",
+    },
+    {
+      prop: "backdropFilter",
+      type: "boolean",
+      default: "true",
+      description: "Liga invert()+grayscale(). Desligado, vira preenchimento sólido em color.",
+    },
+    {
+      prop: "color",
+      type: "string",
+      default: "var(--ink)",
+      description: "Cor do preenchimento sólido do círculo grande quando backdropFilter={false}. Ignorada no padrão.",
+    },
+    {
+      prop: "dotColor",
+      type: "string",
+      default: "color",
+      description: "Cor do preenchimento sólido do pontinho quando backdropFilter={false}. Default: o mesmo valor de color.",
+    },
+    {
+      prop: "className",
+      type: "string",
+      description: "Classes extras no container fixo que envolve os dois elementos.",
+    },
+  ]}
+/>
+
+Desligar o `backdrop-filter` troca o modo inteiro — de "reage ao que está por baixo, sem cor própria" pra "cor sólida fixa":
+
+```tsx
+<BigCircleCursor backdropFilter={false} color="var(--brand)" />
+```
+
+`color` e `dotColor` são separados justamente pra dar espaço a combinações como círculo transparente (invisível) com só o pontinho central visível:
+
+```tsx
+<BigCircleCursor backdropFilter={false} color="transparent" dotColor="var(--ink)" />
+```
+
+### Marcar um elemento como "hover" sem ser botão/link
+
+Por padrão o círculo cresce sobre `button`, `a`, `input`, `select`, `textarea`, `label` e `[role="button"]`. Pra qualquer outro elemento clicável (um `<div>` com `onClick`, por exemplo), marque com `data-cursor-hover`:
+
+```tsx
+<div onClick={...} data-cursor-hover>
+  Também cresce o cursor aqui
+</div>
+```
+
+Os outros cursores que reagem a hover (Ring & Dot, Circle & Dot, Glitch) seguem o mesmo contrato de `data-cursor-hover`.
+
+## Ring & Dot
+
+Anel fino com um pontinho central — o anel cresce sobre elementos interativos, encolhe no clique.
+
+<Preview>
+  <RingDotCursorDemo />
+</Preview>
+
+```tsx
+import { RingDotCursor } from "@adinkra/cursor";
+
+<RingDotCursor />;
+```
+
+### Props — Ring & Dot
+
+<PropsTable
+  rows={[
+    {
+      prop: "size",
+      type: "number",
+      default: "20",
+      description: "Diâmetro do anel em repouso, em px.",
+    },
+    {
+      prop: "hoverSize",
+      type: "number",
+      default: "40",
+      description: "Diâmetro do anel sobre um elemento marcado como hover, em px.",
+    },
+    {
+      prop: "color",
+      type: "string",
+      default: "var(--primary)",
+      description: "Cor do traço externo do anel e do halo do pontinho. O traço interno continua sempre var(--ink).",
+    },
+    {
+      prop: "className",
+      type: "string",
+      description: "Classes extras no container fixo.",
+    },
+  ]}
+/>
+
+## Circle & Dot
+
+Círculo que gira pra acompanhar a direção do movimento e solta um rastro curto acima dele, proporcional à velocidade — desaparece pouco depois de parar. Engrossa a borda sobre elementos interativos, encolhe no clique.
+
+<Preview>
+  <CircleAndDotCursorDemo />
+</Preview>
+
+```tsx
+import { CircleAndDotCursor } from "@adinkra/cursor";
+
+<CircleAndDotCursor />;
+```
+
+### Props — Circle & Dot
+
+<PropsTable
+  rows={[
+    {
+      prop: "size",
+      type: "number",
+      default: "20",
+      description: "Diâmetro do círculo, em px.",
+    },
+    {
+      prop: "color",
+      type: "string",
+      default: "var(--ink)",
+      description: "Cor da borda e do rastro.",
+    },
+    {
+      prop: "className",
+      type: "string",
+      description: "Classes extras no container fixo.",
+    },
+  ]}
+/>
+
+## Glitch
+
+Círculo pequeno com separação cromática na direção do movimento — duas sombras coloridas deslocam em sentidos opostos, proporcional à velocidade, e somem pouco depois de parar. Cresce sobre elementos interativos, encolhe no clique.
+
+<Preview>
+  <GlitchCursorDemo />
+</Preview>
+
+```tsx
+import { GlitchCursor } from "@adinkra/cursor";
+
+<GlitchCursor />;
+```
+
+### Props — Glitch
+
+<PropsTable
+  rows={[
+    {
+      prop: "size",
+      type: "number",
+      default: "15",
+      description: "Diâmetro do círculo em repouso, em px.",
+    },
+    {
+      prop: "hoverSize",
+      type: "number",
+      default: "30",
+      description: "Diâmetro do círculo sobre um elemento marcado como hover, em px.",
+    },
+    {
+      prop: "colorA",
+      type: "string",
+      default: "var(--primary)",
+      description: "Primeira cor da separação cromática — também o fallback sólido em navegadores sem backdrop-filter.",
+    },
+    {
+      prop: "colorB",
+      type: "string",
+      default: "var(--brand)",
+      description: "Segunda cor da separação cromática, deslocada no sentido oposto de colorA.",
+    },
+    {
+      prop: "className",
+      type: "string",
+      description: "Classes extras no container fixo.",
+    },
+  ]}
+/>
+
+## Motion Blur
+
+Círculo que borra na direção do movimento — sem preenchimento de cor nenhum. O eixo do borrão gira com o ângulo do gesto — mais rápido o mouse, mais alongado o rastro; parado, círculo nítido. Efeito dividido em duas propriedades CSS: `backdrop-filter: invert()+grayscale()` (funções CSS puras, mesma dupla do Big Circle) para o tom, e `filter: url(#svg)` (referência a um `<feGaussianBlur>`) para o borrão direcional — `backdrop-filter` referenciando um filtro de SVG diretamente é instável entre navegadores (detalhe completo no `.claude/DECISOES.md`).
+
+<Preview>
+  <MotionBlurCursorDemo />
+</Preview>
+
+```tsx
+import { MotionBlurCursor } from "@adinkra/cursor";
+
+<MotionBlurCursor />;
+```
+
+### Props — Motion Blur
+
+<PropsTable
+  rows={[
+    {
+      prop: "size",
+      type: "number",
+      default: "25",
+      description: "Diâmetro do círculo, em px.",
+    },
+    {
+      prop: "className",
+      type: "string",
+      description: "Classes extras no container fixo.",
+    },
+  ]}
+/>
+
+## Monte um só, uma vez
+
+Monte um dos seis — não mais de um ao mesmo tempo — fora de qualquer componente que possa desmontar sem querer (a raiz do app, ou uma página inteira como no exemplo do `BigCircleCursor` na home do próprio site). Desmontar remove a regra de `cursor: none` e devolve o cursor nativo. Os seis compartilham o mesmo mecanismo de ativação por baixo (`useCursorActive`) — montar mais de um junto faz um desmontar remover o efeito dos outros também.
+
+## Quando NÃO ativa
+
+- **Toque** (`pointer: coarse`): dispositivos sem mouse de verdade não têm cursor pra substituir.
+- **`prefers-reduced-motion: reduce`**: o cursor nativo continua, sem overlay.
+
+Nos dois casos o componente renderiza `null` — nenhum evento é registrado, nenhum `cursor: none` é aplicado.
+
+## Acessibilidade
+
+O overlay inteiro tem `aria-hidden` — é puramente decorativo, não carrega nenhuma informação que não esteja já no cursor nativo que ele substitui. Como o efeito depende de detectar um ponteiro fino (mouse/trackpad) e respeita `prefers-reduced-motion`, ninguém fica sem indicação nenhuma de onde está o ponteiro: em touch ou com movimento reduzido pedido, o cursor nativo do sistema continua funcionando normalmente.
+
+## Cor customizável
+
+Arrow Pointer, Ring & Dot, Circle & Dot e Glitch aceitam cor customizada via prop (`color`, ou `colorA`/`colorB` no Glitch — a separação cromática precisa de duas). Qualquer valor CSS válido serve: token do sistema, hex, `rgb()`...
+
+```tsx
+<CircleAndDotCursor color="#CB5A2A" />
+<GlitchCursor colorA="var(--destructive)" colorB="var(--primary)" />
+```
+
+**Big Circle não tem cor própria por padrão** — o efeito é `backdrop-filter: invert()+grayscale()` reagindo ao que está por baixo, sem preenchimento nenhum. `backdropFilter={false}` desliga esse modo por completo e troca por preenchimento sólido em `color` (ver seção "Big Circle" acima) — diferente de um fallback automático por `CSS.supports`, é uma escolha explícita de quem consome o componente.
+
+**Motion Blur não tem essa opção**: o efeito precisa do `backdrop-filter` pra amostrar o fundo E do borrão direcional ao mesmo tempo — sem o primeiro não sobra nada pra borrar. Uma prop de cor por elemento (`data-cursor-color`) chegou a ser implementada nos dois e foi revertida por completo depois de três abordagens que não satisfizeram o resultado esperado (fundo sólido, `mix-blend-mode`, `color-mix()` translúcido) — isso é diferente do `backdropFilter={false}` do Big Circle (um modo alternativo completo, não uma cor por cima do filtro). Detalhe completo no `.claude/DECISOES.md`.
+
+## Tokens usados
+
+- **Arrow Pointer**: `color` (default `var(--ink)`, contorno) e `var(--background)`, sempre fixo (miolo) — se adapta ao tema sozinho quando `color` fica no padrão.
+- **Big Circle**: nenhum no padrão — o efeito vem de `backdrop-filter` (`invert()+grayscale()`), que reage ao que está por baixo. Com `backdropFilter={false}`, `color` (default `var(--ink)`) vira o preenchimento sólido.
+- **Motion Blur**: nenhum — o efeito inteiro vem de `backdrop-filter`/`filter` (`invert()+grayscale()`), que reage ao que está por baixo em vez de precisar saber o tema ou qualquer token do sistema.
+- **Ring & Dot**: `var(--ink)`, sempre fixo (traço interno/pontinho) e `color` (default `var(--primary)`, traço externo).
+- **Circle & Dot**: `color` (default `var(--ink)`).
+- **Glitch**: `colorA`/`colorB` (default `var(--primary)`/`var(--brand)`, separação cromática, no lugar do ciano/magenta neon da referência original) — como é sombra decorativa (não texto), a regra de contraste AA que restringe `--brand` a texto ≥24px não se aplica aqui.
+
+## Crédito
+
+Os seis efeitos são adaptados do [Curzr](https://github.com/fuzionix/curzr), biblioteca open-source de fuzionix — traduzidos pra React com as convenções deste pacote (`clientX`/`clientY` em vez de `pageX`/`pageY` com ajuste manual, refs diretos no DOM sem state do React no `pointermove`, clique por duração real do `pointerdown`/`pointerup`, cores via token do sistema em vez de hex fixo).

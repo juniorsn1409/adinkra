@@ -1,0 +1,133 @@
+---
+title: Date Picker
+description: Seletor de data com calendário flutuante — campo + popover, sem digitar a data à mão.
+---
+
+<Preview>
+  <DatePickerDemo />
+</Preview>
+
+## Variantes
+
+Mesma composição Popover+Calendar por baixo das quatro — o que muda é o `mode` do Calendar (`single`/`range`), se tem `label` e se leva um campo de hora junto. Nenhuma é um componente conceitualmente novo; nenhuma pede confirmação extra além do que já é natural pra cada caso.
+
+### Basic
+
+O mesmo `DatePicker` de cima, só com a prop `label` — vira um par rótulo+campo (mesmo padrão do `label` do `@adinkra/input`), em vez de só o trigger solto.
+
+<Preview>
+  <DatePickerBasicDemo />
+</Preview>
+
+```tsx
+<DatePicker label="Data do evento" value={date} onChange={setDate} />
+```
+
+### Range Picker
+
+`DateRangePicker` — `mode="range"` no Calendar, dois meses lado a lado (`numberOfMonths={2}`) pra dar pra escolher início e fim sem trocar de mês toda hora. Não fecha ao escolher o primeiro dia (só o `from` ainda não é um intervalo completo) — fecha por `Esc`, clique fora ou no próprio trigger.
+
+<Preview>
+  <DateRangePickerDemo />
+</Preview>
+
+```tsx
+import { DateRangePicker, type DateRange } from "@adinkra/date-picker";
+
+const [range, setRange] = useState<DateRange>();
+<DateRangePicker label="Período" value={range} onChange={setRange} />
+```
+
+### Time Picker
+
+`DateTimePicker` — o mesmo Calendar de dia único, com um `TimePicker` ao lado (duas colunas roláveis, hora e minuto, separadas do calendário por uma linha vertical). O `TimePicker` também é exportado à parte, pra quem só precisa de hora. Também não fecha ao escolher o dia — quem marca data+hora normalmente ajusta a hora em seguida.
+
+<Preview>
+  <DateTimePickerDemo />
+</Preview>
+
+```tsx
+import { DateTimePicker } from "@adinkra/date-picker";
+
+const [date, setDate] = useState<Date>();
+<DateTimePicker label="Agendar para" value={date} onChange={setDate} />
+```
+
+## Como usar
+
+```bash
+bun add @adinkra/date-picker
+```
+
+```tsx
+import { DatePicker } from "@adinkra/date-picker";
+import { useState } from "react";
+
+function Example() {
+  const [date, setDate] = useState<Date>();
+  return <DatePicker value={date} onChange={setDate} placeholder="Escolher data" />;
+}
+```
+
+## Composição
+
+Baseado no [Date Picker do neobrutalism.dev](https://www.neobrutalism.dev/docs/date-picker) — Popover ([Base UI](https://base-ui.com), já usado pelo `@adinkra/navigation-menu`) + Calendar ([react-day-picker](https://daypicker.dev), 2ª dependência externa do sistema: o motor de grade de calendário — navegação de mês, teclado, datas desabilitadas — é grande demais pra reconstruir do zero, mesmo raciocínio já usado pro Base UI). Nenhuma cor nova: dia selecionado usa `bg-secondary` (o mesmo "isto está ligado" do Toggle/NavigationMenu — o céu/primary fica reservado à ação principal, regra 6), dia de hoje usa `outline-ink` (o mesmo tratamento do item ativo da Sidebar). Botões de navegação e de dia reaproveitam `buttonVariants({ variant: "ghost" })` do `@adinkra/button` — nenhum botão reimplementado aqui. Formatação da data por extenso via `Intl.DateTimeFormat` (pt-BR) — não `date-fns`, mesmo padrão já usado no `@adinkra/data-table`.
+
+Também exportados, pra quem quiser montar outra composição: `Calendar` (só a grade, sem popover/trigger), `Popover`/`PopoverTrigger`/`PopoverContent` (o wrapper genérico do Base UI usado por baixo — o `@adinkra/data-table` reaproveita esse mesmo `Popover` pra célula "select", não só datas) e `DateRange` (tipo do `react-day-picker`, pra quem usa `DateRangePicker`).
+
+## Controlado, sem estado próprio
+
+Mesmo espírito do `@adinkra/data-table`: `DatePicker` não guarda a data escolhida sozinho — só o estado efêmero de o popover estar aberto ou fechado. `value`/`onChange` ficam com quem usa. `DatePickerDemo`, usado no preview acima, é só um `useState<Date>()` local (`apps/docs/components/date-picker-demo.tsx`).
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "value",
+      type: "Date | undefined",
+      description: "Data selecionada. undefined mostra o placeholder.",
+    },
+    {
+      prop: "onChange",
+      type: "(date: Date | undefined) => void",
+      description: "Chamado ao escolher um dia no calendário — o popover fecha sozinho em seguida.",
+    },
+    {
+      prop: "placeholder",
+      type: "string",
+      default: '"Escolher data"',
+      description: "Texto mostrado quando não há data selecionada.",
+    },
+    {
+      prop: "disabled",
+      type: "boolean",
+      description: "Desativa o campo — o popover não abre.",
+    },
+    {
+      prop: "label",
+      type: "string",
+      description: "Rótulo acima do campo (par label+trigger, ligado por htmlFor/id) — é a variante \"Basic\". Sem ele, só o trigger.",
+    },
+    {
+      prop: "id",
+      type: "string",
+      description: "Id do trigger — só importa junto de label. Gerado sozinho (useId) quando omitido.",
+    },
+    {
+      prop: "className",
+      type: "string",
+      description: "Repassado pro botão-campo (o trigger), não pro calendário.",
+    },
+  ]}
+/>
+
+`DateRangePicker` e `DateTimePicker` têm as mesmas props (trocando `value`/`onChange` por `DateRange | undefined` no primeiro).
+
+## Acessibilidade
+
+Vem do [Base UI](https://base-ui.com) (popover: foco preso dentro, `Esc` fecha, `aria-expanded` no trigger) e do [react-day-picker](https://daypicker.dev) (grade navegável por teclado — setas movem entre dias, Enter seleciona, `aria-label` em cada dia com a data por extenso).
+
+## Tokens usados
+
+`--ink` · `--surface` · `--card` · `--secondary`/`--secondary-foreground` · `--muted-foreground` · `--shadow-brutal`

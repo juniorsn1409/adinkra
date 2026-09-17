@@ -1,0 +1,107 @@
+---
+title: Switch
+description: Um interruptor liga/desliga — alternativa a uma checkbox para uma opção binária imediata.
+---
+
+<Preview>
+  <div style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "flex-start" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
+      <Switch id="airplane-mode" defaultChecked />
+      <label htmlFor="airplane-mode" style={{ fontSize: "0.875rem" }}>
+        Modo avião
+      </label>
+    </div>
+    <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
+      <Switch id="newsletter" />
+      <label htmlFor="newsletter" style={{ fontSize: "0.875rem" }}>
+        Receber a newsletter
+      </label>
+    </div>
+  </div>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/switch
+```
+
+```tsx
+import { Switch } from "@adinkra/switch";
+
+<div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
+  <Switch id="airplane-mode" />
+  <label htmlFor="airplane-mode">Modo avião</label>
+</div>;
+```
+
+Controlado, quando o estado precisa viver fora do componente:
+
+```tsx
+const [checked, setChecked] = useState(false);
+
+<Switch checked={checked} onCheckedChange={setChecked} />;
+```
+
+## Estados e tamanhos
+
+Ao contrário do Button/Toggle, a trilha não "sobe no hover" — é pequena demais pro gesto, então segue o tratamento mais quieto do Input: borda + sombra dura sempre, só a cor muda. O polegar desliza com `translate-x`.
+
+<StatesGrid>
+  <State label="desligado">
+    <Switch />
+  </State>
+  <State label="ligado">
+    <Switch defaultChecked />
+  </State>
+  <State label="sm">
+    <Switch size="sm" defaultChecked />
+  </State>
+  <State label="desativado">
+    <Switch disabled />
+  </State>
+</StatesGrid>
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "checked",
+      type: "boolean",
+      description: "Estado controlado. Presente, quem usa decide o próximo valor via onCheckedChange.",
+    },
+    {
+      prop: "defaultChecked",
+      type: "boolean",
+      default: "false",
+      description: "Estado inicial, quando não controlado.",
+    },
+    {
+      prop: "onCheckedChange",
+      type: "(checked: boolean) => void",
+      description: "Chamado a cada clique com o próximo valor.",
+    },
+    {
+      prop: "size",
+      type: '"sm" | "md"',
+      default: '"md"',
+      description: "Tamanho da trilha e do polegar.",
+    },
+    {
+      prop: "...props",
+      type: "ButtonHTMLAttributes<HTMLButtonElement>",
+      description: "Qualquer atributo nativo de <button>, incluindo id — pra associar com um <label htmlFor>.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- É um `<button role="switch" aria-checked>` de verdade, seguindo o padrão de switch da WAI-ARIA APG — não um `<input type="checkbox">` disfarçado. Funciona com Enter e Espaço.
+- Sempre associe um `<label htmlFor>` ao `id` do Switch (como nos exemplos acima) — sem isso, quem usa leitor de tela não sabe o que está ligando.
+- `disabled` tira o switch da ordem de tabulação.
+
+## Tokens usados
+
+`--primary` · `--card` · `--ink` · `--border-width` · `--ring`

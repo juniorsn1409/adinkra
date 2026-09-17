@@ -1,0 +1,92 @@
+---
+title: Data Table
+description: Tabela de dados editável, estilo Notion — células por tipo, adicionar e remover linha.
+---
+
+<Preview>
+  <DataTableDemo />
+</Preview>
+
+Clique numa célula pra editar. Nas de texto/número, `Enter` confirma; nas de select, clique numa opção da lista (ou fora, pra fechar sem mudar o valor único); na de data, o `DatePicker` abre o calendário e fecha sozinho ao escolher um dia. "Nova linha" adiciona uma linha vazia; o × ao lado de cada linha remove ela.
+
+## Como usar
+
+```bash
+bun add @adinkra/data-table
+```
+
+```tsx
+import { DataTable, type DataTableColumn, type DataTableRow } from "@adinkra/data-table";
+import { useState } from "react";
+
+const columns: DataTableColumn[] = [
+  { id: "descricao", header: "Descrição", type: "text" },
+  {
+    id: "tipo",
+    header: "Tipo",
+    type: "select",
+    options: [
+      { value: "entrada", label: "Entrada", color: "tag-sky" },
+      { value: "saida", label: "Saída", color: "tag-coral" },
+    ],
+  },
+  { id: "valor", header: "Valor", type: "number", currency: true },
+  { id: "data", header: "Data", type: "date" },
+];
+
+function Example() {
+  const [rows, setRows] = useState<DataTableRow[]>([]);
+  return <DataTable columns={columns} rows={rows} onRowsChange={setRows} />;
+}
+```
+
+## Tipos de coluna (v1)
+
+Escopo fechado com o usuário antes de construir — ficou de fora da v1, por decisão explícita: adicionar/remover/renomear coluna, mudar o tipo de uma coluna já criada, ordenar, filtrar (mais perto do editor de schema do Notion de verdade, escopo bem maior).
+
+- **`text`** — texto livre.
+- **`select`** — etiqueta colorida (via `@adinkra/badge` — nenhuma cor nova, só as variantes que já existem: `accent`, `secondary`, `tag-coral`, `tag-sky`, `tag-mustard`), de uma lista fixa (`options`). Com `multi: true` vira várias etiquetas por célula (tags) em vez de uma só (status).
+- **`number`** — número; com `currency: true` formata como R$ (`Intl.NumberFormat`, pt-BR) e fica vermelho (`--destructive`) quando negativo.
+- **`date`** — data; usa o `@adinkra/date-picker` (`DatePicker`, Popover+Calendar) como gatilho da própria célula, sem passo separado de edição — mostra formatada por extenso (`Intl.DateTimeFormat`, pt-BR) direto no botão.
+
+## Controlado, sem estado próprio de dados
+
+`DataTable` não guarda `rows` sozinho — só o estado efêmero de qual célula está aberta pra edição. Quem usa decide onde as linhas moram (`useState`, uma store, uma query) e como persistir (`onRowsChange` recebe o array inteiro já atualizado). `DataTableDemo`, usado no preview acima, é só um `useState` local (`apps/docs/components/data-table-demo.tsx`) — não está ligado a nada real.
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "columns",
+      type: "DataTableColumn[]",
+      description: "id, header, type (\"text\" | \"select\" | \"number\" | \"date\"), e as opções específicas do tipo (options/multi para select, currency para number).",
+    },
+    {
+      prop: "rows",
+      type: "DataTableRow[]",
+      description: "Cada linha é um objeto com id + um valor por coluna (chave = column.id).",
+    },
+    {
+      prop: "onRowsChange",
+      type: "(rows: DataTableRow[]) => void",
+      description: "Chamado com o array inteiro atualizado a cada edição de célula, nova linha ou remoção.",
+    },
+    {
+      prop: "...props",
+      type: "className",
+      description: "Só className passa direto pro container — a tabela em si tem estrutura fixa demais (thead/tbody/coluna de ação) pra aceitar spread de atributos nativos.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- Célula de texto/número é um `<button>` que vira um `<input>` de verdade ao editar — funciona com Tab/Enter/Escape como qualquer campo de formulário nativo.
+- O dropdown de select fecha com `Escape` ou clicando fora, e cada opção marcada leva um `✓` (não só a cor, pra quem não distingue cor).
+- A célula de data é o próprio `DatePicker` do `@adinkra/date-picker` (Popover do Base UI) — mesmo comportamento de teclado/foco documentado na página dele.
+- O botão de excluir linha (`×`) tem `aria-label="Excluir linha"` — fica sempre visível, não só no hover/foco da linha (decisão de 16/09/2026, revertendo o comportamento anterior).
+
+## Tokens usados
+
+`--ink` · `--card` · `--hairline` · `--destructive` · `--surface` · `--shadow-brutal` · cores do `@adinkra/badge`

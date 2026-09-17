@@ -1,0 +1,159 @@
+---
+title: Segmented Bar
+description: Uma barra dividida em proporções, cada uma com seu rótulo — não a barra de progresso "0 a 100%" clássica, e sim a quebra de um total em partes.
+---
+
+<Preview>
+  <SegmentedBar
+    segments={[
+      { name: "Custos fixos", value: 30 },
+      { name: "Liberdade financeira", value: 30 },
+      { name: "Conforto", value: 10 },
+      { name: "Metas", value: 18 },
+      { name: "Prazeres", value: 10 },
+    ]}
+    className="w-full"
+  />
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/progress
+```
+
+```tsx
+import { SegmentedBar } from "@adinkra/progress";
+
+<SegmentedBar
+  segments={[
+    { name: "Custos fixos", value: 30 },
+    { name: "Liberdade financeira", value: 30 },
+    { name: "Conforto", value: 10 },
+    { name: "Metas", value: 18 },
+    { name: "Prazeres", value: 10 },
+  ]}
+/>;
+```
+
+`name` é só a identidade do segmento pro `aria-label` (nunca aparece sozinha dentro da barra). `value` é o peso/valor de verdade — o texto visível vem de `formatLabel`, recalculado a cada render a partir do `value` atual (por padrão, a porcentagem do total). Isso importa especialmente ao arrastar: um rótulo digitado à mão travaria no valor de quando a barra foi criada; `formatLabel` garante que o texto mostrado sempre bate com o valor de agora.
+
+## Arrastar pra redimensionar
+
+Passe `onSegmentsChange` pra deixar a barra arrastável — arrastar a divisória entre dois segmentos tira valor de um e dá pro outro (o total geral não muda), e o rótulo dos dois lados atualiza em tempo real porque é sempre recalculado, nunca congelado. Sem essa prop, a barra fica só de leitura.
+
+<Preview>
+  <SegmentedBarDraggableDemo />
+</Preview>
+
+```tsx
+import { SegmentedBar, type SegmentedBarSegment } from "@adinkra/progress";
+
+const [segments, setSegments] = useState<SegmentedBarSegment[]>([
+  { name: "Custos fixos", value: 30 },
+  { name: "Liberdade financeira", value: 30 },
+  { name: "Conforto", value: 10 },
+  { name: "Metas", value: 18 },
+  { name: "Prazeres", value: 10 },
+]);
+
+<SegmentedBar segments={segments} onSegmentsChange={setSegments} />;
+```
+
+## Mostrando o valor de verdade, não a porcentagem
+
+`value` não precisa ser um peso abstrato — pode ser o valor de verdade (R$, unidades). Basta passar um `formatLabel` que formate ele em vez de calcular porcentagem; arrastar continua redistribuindo `value` entre os vizinhos, e o texto formatado acompanha.
+
+<Preview>
+  <SegmentedBarCurrencyDemo />
+</Preview>
+
+```tsx
+const currencyFormatter = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+
+<SegmentedBar
+  segments={segments}
+  onSegmentsChange={setSegments}
+  formatLabel={(segment) => currencyFormatter.format(segment.value)}
+/>;
+```
+
+## Segmento pequeno
+
+O rótulo sempre aparece, mesmo num segmento de 1% — só encolhe (`truncate`) se o texto genuinamente não couber num segmento estreito demais, nunca cortado no meio da palavra.
+
+<Preview>
+  <SegmentedBar
+    segments={[
+      { name: "Ações", value: 48 },
+      { name: "Fiis", value: 45 },
+      { name: "Renda fixa", value: 2 },
+      { name: "Tesouro", value: 5 },
+    ]}
+    className="w-full"
+  />
+</Preview>
+
+Pra voltar a esconder rótulo de segmento pequeno, suba `minLabelShare` (padrão `0`):
+
+```tsx
+<SegmentedBar segments={segments} minLabelShare={0.06} />
+```
+
+## Cores
+
+As 4 cores de "etiqueta" do próprio sistema (`--tag-coral`, `--tag-sky`, `--tag-mustard`, `--tag-navy` — regra 8, `DECISOES.md`; `--tag-navy` foi criada pra este componente, eram só 3 antes), fixas nos dois temas, pensadas pra categorização (não pra ação) — o mesmo papel que os segmentos cumprem aqui. Cada uma já vem com seu par de contraste (`--tag-*-foreground`), checado em AA na hora que essas cores foram criadas — o texto não é sempre branco (`--tag-mustard-foreground` é tinta escura). Mais de 4 segmentos repetem a sequência a partir do início.
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "segments",
+      type: "{ name: string; value: number }[]",
+      description: "Um item por parte do total — name é só identidade (aria-label), value é o peso/valor real do segmento.",
+    },
+    {
+      prop: "formatLabel",
+      type: "(segment: SegmentedBarSegment, share: number, total: number) => string",
+      default: "porcentagem do total",
+      description: "Formata o texto mostrado dentro do segmento — chamado de novo a cada render com o value atual, nunca um texto congelado.",
+    },
+    {
+      prop: "minLabelShare",
+      type: "number",
+      default: "0",
+      description: "Fração mínima (0-1) do total pra um segmento mostrar o rótulo — 0 significa que o número sempre aparece, mesmo num segmento de 1%.",
+    },
+    {
+      prop: "onSegmentsChange",
+      type: "(segments: SegmentedBarSegment[]) => void",
+      description: "Presente = a barra fica arrastável — arrastar a divisória entre dois segmentos redistribui valor entre eles. Ausente = só leitura.",
+    },
+    {
+      prop: "minSegmentShare",
+      type: "number",
+      default: "0",
+      description: "Fração mínima (0-1) do total que um segmento pode ter ao arrastar — recalculada a partir do total atual, nunca um número fixo. Padrão 0: o valor pode chegar a zero de verdade.",
+    },
+    {
+      prop: "minVisibleShare",
+      type: "number",
+      default: "0.05",
+      description: "Fração mínima (0-1) do total que um segmento PARECE ter, separado do value em si — mantém o tamanho visível mínimo como se fosse 5% mesmo quando o valor de verdade é 0%. O espaço sobrando depois do piso é repartido proporcionalmente; a soma dos tamanhos visuais sempre fecha em 100%, nunca estoura nem some.",
+    },
+    {
+      prop: "className",
+      type: "string",
+      description: "Classes extras no container — largura, altura, etc.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+O container leva `role="img"` com `aria-label` listando nome e rótulo formatado de todos os segmentos em ordem — pra leitor de tela, é uma imagem com uma descrição textual da proporção inteira, não uma lista de elementos separados pra navegar item a item.
+
+## Tokens usados
+
+`--surface` (fundo do container), `--background` (a pilulazinha do puxador), `--ink` (o anel de contraste do puxador), `--tag-coral`/`--tag-sky`/`--tag-mustard`/`--tag-navy` + seus `-foreground` (as cores dos segmentos em si — regra 8, `DECISOES.md`).

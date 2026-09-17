@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@import "@adinkra/tokens/tokens.css";
+
+/*
+ * Os componentes vivem fora de apps/docs (packages/<componente>/src), então
+ * o escaneamento automático do Tailwind não os alcança sozinho — precisa
+ * dizer explicitamente onde procurar classes. Ver DECISOES.md, seção 3.
+ */
+@source "../../../packages/*/src/**/*.{ts,tsx}";
+
+/*
+ * Adinkra Alphabet (Charles Korankye, MIT — github.com/adinkraalphabet/font),
+ * auto-hospedada em /public/fonts. O nome da fonte aqui ("Adinkra Alphabet")
+ * é o que --font-adinkra (@adinkra/tokens) espera encontrar — só este site
+ * carrega o arquivo de verdade, o token só nomeia. `font-display: swap`
+ * evita bloquear o primeiro paint do wordmark.
+ */
+@font-face {
+  font-family: "Adinkra Alphabet";
+  src: url("/fonts/Adinkra-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+}

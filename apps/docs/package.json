@@ -1,0 +1,45 @@
+{
+  "name": "docs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@adinkra/badge": "workspace:*",
+    "@adinkra/breadcrumb": "workspace:*",
+    "@adinkra/button": "workspace:*",
+    "@adinkra/card": "workspace:*",
+    "@adinkra/charts": "workspace:*",
+    "@adinkra/core": "workspace:*",
+    "@adinkra/cursor": "workspace:*",
+    "@adinkra/data-table": "workspace:*",
+    "@adinkra/date-picker": "workspace:*",
+    "@adinkra/icons": "workspace:*",
+    "@adinkra/input": "workspace:*",
+    "@adinkra/navigation-menu": "workspace:*",
+    "@adinkra/pagination": "workspace:*",
+    "@adinkra/progress": "workspace:*",
+    "@adinkra/sidebar": "workspace:*",
+    "@adinkra/skeleton": "workspace:*",
+    "@adinkra/switch": "workspace:*",
+    "@adinkra/table": "workspace:*",
+    "@adinkra/toggle": "workspace:*",
+    "@adinkra/tokens": "workspace:*",
+    "next": "16.3.5",
+    "next-mdx-remote": "^6.0.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^20.19.43",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3"
+  }
+}

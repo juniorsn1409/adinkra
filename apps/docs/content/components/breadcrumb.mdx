@@ -1,0 +1,133 @@
+---
+title: Breadcrumb
+description: A trilha que mostra onde a página atual está dentro da hierarquia do site.
+---
+
+<Preview>
+  <Breadcrumb>
+    <BreadcrumbList>
+      <BreadcrumbItem>
+        <BreadcrumbLink href="/">Início</BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem>
+        <BreadcrumbLink href="/components">Componentes</BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem>
+        <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+      </BreadcrumbItem>
+    </BreadcrumbList>
+  </Breadcrumb>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/breadcrumb
+```
+
+```tsx
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@adinkra/breadcrumb";
+
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Início</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Componentes</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>;
+```
+
+## Composição
+
+Sete peças, no espírito do [breadcrumb do neobrutalism.dev](https://www.neobrutalism.dev/docs/breadcrumb) (mesma composição do shadcn) — use só as que precisar:
+
+- **`Breadcrumb`** — o `<nav aria-label="breadcrumb">` raiz.
+- **`BreadcrumbList`** — a `<ol>` que encadeia os itens.
+- **`BreadcrumbItem`** — um passo da trilha (`<li>`).
+- **`BreadcrumbLink`** — um passo clicável (`<a href>`).
+- **`BreadcrumbPage`** — o passo atual, sem link (`aria-current="page"`).
+- **`BreadcrumbSeparator`** — o ícone entre passos; aceita `children` pra trocar o separador padrão (um chevron) por outra coisa, como `/`.
+- **`BreadcrumbEllipsis`** — marcador de trilha colapsada, para hierarquias longas.
+
+## Trilha longa (colapsada)
+
+Combine `BreadcrumbEllipsis` com os passos das pontas quando a hierarquia tiver profundidade demais para caber:
+
+<StatesGrid>
+  <State label="colapsada">
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/">Início</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbEllipsis />
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  </State>
+  <State label="separador customizado (/)">
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/">Início</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator>/</BreadcrumbSeparator>
+        <BreadcrumbItem>
+          <BreadcrumbPage>Componentes</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  </State>
+</StatesGrid>
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "BreadcrumbLink href",
+      type: "string",
+      description: "Para onde o passo leva. Qualquer outro atributo de <a> também passa direto.",
+    },
+    {
+      prop: "BreadcrumbSeparator children",
+      type: "ReactNode",
+      default: "chevron",
+      description: "Troca o ícone padrão do separador por outro conteúdo (texto, outro ícone).",
+    },
+    {
+      prop: "...props",
+      type: "HTMLAttributes<...>",
+      description: "Qualquer atributo nativo — em todas as peças, incluindo className.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- `Breadcrumb` é um `<nav aria-label="breadcrumb">` — leitores de tela anunciam a região como navegação, separada do resto da página.
+- `BreadcrumbPage` leva `aria-current="page"`, não é um link — indica o passo atual sem oferecer um clique que não leva a lugar nenhum.
+- `BreadcrumbSeparator` e `BreadcrumbEllipsis` levam `aria-hidden="true"`: são pistas visuais, o `<ol>` de `BreadcrumbList` já basta pra estrutura ser entendida sem eles.
+
+## Tokens usados
+
+`--muted-foreground` · `--foreground` · `--heading` · `--ring`

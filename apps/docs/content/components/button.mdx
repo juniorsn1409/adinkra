@@ -1,0 +1,111 @@
+---
+title: Button
+description: A ação que a pessoa precisa encontrar primeiro numa tela.
+---
+
+<Preview>
+  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
+    <Button variant="primary">Publicar</Button>
+    <Button variant="secondary">Salvar rascunho</Button>
+    <Button variant="outline">Visualizar</Button>
+    <Button variant="ghost">Cancelar</Button>
+    <Button variant="destructive">Excluir</Button>
+  </div>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/button
+```
+
+```tsx
+import { Button } from "@adinkra/button";
+
+<Button variant="primary">Publicar</Button>;
+```
+
+## Estados
+
+O foco visível pelo teclado é obrigatório — sem ele, quem navega por teclado se perde (decisão S2, `DECISOES.md`).
+
+<StatesGrid>
+  <State label="padrão">
+    <Button variant="primary">Assinar</Button>
+  </State>
+  <State label="hover">
+    <Button variant="primary" className="bg-primary-hover">
+      Assinar
+    </Button>
+  </State>
+  <State label="foco (tab)">
+    <Button variant="primary" autoFocus>
+      Assinar
+    </Button>
+  </State>
+  <State label="desativado">
+    <Button variant="primary" disabled>
+      Assinar
+    </Button>
+  </State>
+</StatesGrid>
+
+## Variantes
+
+Um só botão `primary` por tela (decisão 4, `DECISOES.md`) — o resto usa `secondary`, `outline` ou `ghost`.
+
+<StatesGrid>
+  <State label="primary">
+    <Button variant="primary">Publicar</Button>
+  </State>
+  <State label="secondary">
+    <Button variant="secondary">Salvar</Button>
+  </State>
+  <State label="outline">
+    <Button variant="outline">Visualizar</Button>
+  </State>
+  <State label="ghost">
+    <Button variant="ghost">Cancelar</Button>
+  </State>
+</StatesGrid>
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "variant",
+      type: '"primary" | "secondary" | "outline" | "ghost" | "destructive"',
+      default: '"primary"',
+      description: "Qual ação o botão representa.",
+    },
+    {
+      prop: "size",
+      type: '"sm" | "md" | "lg"',
+      default: '"md"',
+      description: "Altura e espaçamento interno.",
+    },
+    {
+      prop: "disabled",
+      type: "boolean",
+      default: "false",
+      description: "Desativa o botão e tira do fluxo de foco.",
+    },
+    {
+      prop: "...props",
+      type: "ButtonHTMLAttributes<HTMLButtonElement>",
+      description: "Qualquer atributo nativo de <button>.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- É um `<button>` nativo: funciona com Enter e Espaço, e entra na ordem de tabulação sozinho.
+- O anel de foco usa `--ring`, o marinho, com contraste de 12.1:1 sobre o fundo claro (regra S2).
+- Desativado, `disabled` também tira o botão da ordem de tabulação — nunca use só uma cor apagada para indicar isso.
+
+## Tokens usados
+
+`--primary` · `--primary-foreground` · `--primary-hover` · `--secondary` · `--secondary-foreground` ·
+`--border` · `--foreground` · `--surface` · `--destructive` · `--destructive-foreground` · `--ring`

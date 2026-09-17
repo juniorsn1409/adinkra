@@ -1,0 +1,147 @@
+---
+title: Pagination
+description: Navegação entre páginas de uma lista longa — página anterior, próxima e o número atual.
+---
+
+<Preview>
+  <Pagination>
+    <PaginationContent>
+      <PaginationItem>
+        <PaginationPrevious href="#" />
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="#">1</PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="#" isActive>
+          2
+        </PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationLink href="#">3</PaginationLink>
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationEllipsis />
+      </PaginationItem>
+      <PaginationItem>
+        <PaginationNext href="#" />
+      </PaginationItem>
+    </PaginationContent>
+  </Pagination>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/pagination
+```
+
+```tsx
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@adinkra/pagination";
+
+<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious href="#" />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#" isActive>
+        1
+      </PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#">2</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext href="#" />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>;
+```
+
+Como o `Breadcrumb`, é um conjunto de peças estilizadas, não um componente que sabe paginar sozinho — quem usa decide o `href`/`onClick` de cada link e qual página está ativa (com um router, normalmente a partir da URL).
+
+## Composição
+
+Sete peças, no espírito da [pagination do neobrutalism.dev](https://www.neobrutalism.dev/docs/pagination) (mesma composição do shadcn) — use só as que precisar:
+
+- **`Pagination`** — o `<nav aria-label="pagination">` raiz.
+- **`PaginationContent`** — a `<ul>` que encadeia os itens.
+- **`PaginationItem`** — um passo da lista (`<li>`).
+- **`PaginationLink`** — um número de página (`<a href>`); `isActive` marca a página atual.
+- **`PaginationPrevious`** / **`PaginationNext`** — atalhos com seta + texto.
+- **`PaginationEllipsis`** — marcador de páginas puladas, para listas longas.
+
+## Página atual
+
+`isActive` deixa o link com a mesma cara "afundada" — borda de tinta, fundo `--secondary`, sombra dura — que o `Toggle` usa pro estado ligado. Aqui não é algo que se liga/desliga, é só "você está aqui": sem o convite de hover que os outros números têm.
+
+<StatesGrid>
+  <State label="número (padrão)">
+    <PaginationLink href="#">4</PaginationLink>
+  </State>
+  <State label="número (isActive)">
+    <PaginationLink href="#" isActive>
+      4
+    </PaginationLink>
+  </State>
+  <State label="anterior/próxima">
+    <div style={{ display: "flex", gap: "0.5rem" }}>
+      <PaginationPrevious href="#" />
+      <PaginationNext href="#" />
+    </div>
+  </State>
+  <State label="desativado">
+    <PaginationLink href="#" aria-disabled="true">
+      5
+    </PaginationLink>
+  </State>
+</StatesGrid>
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "PaginationLink isActive",
+      type: "boolean",
+      default: "false",
+      description: "Marca a página atual — aria-current=\"page\" e o visual afundado.",
+    },
+    {
+      prop: "PaginationLink size",
+      type: '"icon" | "default"',
+      default: '"icon"',
+      description: "Chip quadrado (números) ou pílula com espaço pro texto (Previous/Next usam \"default\").",
+    },
+    {
+      prop: "PaginationLink href",
+      type: "string",
+      description: "Para onde o link leva. Qualquer outro atributo de <a> também passa direto.",
+    },
+    {
+      prop: "...props",
+      type: "HTMLAttributes<...>",
+      description: "Qualquer atributo nativo — em todas as peças, incluindo className.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- `Pagination` é um `<nav aria-label="pagination">` — leitores de tela anunciam a região separada do resto da página.
+- `PaginationLink` com `isActive` leva `aria-current="page"` — indica a página atual sem depender só de cor.
+- `PaginationPrevious`/`PaginationNext` levam `aria-label` próprio ("Página anterior"/"Próxima página") além do texto visível, então continuam claros mesmo se só o ícone aparecer numa tela estreita.
+- `PaginationEllipsis` leva `aria-hidden="true"` — é uma pista visual, a lista de números já basta pra estrutura ser entendida sem ela.
+- Sem página anterior/próxima disponível, passe `aria-disabled="true"` em vez de remover o link — ele fica visível, só sai do fluxo de clique/foco (mesmo padrão do `disabled` do Button, mas em cima de um `<a>`, que não tem esse atributo nativo).
+
+## Tokens usados
+
+`--secondary` · `--secondary-foreground` · `--surface` · `--ink` · `--border-width` · `--foreground` · `--muted-foreground` · `--ring`

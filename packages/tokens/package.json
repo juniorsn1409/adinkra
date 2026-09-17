@@ -1,0 +1,13 @@
+{
+  "name": "@adinkra/tokens",
+  "version": "0.1.0",
+  "description": "Tokens de cor, tipografia e raio do design system Adinkra, como CSS variables e tema do Tailwind v4.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": true,
+  "exports": {
+    "./tokens.css": "./src/tokens.css",
+    "./package.json": "./package.json"
+  },
+  "files": ["src"]
+}

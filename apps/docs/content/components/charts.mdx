@@ -1,0 +1,380 @@
+---
+title: Charts
+description: Gráficos com Recharts por baixo e o tema Adinkra por cima — borda, sombra e paleta do sistema em vez do visual padrão da biblioteca.
+---
+
+<Preview>
+  <SimpleBarChart
+    data={[
+      { month: "Jan", desktop: 186 },
+      { month: "Fev", desktop: 305 },
+      { month: "Mar", desktop: 237 },
+      { month: "Abr", desktop: 173 },
+      { month: "Mai", desktop: 209 },
+    ]}
+    config={{ desktop: { label: "Desktop" } }}
+    xAxisKey="month"
+    className="w-full"
+  />
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/charts
+```
+
+```tsx
+import { SimpleBarChart } from "@adinkra/charts";
+
+<SimpleBarChart
+  data={[
+    { month: "Jan", desktop: 186 },
+    { month: "Fev", desktop: 305 },
+    { month: "Mar", desktop: 237 },
+  ]}
+  config={{ desktop: { label: "Desktop" } }}
+  xAxisKey="month"
+/>;
+```
+
+`config` é uma entrada por série: a chave bate com uma propriedade de `data`, o valor dá o rótulo (tooltip/legenda) e, opcionalmente, a cor. Sem `color`/`theme` no `config`, a série usa a paleta categórica do próprio sistema (`--tag-coral`, `--tag-sky`, `--tag-mustard`, `--tag-navy` — regra 8, `DECISOES.md`), ciclando pela ordem de declaração das chaves.
+
+## Empilhado com legenda
+
+Uma barra por chave do `config`, empilhadas (`stackId` igual em todas) em vez de lado a lado. Sempre vem com legenda embaixo — a partir de 2 séries, a legenda deixa de ser opcional.
+
+<Preview>
+  <StackedBarChartWithLegend
+    data={[
+      { month: "Jan", desktop: 186, mobile: 80 },
+      { month: "Fev", desktop: 305, mobile: 200 },
+      { month: "Mar", desktop: 237, mobile: 120 },
+      { month: "Abr", desktop: 173, mobile: 190 },
+      { month: "Mai", desktop: 209, mobile: 130 },
+    ]}
+    config={{ desktop: { label: "Desktop" }, mobile: { label: "Mobile" } }}
+    xAxisKey="month"
+    className="w-full"
+  />
+</Preview>
+
+```tsx
+import { StackedBarChartWithLegend } from "@adinkra/charts";
+
+<StackedBarChartWithLegend
+  data={[
+    { month: "Jan", desktop: 186, mobile: 80 },
+    { month: "Fev", desktop: 305, mobile: 200 },
+  ]}
+  config={{ desktop: { label: "Desktop" }, mobile: { label: "Mobile" } }}
+  xAxisKey="month"
+/>;
+```
+
+## Valores negativos
+
+Uma série só, cor por sinal: negativo usa `--destructive` (mesma convenção do `@adinkra/data-table`), positivo usa a cor da série no `config`. A `<ReferenceLine y={0}>` marca a linha de base — sem ela, uma barra negativa fica sem referência de onde é zero.
+
+<Preview>
+  <NegativeBarChart
+    data={[
+      { month: "Jan", saldo: 186 },
+      { month: "Fev", saldo: -120 },
+      { month: "Mar", saldo: 237 },
+      { month: "Abr", saldo: -95 },
+      { month: "Mai", saldo: 60 },
+    ]}
+    config={{ saldo: { label: "Saldo" } }}
+    xAxisKey="month"
+    dataKey="saldo"
+    className="w-full"
+  />
+</Preview>
+
+```tsx
+import { NegativeBarChart } from "@adinkra/charts";
+
+<NegativeBarChart
+  data={[
+    { month: "Jan", saldo: 186 },
+    { month: "Fev", saldo: -120 },
+  ]}
+  config={{ saldo: { label: "Saldo" } }}
+  xAxisKey="month"
+  dataKey="saldo"
+/>;
+```
+
+## Donut com texto no centro
+
+`innerRadius` abre o buraco do meio, e o total (soma de todos os valores) fica escrito centralizado — recalculado a partir de `data`, nunca hardcoded.
+
+<Preview>
+  <DonutChartWithText
+    data={[
+      { browser: "chrome", visitors: 275 },
+      { browser: "safari", visitors: 200 },
+      { browser: "firefox", visitors: 187 },
+      { browser: "edge", visitors: 90 },
+    ]}
+    config={{
+      chrome: { label: "Chrome" },
+      safari: { label: "Safari" },
+      firefox: { label: "Firefox" },
+      edge: { label: "Edge" },
+    }}
+    dataKey="visitors"
+    nameKey="browser"
+    className="mx-auto w-full max-w-64"
+  />
+</Preview>
+
+```tsx
+import { DonutChartWithText } from "@adinkra/charts";
+
+<DonutChartWithText
+  data={[
+    { browser: "chrome", visitors: 275 },
+    { browser: "safari", visitors: 200 },
+  ]}
+  config={{ chrome: { label: "Chrome" }, safari: { label: "Safari" } }}
+  dataKey="visitors"
+  nameKey="browser"
+/>;
+```
+
+## Pizza com rótulo customizado
+
+Nome e porcentagem do lado de fora de cada fatia, ligados por uma linha fina — sem legenda separada, o rótulo já carrega a identidade da fatia.
+
+<Preview>
+  <PieChartWithCustomLabel
+    data={[
+      { browser: "chrome", visitors: 275 },
+      { browser: "safari", visitors: 200 },
+      { browser: "firefox", visitors: 187 },
+      { browser: "edge", visitors: 90 },
+    ]}
+    config={{
+      chrome: { label: "Chrome" },
+      safari: { label: "Safari" },
+      firefox: { label: "Firefox" },
+      edge: { label: "Edge" },
+    }}
+    dataKey="visitors"
+    nameKey="browser"
+    className="mx-auto w-full max-w-96"
+  />
+</Preview>
+
+```tsx
+import { PieChartWithCustomLabel } from "@adinkra/charts";
+
+<PieChartWithCustomLabel
+  data={[{ browser: "chrome", visitors: 275 }]}
+  config={{ chrome: { label: "Chrome" } }}
+  dataKey="visitors"
+  nameKey="browser"
+/>;
+```
+
+## Radar preenchido
+
+Uma `<Radar>` por chave do `config`, área preenchida (não só o contorno) — mais de uma série ganha legenda automaticamente.
+
+<Preview>
+  <FilledRadarChart
+    data={[
+      { category: "Design", desktop: 186 },
+      { category: "Código", desktop: 305 },
+      { category: "Testes", desktop: 237 },
+      { category: "Docs", desktop: 173 },
+      { category: "Suporte", desktop: 209 },
+      { category: "Deploy", desktop: 214 },
+    ]}
+    config={{ desktop: { label: "Pontuação" } }}
+    angleKey="category"
+    className="mx-auto w-full max-w-96"
+  />
+</Preview>
+
+```tsx
+import { FilledRadarChart } from "@adinkra/charts";
+
+<FilledRadarChart
+  data={[{ category: "Design", desktop: 186 }]}
+  config={{ desktop: { label: "Pontuação" } }}
+  angleKey="category"
+/>;
+```
+
+## Sparklines
+
+Linha ou área sozinha, sem eixo/grade/tooltip — pra caber pequena dentro de um KPI ou célula de tabela, sinal de tendência em vez de gráfico de leitura detalhada.
+
+<Preview>
+  <div className="grid w-full gap-4">
+    <LineSparkline data={[{ v: 10 }, { v: 40 }, { v: 25 }, { v: 60 }, { v: 45 }, { v: 80 }]} dataKey="v" />
+    <AreaSparkline data={[{ v: 10 }, { v: 40 }, { v: 25 }, { v: 60 }, { v: 45 }, { v: 80 }]} dataKey="v" />
+  </div>
+</Preview>
+
+```tsx
+import { AreaSparkline, LineSparkline } from "@adinkra/charts";
+
+<LineSparkline data={[{ v: 10 }, { v: 40 }, { v: 25 }]} dataKey="v" />;
+<AreaSparkline data={[{ v: 10 }, { v: 40 }, { v: 25 }]} dataKey="v" />;
+```
+
+## Tendência de alta e de baixa
+
+Mesma sparkline, cor por convenção: alta usa `--primary` (céu), baixa usa `--destructive` (tomate) — o sistema não tem token verde (decisão revertida, ver `DECISOES.md`/Data Table), então "alta" não vira verde aqui.
+
+<Preview>
+  <div className="grid w-full grid-cols-2 gap-4">
+    <UpwardTrendLineChart data={[{ v: 10 }, { v: 15 }, { v: 22 }, { v: 30 }, { v: 45 }, { v: 60 }]} dataKey="v" />
+    <DownwardTrendLineChart data={[{ v: 60 }, { v: 45 }, { v: 40 }, { v: 30 }, { v: 20 }, { v: 12 }]} dataKey="v" />
+  </div>
+</Preview>
+
+```tsx
+import { DownwardTrendLineChart, UpwardTrendLineChart } from "@adinkra/charts";
+
+<UpwardTrendLineChart data={[{ v: 10 }, { v: 15 }, { v: 22 }]} dataKey="v" />;
+<DownwardTrendLineChart data={[{ v: 60 }, { v: 45 }, { v: 40 }]} dataKey="v" />;
+```
+
+## Linha com ponto final destacado
+
+Linha completa (eixo + tooltip), só o último valor ganha um marcador maior — chama atenção pro dado mais recente numa série "até agora".
+
+<Preview>
+  <LineChartWithEndDot
+    data={[
+      { month: "Jan", v: 186 },
+      { month: "Fev", v: 305 },
+      { month: "Mar", v: 237 },
+      { month: "Abr", v: 273 },
+      { month: "Mai", v: 309 },
+    ]}
+    dataKey="v"
+    xAxisKey="month"
+    className="w-full"
+  />
+</Preview>
+
+```tsx
+import { LineChartWithEndDot } from "@adinkra/charts";
+
+<LineChartWithEndDot data={[{ month: "Jan", v: 186 }]} dataKey="v" xAxisKey="month" />;
+```
+
+## Treemap
+
+Blocos proporcionais ao valor — compara peso relativo de muitas categorias de uma vez, onde uma pizza com fatias pequenas ficaria ilegível.
+
+<Preview>
+  <TreemapChart
+    data={[
+      { name: "Chrome", value: 61 },
+      { name: "Safari", value: 19 },
+      { name: "Edge", value: 9 },
+      { name: "Firefox", value: 7 },
+      { name: "Outros", value: 4 },
+    ]}
+    className="w-full"
+  />
+</Preview>
+
+```tsx
+import { TreemapChart } from "@adinkra/charts";
+
+<TreemapChart data={[{ name: "Chrome", value: 61 }, { name: "Safari", value: 19 }]} />;
+```
+
+## Sankey
+
+Fluxo entre etapas — origem e destino ligados por uma faixa cuja espessura é o valor. Útil pra funil (visitas → cadastro → compra) ou qualquer transição entre estados.
+
+<Preview>
+  <SankeyChart
+    data={{
+      nodes: [{ name: "Visitas" }, { name: "Cadastro" }, { name: "Compra" }, { name: "Abandono" }],
+      links: [
+        { source: 0, target: 1, value: 400 },
+        { source: 0, target: 3, value: 600 },
+        { source: 1, target: 2, value: 250 },
+        { source: 1, target: 3, value: 150 },
+      ],
+    }}
+    className="w-full"
+  />
+</Preview>
+
+```tsx
+import { SankeyChart } from "@adinkra/charts";
+
+<SankeyChart
+  data={{
+    nodes: [{ name: "Visitas" }, { name: "Cadastro" }],
+    links: [{ source: 0, target: 1, value: 400 }],
+  }}
+/>;
+```
+
+## Cor customizada por série
+
+`config` aceita `color` (fixo) ou `theme` (um valor por modo claro/escuro) por chave — sobrescreve a paleta categórica padrão só pra aquela série.
+
+```tsx
+<SimpleBarChart
+  data={data}
+  config={{ desktop: { label: "Desktop", color: "var(--primary)" } }}
+  xAxisKey="month"
+/>
+```
+
+## Props
+
+Nem todo componente usa todas as props abaixo — cada gráfico só recebe as que fazem sentido pra sua forma (ex.: sparklines não têm `config`/eixo, `TreemapChart`/`SankeyChart` têm o formato de `data` próprio).
+
+<PropsTable
+  rows={[
+    {
+      prop: "data",
+      type: "Record<string, unknown>[]",
+      description: "Uma linha por categoria (eixo X, fatia, eixo do radar...) — o resto das chaves vira uma série/valor, conforme o gráfico. TreemapChart usa { name, value }[]; SankeyChart usa { nodes, links }.",
+    },
+    {
+      prop: "config",
+      type: "ChartConfig",
+      description: "Uma entrada por série ou fatia: label (tooltip/legenda) e, opcionalmente, color ou theme (light/dark). Sem cor definida, usa a paleta categórica do sistema ciclada pela ordem das chaves. Ausente em sparklines, Treemap e Sankey (cor vem direto da prop color ou cicla sozinha).",
+    },
+    {
+      prop: "xAxisKey / angleKey",
+      type: "string",
+      description: "Chave de data usada no eixo X (barra/linha) ou nos rótulos ao redor do polígono (radar).",
+    },
+    {
+      prop: "dataKey / nameKey",
+      type: "string",
+      description: "Chave de data com o valor numérico (dataKey) e, em pizza/donut, com o nome de cada fatia (nameKey). NegativeBarChart e sparklines têm uma série só.",
+    },
+    {
+      prop: "color",
+      type: "string",
+      default: '"var(--primary)"',
+      description: "Só nas sparklines/LineChartWithEndDot: cor do traço — qualquer token ou hex, não passa por config.",
+    },
+    {
+      prop: "className",
+      type: "string",
+      description: "Classes extras no container do gráfico.",
+    },
+  ]}
+/>
+
+## Tokens usados
+
+`--tag-coral`/`--tag-sky`/`--tag-mustard`/`--tag-navy` (paleta categórica padrão das séries, fatias, blocos e nós) + seus `-foreground` (texto legível dentro dos blocos do Treemap, um par por cor — nunca `--heading` fixo, que falha contraste na mostarda), `--primary` (tendência de alta), `--destructive` (barra negativa, tendência de baixa), `--border` (linha de base do gráfico negativo, guia de hover, ligações do Sankey — nunca `--ink`: essas são linhas de apoio, não dado nem chrome), `--hairline` (grade e linhas de eixo), `--muted-foreground` (texto dos eixos e legenda), `--surface` (fundo do tooltip), `--ink` (só na "cartão" do tooltip — borda/sombra `shadow-brutal`, igual todo painel flutuante do sistema; nenhuma marca de dado usa `--ink`), `--heading` (texto central do donut, rótulos do Sankey fora dos nós).
