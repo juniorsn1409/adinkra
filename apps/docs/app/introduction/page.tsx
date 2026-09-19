@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { buttonVariants } from "@adinkra/button";
+import { GlitchCursor } from "@adinkra/cursor";
 import { DocsShell } from "../../components/docs-shell";
 
 export const metadata = { title: "Introduction" };
@@ -7,6 +8,7 @@ export const metadata = { title: "Introduction" };
 export default function IntroductionPage() {
   return (
     <DocsShell>
+      <GlitchCursor />
       <article className="grid w-full max-w-3xl gap-8 pb-24">
         <header className="grid gap-2 border-b border-hairline pb-6">
           <p className="font-display text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">

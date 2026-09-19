@@ -101,7 +101,7 @@ Baseado no [Navigation Menu do neobrutalism.dev](https://www.neobrutalism.dev/do
 
 ## Estados
 
-Vocabulário reaproveitado do resto do sistema, não inventado aqui: hover usa o mesmo `bg-card` do `SidebarMenuButton`; aberto/ativo usa `bg-secondary`/`text-secondary-foreground`, o mesmo "isto está ligado" do `Toggle` e do grupo aberto da `Sidebar` — o céu (`--primary`) fica reservado à ação principal (regra 6, DECISOES.md). Sem borda/sombra no trigger (é navegação, tratamento ghost) — só o painel flutuante leva borda + raio + sombra, como qualquer cartão único do sistema.
+Vocabulário reaproveitado do resto do sistema, não inventado aqui: hover usa o mesmo `bg-card` do `SidebarMenuButton`; aberto/ativo usa `bg-primary`/`text-primary-foreground` (17/09, era `bg-secondary`), o mesmo "isto está ligado" do `Toggle`, do grupo aberto da `Sidebar`, do `Badge` e da `Pagination` — regra 6 (DECISOES.md) ampliada: indicador de estado pode repetir a cor primária, só botão de ação fica limitado a um por tela. Sem borda/sombra no trigger (é navegação, tratamento ghost) — só o painel flutuante leva borda + raio + sombra, como qualquer cartão único do sistema.
 
 ## Props
 
@@ -132,4 +132,4 @@ Vem do [Base UI](https://base-ui.com/react/components/navigation-menu): navegaç
 
 ## Tokens usados
 
-`--ink` · `--surface` · `--foreground` · `--secondary`/`--secondary-foreground` · `--card` · `--ring` · `--shadow-brutal`
+`--ink` · `--surface` · `--foreground` · `--primary`/`--primary-foreground` · `--card` · `--ring` · `--shadow-brutal`

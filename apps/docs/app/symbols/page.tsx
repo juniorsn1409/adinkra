@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardTitle } from "@adinkra/card";
 import { iconRegistry } from "@adinkra/icons";
+import { GlitchCursor } from "@adinkra/cursor";
 import { DocsShell } from "../../components/docs-shell";
 
 export const metadata = { title: "Símbolos" };
@@ -58,6 +59,7 @@ const symbols: SymbolEntry[] = [
   { name: "Gye Nyame", description: "A onipotência e supremacia de Deus.", slug: "gye-nyame" },
   { name: "Sankofa", description: "Aprender com o passado pra construir o futuro.", slug: "sankofa" },
   { name: "Sankofa (coração)", description: "Versão em coração do retorno às raízes.", slug: "sankofa-heart" },
+  { name: "Sankofa (espiral)", description: "Versão decorada, com espirais na barriga e leque de penas na cauda.", slug: "sankofa-swirl" },
   { name: "Adinkrahene", description: "Autoridade, liderança, carisma.", slug: "adinkrahene" },
   { name: "Dwennimmen", description: "Força e humildade ao mesmo tempo.", slug: "dwennimmen" },
   { name: "Funtumfunefu Denkyemfunefu", description: "Unidade na diversidade, destino compartilhado.", slug: "funtumfunefu-denkyemfunefu" },

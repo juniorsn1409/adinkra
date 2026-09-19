@@ -1,0 +1,187 @@
+---
+title: Arc Text
+description: Texto em arco animado, no espírito de um selo/logo — letra por letra, com leve parallax no mouse.
+---
+
+Tradução de um mecanismo de logo animado ([CodePen "Happy Thanksgiving!"](https://codepen.io/kuro-nyani/pen/LYqyKgB) de kuro-nyani/Jackie Zen, arte de [Stephen Doulas](https://dribbble.com/stephendoulas)) — só o efeito de texto em arco foi extraído, sem jQuery/GSAP (reescrito em React + CSS). Componente separado, não aplicado em nenhuma página do site por padrão — existe pra quem quiser usar como selo/logo, não é o wordmark principal do Adinkra (que continua sendo `font-adinkra` reto, na sidebar/home).
+
+<Preview>
+  <ArcText />
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/arc-text
+```
+
+```tsx
+import { ArcText } from "@adinkra/arc-text";
+
+<ArcText text="Adinkra" />;
+```
+
+## Mecânica
+
+Cada letra é um `<span>` com `transform-origin: bottom center`, todas pivotando do mesmo ponto — como os números de um relógio. O ângulo de cada letra é calculado a partir do total de letras e do prop `arc` (não hardcoded por índice, diferente do CSS original, que tinha uma regra por letra específica pra uma frase fixa) — funciona pra qualquer texto e qualquer tamanho.
+
+A cor vem de `currentColor` — sem token fixo, herda de quem envolve o componente (`className="text-brand"`, por exemplo).
+
+## Outros tamanhos e textos
+
+<StatesGrid>
+  <State label='text="ADK"'>
+    <ArcText text="ADK" size={64} />
+  </State>
+  <State label="arc={160}">
+    <ArcText arc={160} size={64} />
+  </State>
+  <State label="parallax={false}">
+    <ArcText parallax={false} size={64} />
+  </State>
+</StatesGrid>
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "text",
+      type: "string",
+      default: '"Adinkra"',
+      description: "Texto desenhado em arco, letra por letra.",
+    },
+    {
+      prop: "arc",
+      type: "number",
+      default: "100",
+      description: "Quantos graus o arco ocupa, centralizados.",
+    },
+    {
+      prop: "size",
+      type: "number",
+      default: "96",
+      description: "Raio do arco em px — também a altura de cada letra até o pivô.",
+    },
+    {
+      prop: "parallax",
+      type: "boolean",
+      default: "true",
+      description: 'Segue o cursor com um leve deslocamento. Desliga sozinho com prefers-reduced-motion.',
+    },
+    {
+      prop: "...props",
+      type: "HTMLAttributes<HTMLDivElement>",
+      description: "Qualquer atributo nativo de <div>.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+O texto completo vai no `aria-label` do contêiner (`role="img"`) — cada `<span>` de letra é `aria-hidden`, então um leitor de tela anuncia a palavra inteira de uma vez, não letra por letra. O parallax desliga sozinho sob `prefers-reduced-motion: reduce`; a entrada com fade usa `transition` comum, já coberta pela regra global de `@adinkra/tokens` que zera duração de animação/transição nesse caso.
+
+## Tokens usados
+
+Nenhum — a cor herda de `currentColor`, a fonte é `--font-display` (Jost).
+
+## ArcLogo
+
+Composição maior no espírito do `ArcText` (mecânica própria, não usa o componente por dentro) — palavra em arco no topo, sol e raios animados como halo, um Sankofa desenhado ao vivo como emblema central, ano partido ao meio embaixo. Tradução do mecanismo de um [logo animado no CodePen](https://codepen.io/kuro-nyani/pen/LYqyKgB) (kuro-nyani/Jackie Zen, arte de [Stephen Doulas](https://dribbble.com/stephendoulas)) — a ilustração original (peru, folha) era específica de Thanksgiving e ficou de fora; só a mecânica de sol+raios+texto em arco foi mantida, com o peru trocado por um símbolo Adinkra. A palavra segue um semicírculo de raio constante — não uma parábola (que afina no vértice) nem letras girando em leque a partir de um pivô.
+
+<Preview>
+  <ArcLogoDemo />
+</Preview>
+
+Os controles ao lado mudam `text`/`year`/`size` ao vivo, ligam/desligam o raio automático do semicírculo (com um campo manual, em px, quando desligado), ajustam `tailLength` (o trecho reto do excedente de letra), `logoY` (distância entre a palavra e o sol/ícone), o `icon` (qualquer slug de `@adinkra/icons`, não só o Sankofa) e o `parallax` da composição inteira; "Reiniciar animação" força o componente a remontar (mesmo padrão do botão "Replay" da referência original).
+
+```tsx
+import { ArcLogo } from "@adinkra/arc-text";
+
+<ArcLogo text="Adinkra" year="2026" />;
+```
+
+**O traçado é um resultado experimental, pra qualquer ícone.** Os paths de `@adinkra/icons` vêm desenhados pra ser PREENCHIDOS (`fillRule: evenodd`, vários subpaths sobrepostos pra criar vazios), não pra ser traçados como contorno. `ArcLogo` troca `fill` por `stroke` e mede o comprimento real em runtime (`getTotalLength`) pra animar o traço — a mesma ideia da referência original (que usava jQuery pra isso), sem jQuery. O resultado pode sair mais "rabiscado" que o ícone preenchido normal, já que nenhum path foi desenhado com essa intenção — troque o `icon` na demo abaixo pra comparar entre símbolos.
+
+### Props — ArcLogo
+
+<PropsTable
+  rows={[
+    {
+      prop: "text",
+      type: "string",
+      default: '"Adinkra"',
+      description: "Palavra no topo.",
+    },
+    {
+      prop: "brandText",
+      type: "string",
+      default: "mesmo valor de text",
+      description: 'Nome exibido no vão entre "20" e "26", embaixo. Sem essa prop, repete text — passe um valor diferente pra usar outra palavra ali.',
+    },
+    {
+      prop: "arc",
+      type: "number",
+      default: "size × 0.3",
+      description: "Raio do semicírculo do topo, em px. Palavra curta cabe inteira na curva; o que sobrar continua reto pelas laterais, ângulo travado em ±90° (a mesma tangente de onde a curva parou).",
+    },
+    {
+      prop: "tailLength",
+      type: "number",
+      default: "2.5",
+      description: "O quanto o trecho reto (o excedente de letra além do semicírculo) pode descer, em múltiplos do raio do sol.",
+    },
+    {
+      prop: "logoY",
+      type: "number",
+      default: "0.5",
+      description: "Posição vertical do sol (e, a partir dele, raios/Sankofa/ano), como fração de size — 0 é o topo, 1 é a base. Controla a distância entre a palavra e o resto da composição.",
+    },
+    {
+      prop: "icon",
+      type: "string",
+      default: '"sankofa"',
+      description: "Slug de qualquer símbolo de @adinkra/icons — emblema central, desenhado ao vivo. Slug inválido cai pro Sankofa.",
+    },
+    {
+      prop: "rayDistance",
+      type: "number",
+      default: "1",
+      description: "Multiplicador da distância do leque de raios até o sol — maior afasta, menor aproxima, sem mudar o tamanho do sol.",
+    },
+    {
+      prop: "rayShape",
+      type: '"straight" | "parabola"',
+      default: '"straight"',
+      description: 'Formato de cada raio — "straight" são retos (padrão), "parabola" curva cada um numa curva quadrática, sempre pro mesmo lado (efeito de chama/redemoinho).',
+    },
+    {
+      prop: "year",
+      type: "string",
+      default: '"2026"',
+      description: 'Ano exibido embaixo, partido ao meio ("2026" vira "20"/"26").',
+    },
+    {
+      prop: "size",
+      type: "number",
+      default: "220",
+      description: "Diâmetro total do selo, em px.",
+    },
+    {
+      prop: "parallax",
+      type: "boolean",
+      default: "true",
+      description: "Liga o parallax de toda a composição (sol, raios, ícone, palavra, ano) — todos se movem juntos, com o mesmo peso.",
+    },
+    {
+      prop: "filled",
+      type: "boolean",
+      default: "true",
+      description: "Preenche o ícone com cor depois que o traço termina de desenhar (fade-in). Desligado, o ícone fica só com o contorno.",
+    },
+  ]}
+/>
+
+### Tokens usados — ArcLogo
+
+`--primary` (sol, raios) · `--secondary` (palavra em arco, nome no meio do ano, ano, ícone) · `--font-display`

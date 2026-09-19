@@ -15,10 +15,11 @@ import { cn } from "@adinkra/core";
  *
  * Vocabulário de estado reaproveitado do resto do sistema, não inventado
  * aqui: hover = `bg-card` (mesmo do SidebarMenuButton), aberto/ativo =
- * `bg-secondary`/`text-secondary-foreground` (mesmo "isto está ligado" do
- * Toggle e do grupo aberto da Sidebar — céu/primary fica reservado à ação
- * principal, regra 6). Sem borda/sombra no trigger (é navegação, tratamento
- * ghost, não uma ação) — só o painel flutuante (Popup) leva
+ * `bg-primary`/`text-primary-foreground` (17/09, era `bg-secondary` — mesma
+ * leva que trocou Toggle/Sidebar/Badge/Pagination; regra 6 ampliada:
+ * indicador de estado pode repetir a primária, só botão de AÇÃO fica
+ * limitado a um por tela). Sem borda/sombra no trigger (é navegação,
+ * tratamento ghost, não uma ação) — só o painel flutuante (Popup) leva
  * borda+raio+sombra, como qualquer "cartão único" do sistema.
  */
 function NavigationMenu({
@@ -81,8 +82,8 @@ function navigationMenuTriggerStyle() {
     "group inline-flex h-9 w-max items-center justify-center gap-1 rounded-control px-3.5 py-2",
     "font-display text-sm text-foreground transition-colors",
     "hover:bg-card",
-    "data-popup-open:bg-secondary data-popup-open:text-secondary-foreground",
-    "data-active:bg-secondary data-active:text-secondary-foreground",
+    "data-popup-open:bg-primary data-popup-open:text-primary-foreground",
+    "data-active:bg-primary data-active:text-primary-foreground",
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
     "disabled:pointer-events-none disabled:opacity-45 data-disabled:pointer-events-none data-disabled:opacity-45",
   );

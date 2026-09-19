@@ -107,7 +107,7 @@ Revisado contra o [sidebar do neobrutalism.dev](https://www.neobrutalism.dev/doc
 
 ## Modos de recolhimento
 
-`collapsible="icon"` (o padrão) recolhe a sidebar para uma faixa só de ícones — o rótulo some, o ícone e o contorno do item ativo continuam. `collapsible="offcanvas"` recolhe até largura zero (nada fica visível) — pensado pra navegações sem ícone por item, onde uma faixa de ícones vazios não faria sentido; é o modo usado pela sidebar real deste site (veja o preview no topo desta página, com `<SidebarRail/>` na borda). `collapsible="none"` deixa sempre expandida, sem nenhuma das duas opções.
+`collapsible="icon"` (o padrão) recolhe a sidebar para uma faixa só de ícones — o rótulo some, o ícone e o contorno do item ativo continuam; é o modo usado pela sidebar real deste site desde 17/09 (veja o preview no topo desta página, com `<SidebarRail/>` na borda) — antes disso usava `"offcanvas"`, porque nenhum item tinha ícone ainda. `collapsible="offcanvas"` recolhe até largura zero (nada fica visível) — pensado pra navegações sem ícone por item, onde uma faixa de ícones vazios não faria sentido. `collapsible="none"` deixa sempre expandida, sem nenhuma das duas opções.
 
 ## Submenu
 
@@ -210,7 +210,7 @@ Em mobile ele não renderiza nada — lá quem fecha a gaveta é o fundo escurec
 
 Abaixo de 768px (o mesmo breakpoint de `useIsMobile`, exportado pelo pacote), `Sidebar` vira uma gaveta: fixa na tela, começa **fechada**, desliza com `translate-x` e ganha um fundo escurecido atrás (`bg-ink/40`) que fecha ao ser tocado. `Ctrl`/`Cmd` + `B`, `SidebarTrigger` e `Esc` (só quando a gaveta já está aberta) continuam funcionando do mesmo jeito.
 
-Isso é automático — o mesmo `<Sidebar>` que renderiza a faixa fixa no desktop passa a renderizar a gaveta sozinho, sem nenhuma prop nova. Só é preciso garantir que exista algum `SidebarTrigger` visível em telas pequenas pra reabrir a gaveta depois de fechada (neste próprio site, ele mora numa barra que só aparece abaixo de `md`, já que a navegação em si — `collapsible="none"` — não tem gatilho embutido).
+Isso é automático — o mesmo `<Sidebar>` que renderiza a faixa fixa no desktop passa a renderizar a gaveta sozinho, sem nenhuma prop nova. Só é preciso garantir que exista algum `SidebarTrigger` visível em telas pequenas pra reabrir a gaveta depois de fechada (neste próprio site, ele mora numa barra que só aparece abaixo de `md`).
 
 ## Exemplos de uso
 
@@ -247,7 +247,7 @@ Todos os jeitos de montar uma `@adinkra/sidebar` num lugar só — básico, subm
     {
       prop: "SidebarMenuButton icon",
       type: "ReactNode",
-      description: "Fica visível mesmo com a sidebar recolhida a ícones.",
+      description: "Fica visível mesmo com a sidebar recolhida a ícones. Sem essa prop, um quadrado neutro entra no lugar (17/09) — a faixa recolhida nunca fica com uma linha em branco.",
     },
     {
       prop: "SidebarMenuButton tooltip",

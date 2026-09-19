@@ -49,11 +49,14 @@ export function AppSidebar({ className }: AppSidebarProps = {}) {
   const pathname = usePathname();
 
   return (
-    // "offcanvas", não "icon": sem ícone por item, uma faixa recolhida só de
-    // ícones sobraria vazia — recolhe até largura zero em vez disso. A
-    // SidebarRail (faixa fina na borda) alterna entre os dois estados; ver
-    // DECISOES.md.
-    <Sidebar collapsible="offcanvas" className={className}>
+    // "icon" (17/09, era "offcanvas" — sem ícone por item, uma faixa
+    // recolhida só de ícones sobraria vazia; ver DECISOES.md). Nenhum item
+    // daqui passa `icon`: o próprio @adinkra/sidebar desenha um quadrado
+    // neutro (`DefaultMenuIcon`) quando a prop não vem, então a faixa
+    // recolhida fica utilizável sem escolher um símbolo Adinkra por item.
+    // Sub-itens (Button, Input...) continuam sem ícone/quadrado — limitação
+    // conhecida, submenu não vira flutuante recolhido.
+    <Sidebar collapsible="icon" className={className}>
       <SidebarContent>
         {/*
           SidebarHeader movido pra dentro do SidebarContent (pedido do

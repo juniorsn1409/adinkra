@@ -14,6 +14,7 @@
       "name": "docs",
       "version": "0.1.0",
       "dependencies": {
+        "@adinkra/arc-text": "workspace:*",
         "@adinkra/badge": "workspace:*",
         "@adinkra/breadcrumb": "workspace:*",
         "@adinkra/button": "workspace:*",
@@ -46,6 +47,23 @@
         "@types/react-dom": "^19.3.0",
         "tailwindcss": "^4.3.3",
         "typescript": "^5.9.3",
+      },
+    },
+    "packages/arc-text": {
+      "name": "@adinkra/arc-text",
+      "version": "0.1.0",
+      "dependencies": {
+        "@adinkra/core": "workspace:*",
+        "@adinkra/icons": "workspace:*",
+      },
+      "devDependencies": {
+        "@types/react": "^19.3.0",
+        "react": "^19.3.0",
+        "tsup": "^8.5.1",
+        "typescript": "^5.9.3",
+      },
+      "peerDependencies": {
+        "react": "^19.0.0",
       },
     },
     "packages/badge": {
@@ -370,6 +388,8 @@
     },
   },
   "packages": {
+    "@adinkra/arc-text": ["@adinkra/arc-text@workspace:packages/arc-text"],
+
     "@adinkra/badge": ["@adinkra/badge@workspace:packages/badge"],
 
     "@adinkra/breadcrumb": ["@adinkra/breadcrumb@workspace:packages/breadcrumb"],

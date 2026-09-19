@@ -362,6 +362,15 @@ export const SidebarMenuAction = React.forwardRef<HTMLButtonElement, SidebarMenu
 );
 SidebarMenuAction.displayName = "SidebarMenuAction";
 
+// Fallback pra quem não passa `icon` (17/09/2026, pedido do usuário) —
+// quadrado neutro, não um ícone de verdade: sem ele, a faixa recolhida a
+// ícones (`collapsible="icon"`) ficaria com linhas em branco pra quem não
+// tem símbolo escolhido. `bg-current` herda a cor do texto ao redor
+// (`text-foreground`/`text-heading`, conforme o estado), sem token novo.
+function DefaultMenuIcon() {
+  return <span aria-hidden className="block size-2.5 rounded-[2px] bg-current" />;
+}
+
 export interface SidebarMenuButtonProps extends React.ComponentPropsWithoutRef<"button"> {
   isActive?: boolean;
   /** Texto mostrado como title quando o sidebar está recolhido a ícones. */
@@ -397,7 +406,7 @@ export const SidebarMenuButton = React.forwardRef<HTMLButtonElement, SidebarMenu
           className,
         )}
       >
-        {icon ? <span className="flex size-4 flex-none items-center justify-center [&>svg]:size-4">{icon}</span> : null}
+        <span className="flex size-4 flex-none items-center justify-center [&>svg]:size-4">{icon ?? <DefaultMenuIcon />}</span>
         <span className="truncate group-data-[state=collapsed]/sidebar:hidden">{children}</span>
       </span>
     );
@@ -515,18 +524,16 @@ export function SidebarMenuCollapsibleTrigger({
         "font-display text-sm text-foreground [&::-webkit-details-marker]:hidden",
         "transition-colors duration-150",
         "hover:bg-card",
-        // Aberto ganha o mesmo fundo "ligado" do Toggle (--secondary) — o
-        // grupo aberto é o estado atual, não uma ação de marca (regra 6,
-        // DECISOES.md reserva o céu só pra isso); reaproveita o vocabulário
-        // já usado pelo Toggle/Pagination pra "isto está ativo".
-        "group-open/collapsible:bg-secondary group-open/collapsible:font-medium group-open/collapsible:text-secondary-foreground",
-        "group-open/collapsible:hover:bg-secondary",
+        // Aberto ganha --primary laranja (17/09, era o "ligado" --secondary
+        // do Toggle — trocado junto na mesma leva, pedido do usuário).
+        "group-open/collapsible:bg-primary group-open/collapsible:font-medium group-open/collapsible:text-primary-foreground",
+        "group-open/collapsible:hover:bg-primary",
         "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
         className,
       )}
       {...props}
     >
-      {icon ? <span className="flex size-4 flex-none items-center justify-center [&>svg]:size-4">{icon}</span> : null}
+      <span className="flex size-4 flex-none items-center justify-center [&>svg]:size-4">{icon ?? <DefaultMenuIcon />}</span>
       <span className="flex-1 truncate group-data-[state=collapsed]/sidebar:hidden">{children}</span>
       <svg
         viewBox="0 0 16 16"
@@ -534,7 +541,7 @@ export function SidebarMenuCollapsibleTrigger({
         height="13"
         fill="none"
         aria-hidden="true"
-        className="flex-none text-foreground transition-transform duration-150 group-open/collapsible:rotate-90 group-open/collapsible:text-secondary-foreground group-data-[state=collapsed]/sidebar:hidden"
+        className="flex-none text-foreground transition-transform duration-150 group-open/collapsible:rotate-90 group-open/collapsible:text-primary-foreground group-data-[state=collapsed]/sidebar:hidden"
       >
         <path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
       </svg>

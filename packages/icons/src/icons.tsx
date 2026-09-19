@@ -822,6 +822,15 @@ export function SankofaHeartIcon(props: IconProps) {
   );
 }
 
+export function SankofaSwirlIcon(props: IconProps) {
+  const path = iconPaths["sankofa-swirl"]!;
+  return (
+    <svg viewBox={path.viewBox} fill="currentColor" {...props}>
+      <path d={path.d} fillRule={path.fillRule} />
+    </svg>
+  );
+}
+
 export function SepowIcon(props: IconProps) {
   const path = iconPaths["sepow"]!;
   return (
@@ -1005,6 +1014,7 @@ export const iconRegistry: Record<string, React.ComponentType<IconProps>> = {
   "pempamsie": PempamsieIcon,
   "sankofa": SankofaIcon,
   "sankofa-heart": SankofaHeartIcon,
+  "sankofa-swirl": SankofaSwirlIcon,
   "sepow": SepowIcon,
   "sesa-wo-suban": SesaWoSubanIcon,
   "som-onyankopon": SomOnyankoponIcon,

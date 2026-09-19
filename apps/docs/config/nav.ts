@@ -27,9 +27,11 @@ export interface NavGroup {
 // usuário pediu pra apagar o componente e o pacote inteiro, sistema de tema
 // junto (ver DECISOES.md).
 //
-// Sem ícone por item de propósito (decisão de 15/09/2026) — por isso a
-// sidebar não colapsa mais para uma faixa de ícones (AppSidebar usa
-// collapsible="none").
+// Sem ícone por COMPONENTE de propósito (decisão de 15/09/2026, ainda vale)
+// — só as categorias (Primitivos/Navegação/Formulário/Sistema) ganharam
+// ícone depois (17/09), pra sidebar poder recolher em "icon" (mapa em
+// apps/docs/components/sidebar.tsx, não aqui — nav.ts é consumido fora de
+// componente React também, não é lugar de guardar JSX).
 export const nav: NavGroup[] = [
   {
     title: "Primitivos",
@@ -64,7 +66,10 @@ export const nav: NavGroup[] = [
   },
   {
     title: "Sistema",
-    items: [{ title: "Cursor", slug: "cursor", status: "estavel" }],
+    items: [
+      { title: "Cursor", slug: "cursor", status: "estavel" },
+      { title: "Arc Text", slug: "arc-text", status: "estavel" },
+    ],
   },
 ];
 

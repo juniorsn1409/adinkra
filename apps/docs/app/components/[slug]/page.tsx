@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { compileMDX } from "next-mdx-remote/rsc";
+import { ArcText } from "@adinkra/arc-text";
 import { Badge } from "@adinkra/badge";
 import {
   Breadcrumb,
@@ -72,6 +73,7 @@ import {
   MotionBlurCursorDemo,
   RingDotCursorDemo,
 } from "../../../components/cursor-demo";
+import { ArcLogoDemo } from "../../../components/arc-logo-demo";
 import { DataTableDemo } from "../../../components/data-table-demo";
 import { DatePickerBasicDemo, DatePickerDemo, DateRangePickerDemo, DateTimePickerDemo } from "../../../components/date-picker-demo";
 import { SegmentedBarCurrencyDemo, SegmentedBarDraggableDemo } from "../../../components/segmented-bar-demo";
@@ -121,6 +123,8 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
       StatesGrid,
       State,
       PropsTable,
+      ArcText,
+      ArcLogoDemo,
       Button,
       Input,
       Badge,

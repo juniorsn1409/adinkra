@@ -13,8 +13,9 @@ import { cn } from "@adinkra/core";
  * ferramentas, por exemplo) — diferente de um clique disparando uma ação.
  * Por isso o gesto "sobe no hover, afunda ao pressionar" da mecânica
  * neobrutalista (seção 4, DECISOES.md) aqui não é passageiro: `data-state`
- * decide se o botão fica "afundado" (borda de tinta, fundo `--secondary`,
- * deslocado, sem sombra) o tempo todo, não só durante o clique. Desligado, o
+ * decide se o botão fica "afundado" (borda de tinta, fundo `--primary`
+ * laranja — 17/09, era `--secondary` — deslocado, sem sombra) o tempo
+ * todo, não só durante o clique. Desligado, o
  * variant `default` descansa como o `ghost` do Button (sem borda) até o
  * hover convidar ao clique.
  */
@@ -27,7 +28,7 @@ const toggleVariants = cva(
     "transition-[transform,box-shadow,background-color,border-color] duration-150",
     "disabled:pointer-events-none disabled:opacity-45 disabled:shadow-none disabled:translate-x-0 disabled:translate-y-0",
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-    "data-[state=on]:border-ink data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground",
+    "data-[state=on]:border-ink data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
     "data-[state=on]:translate-x-0.5 data-[state=on]:translate-y-0.5 data-[state=on]:shadow-none",
   ],
   {

@@ -12,12 +12,17 @@ import { cn } from "@adinkra/core";
  * texto pequeno do selo (11px), nem branco nem tinta passam no AA em cima
  * dele (regra 3, DECISOES.md). `tag-coral` usa `--tag-coral`, um coral mais
  * escuro feito exatamente para isso — ver regra 8.
+ *
+ * `primary` (17/09, laranja do redesign sidebar.io) virou o padrão, no
+ * lugar de `accent` — pedido do usuário, mesma leva que trocou o "ligado"
+ * do Toggle e o submenu aberto da Sidebar. `accent` continua disponível.
  */
 const badgeVariants = cva(
   "inline-flex items-center rounded-control border-[length:var(--border-width)] border-ink px-2 py-0.5 font-display text-[0.6875rem] font-medium uppercase tracking-[0.14em]",
   {
     variants: {
       variant: {
+        primary: "bg-primary text-primary-foreground",
         accent: "bg-accent text-accent-foreground",
         secondary: "bg-secondary text-secondary-foreground",
         outline: "bg-transparent text-foreground",
@@ -26,7 +31,7 @@ const badgeVariants = cva(
         "tag-mustard": "bg-tag-mustard text-tag-mustard-foreground",
       },
     },
-    defaultVariants: { variant: "accent" },
+    defaultVariants: { variant: "primary" },
   },
 );
 

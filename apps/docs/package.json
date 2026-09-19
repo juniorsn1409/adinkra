@@ -9,6 +9,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@adinkra/arc-text": "workspace:*",
     "@adinkra/badge": "workspace:*",
     "@adinkra/breadcrumb": "workspace:*",
     "@adinkra/button": "workspace:*",

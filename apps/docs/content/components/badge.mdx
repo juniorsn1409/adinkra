@@ -5,7 +5,8 @@ description: Uma etiqueta curta de status, nunca clicável.
 
 <Preview>
   <div style={{ display: "flex", gap: "0.5rem" }}>
-    <Badge variant="accent">Novo</Badge>
+    <Badge>Novo</Badge>
+    <Badge variant="accent">Revisado</Badge>
     <Badge variant="secondary">Publicado</Badge>
     <Badge variant="outline">Rascunho</Badge>
   </div>
@@ -20,14 +21,17 @@ bun add @adinkra/badge
 ```tsx
 import { Badge } from "@adinkra/badge";
 
-<Badge variant="accent">Novo</Badge>;
+<Badge>Novo</Badge>;
 ```
 
 ## Variantes
 
 <StatesGrid>
+  <State label="primary (padrão)">
+    <Badge variant="primary">Novo</Badge>
+  </State>
   <State label="accent">
-    <Badge variant="accent">Novo</Badge>
+    <Badge variant="accent">Revisado</Badge>
   </State>
   <State label="secondary">
     <Badge variant="secondary">Publicado</Badge>
@@ -47,8 +51,8 @@ daqui.
   rows={[
     {
       prop: "variant",
-      type: '"accent" | "secondary" | "outline"',
-      default: '"accent"',
+      type: '"primary" | "accent" | "secondary" | "outline"',
+      default: '"primary"',
       description: "Cor da etiqueta.",
     },
     {
@@ -61,4 +65,4 @@ daqui.
 
 ## Tokens usados
 
-`--accent` · `--accent-foreground` · `--secondary` · `--secondary-foreground` · `--border` · `--muted-foreground`
+`--primary` · `--primary-foreground` · `--accent` · `--accent-foreground` · `--secondary` · `--secondary-foreground` · `--border` · `--muted-foreground`

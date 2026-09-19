@@ -11,11 +11,11 @@ import { cn } from "@adinkra/core";
  * Pagination/Content/Item/Link/Previous/Next/Ellipsis), reconstruída com os
  * nossos tokens. `PaginationLink` não reaproveita `buttonVariants` do
  * `@adinkra/button` — é um chip quadrado, não um botão de ação —, mas usa o
- * mesmo vocabulário visual (borda de tinta, sombra dura, `--secondary` pra
- * "selecionado"). A página ativa fica com a mesma cara "afundada" (borda +
- * fundo `--secondary`, sem o convite de hover) que o `Toggle` usa pro
- * estado ligado — aqui não é um estado que alguém liga/desliga, é só "você
- * está aqui".
+ * mesmo vocabulário visual (borda de tinta, sombra dura, `--primary` pra
+ * "selecionado" — era `--secondary`, trocado 17/09 junto com Toggle/Sidebar/
+ * Badge). A página ativa fica com a mesma cara "afundada" (borda + fundo
+ * `--primary`, sem o convite de hover) que o `Toggle` usa pro estado ligado
+ * — aqui não é um estado que alguém liga/desliga, é só "você está aqui".
  *
  * Ícones (setas do Previous/Next, três pontos da elipse) são SVG inline com
  * o mesmo traço já usado no chevron do submenu da Sidebar, no Breadcrumb e
@@ -84,8 +84,8 @@ const paginationLinkVariants = cva(
     variants: {
       isActive: {
         true: [
-          "border-ink bg-secondary text-secondary-foreground shadow-brutal",
-          "hover:translate-x-0 hover:translate-y-0 hover:bg-secondary hover:shadow-brutal",
+          "border-ink bg-primary text-primary-foreground shadow-brutal",
+          "hover:translate-x-0 hover:translate-y-0 hover:bg-primary hover:shadow-brutal",
         ],
         false: "",
       },
