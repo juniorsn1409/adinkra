@@ -47,9 +47,12 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             className={cn(
               "peer h-9 w-full cursor-pointer appearance-none rounded-control border-[length:var(--border-width)] bg-card py-0 pl-3 pr-9 text-sm text-foreground",
               "shadow-brutal transition-[border-color,box-shadow] duration-150",
-              "focus-visible:outline-none focus-visible:border-ring focus-visible:shadow-[4px_4px_0_0_var(--ring)]",
+              // Mesmo anel dos botões (outline --ring com respiro de 2px). Trocar só a cor da
+            // borda de tinta pra --ring (marinho, quase igual à tinta) e crescer a sombra
+            // não passava de 3:1 entre foco e repouso — ficava quase invisível.
+            "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
               "disabled:pointer-events-none disabled:opacity-45 disabled:shadow-none",
-              error ? "border-destructive shadow-[4px_4px_0_0_var(--destructive)]" : "border-ink",
+              error ? "border-destructive shadow-[2px_2px_0_0_var(--destructive)]" : "border-ink",
               className,
             )}
             {...props}

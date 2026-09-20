@@ -71,13 +71,20 @@ export default function HomePage() {
             fundo, já que este bloco ocupa a coluna inteira): accent-foreground
             na metade de cima, primary-foreground na de baixo. */}
         <div
-          className="hero-enter flex flex-col items-center justify-center px-4 pt-16 pb-20 sm:px-6 lg:pt-24 lg:pb-32 relative z-10 flex-1 bg-clip-text text-transparent"
+          className="hero-enter relative z-10 grid flex-1 grid-rows-2 px-4 py-12 sm:px-6 lg:py-16 bg-clip-text text-transparent"
           style={{
             backgroundImage:
               "linear-gradient(to bottom, var(--accent-foreground) 50%, var(--primary-foreground) 50%)",
           }}
         >
-          <div className="relative flex flex-col items-center gap-6 pointer-events-none text-center">
+          {/* Duas linhas iguais (grid-rows-2): a de cima é a metade da cor
+              --primary, a de baixo a do --primary-hover, e o padding é
+              simétrico pra a divisão do texto cair exatamente na linha das
+              duas cores de fundo. Título e descrição ficam na de cima; o
+              resto (sobre, destaques, botão) na de baixo. Cada metade
+              encosta no centro (justify-end / justify-start, 2rem de
+              respiro da linha) em vez de flutuar no meio da própria metade. */}
+          <div className="pointer-events-none flex flex-col items-center justify-end gap-6 pb-8 text-center">
             {/* pl-[Nem] = o mesmo N do tracking: o espaçamento também entra depois
                 da última letra e, sem essa compensação, o texto centralizado
                 parece deslocado pra esquerda (alinhamento óptico). */}
@@ -90,6 +97,8 @@ export default function HomePage() {
             <p className="max-w-[60ch] text-lg sm:text-xl">
               <T k="home.description" />
             </p>
+          </div>
+          <div className="pointer-events-none flex flex-col items-center justify-start gap-6 pt-8 text-center">
             <p className="max-w-[56ch] text-base">
               <T k="home.about" />
             </p>

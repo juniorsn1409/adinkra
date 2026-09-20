@@ -473,7 +473,7 @@ export function ArcLogo({
         aria-hidden
         viewBox={`0 0 ${size} ${height}`}
         className="group absolute inset-0 text-primary transition-[opacity,transform] duration-[2000ms] ease-out"
-        style={{ width: size, height, opacity: mounted ? 1 : 0 }}
+        style={{ width: size, height, opacity: mounted ? 1 : 0, transition: "opacity 700ms ease-out, transform 2000ms ease-out" }}
       >
         <circle cx={sunCx} cy={sunCy} r={sunRadius} fill="currentColor" />
         <g className="pointer-events-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
@@ -502,7 +502,7 @@ export function ArcLogo({
           inteiro desde o frame 0 (fill não segue `stroke-dashoffset`),
           destruindo o efeito de "desenhar ao vivo". Em vez disso o
           preenchimento faz fade-in DEPOIS que o traço termina (delay
-          2500ms = os mesmos 350ms+2150ms do traço), como se o contorno
+          1400ms, quando o traço de 1500ms começado em 100ms está terminando), como se o contorno
           desenhasse e só então "ganhasse cor". */}
       <svg
         ref={sankofaGroupRef}
@@ -518,7 +518,7 @@ export function ArcLogo({
             fill="currentColor"
             fillRule={sankofa.fillRule}
             opacity={mounted ? 1 : 0}
-            style={{ transition: "opacity 500ms ease-out 2000ms" }}
+            style={{ transition: "opacity 600ms ease-out 1400ms" }}
           />
         )}
         <path
@@ -531,10 +531,12 @@ export function ArcLogo({
           strokeLinejoin="round"
           strokeDasharray={sankofaLength ?? undefined}
           strokeDashoffset={sankofaLength == null ? undefined : sankofaRevealed ? 0 : sankofaLength}
-          // Traço lento de propósito — é o evento principal da entrada
-          // (pedido do usuário: animação inteira levando uns 7s pra
-          // completar; ver o resto do timeline nos comentários acima).
-          style={{ transition: "stroke-dashoffset 2.15s ease-out 350ms" }}
+          // Evento principal da entrada. A sequência inteira (sol, traço,
+          // preenchimento, palavra e ano) fecha em 2s — antes eram ~4s e
+          // a marca demorava demais pra aparecer (20/09/2026, pedido do usuário: 2s bastam). O 2s do
+          // parallax (transition-transform) é outra coisa: lag de seguir o
+          // mouse, não da entrada.
+          style={{ transition: "stroke-dashoffset 1500ms ease-out 100ms" }}
         />
       </svg>
 
@@ -551,13 +553,13 @@ export function ArcLogo({
           <span
             key={index}
             aria-hidden
-            className="absolute transition-opacity duration-[2000ms] ease-out"
+            className="absolute transition-opacity duration-[1500ms] ease-out"
             style={{
               left: point.x,
               top: point.y,
               transform: `translate(-50%, -50%) rotate(${point.angle}deg)`,
               opacity: mounted ? 1 : 0,
-              transitionDelay: mounted ? `2000ms` : "0ms",
+              transitionDelay: mounted ? "500ms" : "0ms",
             }}
           >
             {point.ch === " " ? " " : point.ch}
@@ -571,13 +573,13 @@ export function ArcLogo({
           do raio da curva"), não mais um padding fixo (px-[8%]) solto. */}
       <div
         ref={yearStartRef}
-        className="absolute font-display text-sm font-bold tracking-[0.1em] text-heading transition-opacity duration-[2000ms] ease-out"
+        className="absolute font-display text-sm font-bold tracking-[0.1em] text-heading transition-opacity duration-[1500ms] ease-out"
         style={{
           top: yearTop,
           left: wordPivotX - curveRadius,
           transform: "translateX(-50%)",
           opacity: mounted ? 1 : 0,
-          transitionDelay: mounted ? "2000ms" : "0ms",
+          transitionDelay: mounted ? "500ms" : "0ms",
         }}
       >
         <span className="border-b-2 border-secondary pb-0.5 text-secondary">{yearStart}</span>
@@ -591,26 +593,26 @@ export function ArcLogo({
           `text` sempre — sem passar, cai pro mesmo valor de `text`. */}
       <div
         ref={brandRef}
-        className="absolute select-none font-display text-sm font-bold uppercase tracking-[0.1em] text-secondary transition-opacity duration-[2000ms] ease-out"
+        className="absolute select-none font-display text-sm font-bold uppercase tracking-[0.1em] text-secondary transition-opacity duration-[1500ms] ease-out"
         style={{
           top: yearTop,
           left: wordPivotX,
           transform: "translateX(-50%)",
           opacity: mounted ? 1 : 0,
-          transitionDelay: mounted ? "2000ms" : "0ms",
+          transitionDelay: mounted ? "500ms" : "0ms",
         }}
       >
         {brandText}
       </div>
       <div
         ref={yearEndRef}
-        className="absolute font-display text-sm font-bold tracking-[0.1em] text-heading transition-opacity duration-[2000ms] ease-out"
+        className="absolute font-display text-sm font-bold tracking-[0.1em] text-heading transition-opacity duration-[1500ms] ease-out"
         style={{
           top: yearTop,
           left: wordPivotX + curveRadius,
           transform: "translateX(-50%)",
           opacity: mounted ? 1 : 0,
-          transitionDelay: mounted ? "2000ms" : "0ms",
+          transitionDelay: mounted ? "500ms" : "0ms",
         }}
       >
         <span className="border-b-2 border-secondary pb-0.5 text-secondary">{yearEnd}</span>
