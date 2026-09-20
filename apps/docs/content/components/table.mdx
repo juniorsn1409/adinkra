@@ -5,45 +5,45 @@ description: Uma tabela de dados com borda e sombra dura no contêiner, e linhas
 
 <Preview>
   <Table>
-    <TableCaption>Ensaios publicados nas últimas duas semanas.</TableCaption>
+    <TableCaption>{t("sample.essaysPublishedInTheLast")}</TableCaption>
     <TableHeader>
       <TableRow>
-        <TableHead>Título</TableHead>
-        <TableHead>Categoria</TableHead>
+        <TableHead>{t("sample.title")}</TableHead>
+        <TableHead>{t("sample.category")}</TableHead>
         <TableHead>Status</TableHead>
-        <TableHead style={{ textAlign: "right" }}>Leitores</TableHead>
+        <TableHead style={{ textAlign: "right" }}>{t("sample.readers")}</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
       <TableRow>
-        <TableCell>Sankofa e o design de sistemas</TableCell>
-        <TableCell>Ensaio</TableCell>
-        <TableCell>Publicado</TableCell>
-        <TableCell style={{ textAlign: "right" }}>1.284</TableCell>
+        <TableCell>{t("sample.sankofaAndSystemsDesign")}</TableCell>
+        <TableCell>{t("sample.essay")}</TableCell>
+        <TableCell>{t("sample.published")}</TableCell>
+        <TableCell style={{ textAlign: "right" }}>{t("sample.1284")}</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell>Notas sobre a paleta</TableCell>
-        <TableCell>Nota</TableCell>
-        <TableCell>Publicado</TableCell>
+        <TableCell>{t("sample.notesOnThePalette")}</TableCell>
+        <TableCell>{t("sample.note")}</TableCell>
+        <TableCell>{t("sample.published")}</TableCell>
         <TableCell style={{ textAlign: "right" }}>642</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell>Por que cantos arredondados</TableCell>
-        <TableCell>Ensaio</TableCell>
-        <TableCell>Rascunho</TableCell>
-        <TableCell style={{ textAlign: "right" }}>—</TableCell>
+        <TableCell>{t("sample.whyRoundedCorners")}</TableCell>
+        <TableCell>{t("sample.essay")}</TableCell>
+        <TableCell>{t("sample.draft")}</TableCell>
+        <TableCell style={{ textAlign: "right" }}>{t("sample.text")}</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell>Arquitetura de pacotes isolados</TableCell>
-        <TableCell>Nota</TableCell>
-        <TableCell>Publicado</TableCell>
+        <TableCell>{t("sample.isolatedPackageArchitecture")}</TableCell>
+        <TableCell>{t("sample.note")}</TableCell>
+        <TableCell>{t("sample.published")}</TableCell>
         <TableCell style={{ textAlign: "right" }}>903</TableCell>
       </TableRow>
     </TableBody>
     <TableFooter>
       <TableRow>
-        <TableCell colSpan={3}>Total de leitores</TableCell>
-        <TableCell style={{ textAlign: "right" }}>2.829</TableCell>
+        <TableCell colSpan={3}>{t("sample.totalReaders")}</TableCell>
+        <TableCell style={{ textAlign: "right" }}>{t("sample.2829")}</TableCell>
       </TableRow>
     </TableFooter>
   </Table>
@@ -90,11 +90,11 @@ Sete peças, no espírito do [table do neobrutalism.dev](https://www.neobrutalis
 
 <StatesGrid>
   <State label="ímpar (bg-card)">
-    <div style={{ width: "100%", padding: "0.75rem", fontSize: "0.8125rem" }}>Fundo padrão da tabela</div>
+    <div style={{ width: "100%", padding: "0.75rem", fontSize: "0.8125rem" }}>{t("sample.defaultTableBackground")}</div>
   </State>
   <State label="par (bg-surface)">
     <div style={{ width: "100%", padding: "0.75rem", fontSize: "0.8125rem", background: "var(--surface)" }}>
-      Um tom mais fosco
+      {t("sample.aSlightlyDullerTone")}
     </div>
   </State>
 </StatesGrid>
@@ -113,7 +113,7 @@ Sete peças, no espírito do [table do neobrutalism.dev](https://www.neobrutalis
         fontSize: "0.8125rem",
       }}
     >
-      <span style={{ padding: "0.5rem", borderRight: "var(--border-width) solid var(--ink)" }}>Título</span>
+      <span style={{ padding: "0.5rem", borderRight: "var(--border-width) solid var(--ink)" }}>{t("sample.title")}</span>
       <span style={{ padding: "0.5rem" }}>Status</span>
     </div>
   </State>
@@ -126,7 +126,7 @@ Sete peças, no espírito do [table do neobrutalism.dev](https://www.neobrutalis
         fontSize: "0.8125rem",
       }}
     >
-      <span style={{ padding: "0.5rem" }}>Título</span>
+      <span style={{ padding: "0.5rem" }}>{t("sample.title")}</span>
       <span style={{ padding: "0.5rem" }}>Status</span>
     </div>
   </State>

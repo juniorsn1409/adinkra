@@ -5,10 +5,10 @@ description: Uma etiqueta curta de status, nunca clicável.
 
 <Preview>
   <div style={{ display: "flex", gap: "0.5rem" }}>
-    <Badge>Novo</Badge>
-    <Badge variant="accent">Revisado</Badge>
-    <Badge variant="secondary">Publicado</Badge>
-    <Badge variant="outline">Rascunho</Badge>
+    <Badge>{t("sample.new")}</Badge>
+    <Badge variant="accent">{t("sample.reviewed")}</Badge>
+    <Badge variant="secondary">{t("sample.published")}</Badge>
+    <Badge variant="outline">{t("sample.draft")}</Badge>
   </div>
 </Preview>
 
@@ -28,16 +28,16 @@ import { Badge } from "@adinkra/badge";
 
 <StatesGrid>
   <State label="primary (padrão)">
-    <Badge variant="primary">Novo</Badge>
+    <Badge variant="primary">{t("sample.new")}</Badge>
   </State>
   <State label="accent">
-    <Badge variant="accent">Revisado</Badge>
+    <Badge variant="accent">{t("sample.reviewed")}</Badge>
   </State>
   <State label="secondary">
-    <Badge variant="secondary">Publicado</Badge>
+    <Badge variant="secondary">{t("sample.published")}</Badge>
   </State>
   <State label="outline">
-    <Badge variant="outline">Rascunho</Badge>
+    <Badge variant="outline">{t("sample.draft")}</Badge>
   </State>
 </StatesGrid>
 

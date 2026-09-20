@@ -1,7 +1,8 @@
 import { Card, CardContent, CardDescription, CardTitle } from "@adinkra/card";
 import { iconRegistry } from "@adinkra/icons";
 import { GlitchCursor } from "@adinkra/cursor";
-import { DocsShell } from "../../components/docs-shell";
+import { T } from "../../../components/language";
+import { PageTopbar } from "../../../components/page-topbar";
 
 export const metadata = { title: "Símbolos" };
 
@@ -162,16 +163,16 @@ const symbols: SymbolEntry[] = [
 
 export default function SymbolsPage() {
   return (
-    <DocsShell>
+    <>
       <article className="grid w-full gap-8 pb-24">
+        <PageTopbar title={<T k="common.symbols" />} trail={[]} />
         <header className="grid gap-2 border-b border-hairline pb-6">
           <p className="font-display text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-            Recursos
+            <T k="common.resources" />
           </p>
-          <h1 className="font-display text-3xl font-medium text-heading">Símbolos</h1>
+          <h1 className="-ml-[0.04em] font-display text-3xl font-medium text-heading"><T k="common.symbols" /></h1>
           <p className="text-muted-foreground">
-            Catálogo dos 101 símbolos Adinkra tradicionais — nome, significado e o traço de cada um,
-            vetorizado a partir das formas tradicionais (potrace, revisão em lote de 15/09/2026).
+            <T k="symbols.description" />
           </p>
         </header>
 
@@ -187,6 +188,6 @@ export default function SymbolsPage() {
           ))}
         </div>
       </article>
-    </DocsShell>
+    </>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useLang } from "./language";
 
 // `BigCircleCursor` de verdade (@adinkra/cursor) é `position: fixed` e
 // escuta o `document` inteiro de propósito — pensado pra ficar montado uma
@@ -16,6 +17,7 @@ const HOVER_SELECTOR = "button, a, [data-cursor-hover]";
 const SIZE = 96;
 
 export function BigCircleCursorDemo() {
+  const { t } = useLang();
   const containerRef = React.useRef<HTMLDivElement>(null);
   const circleRef = React.useRef<HTMLDivElement>(null);
   const dotRef = React.useRef<HTMLDivElement>(null);
@@ -52,9 +54,9 @@ export function BigCircleCursorDemo() {
         type="button"
         className="rounded-control border-[length:var(--border-width)] border-ink bg-primary px-4 py-2 text-primary-foreground shadow-brutal"
       >
-        Passe o mouse aqui
+        {t("demo.cursor.hoverHere")}
       </button>
-      <p className="max-w-40 text-sm text-muted-foreground">e aqui, fora do botão</p>
+      <p className="max-w-40 text-sm text-muted-foreground">{t("demo.cursor.outside")}</p>
       <div
         ref={circleRef}
         style={{
@@ -104,6 +106,7 @@ const BLUR_STOP_DELAY_MS = 50;
 const BLUR_SIZE = 25;
 
 export function MotionBlurCursorDemo() {
+  const { t } = useLang();
   const containerRef = React.useRef<HTMLDivElement>(null);
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   const filterRef = React.useRef<SVGFEGaussianBlurElement>(null);
@@ -150,9 +153,9 @@ export function MotionBlurCursorDemo() {
         type="button"
         className="rounded-control border-[length:var(--border-width)] border-ink bg-primary px-4 py-2 text-primary-foreground shadow-brutal"
       >
-        Mova rápido por aqui
+        {t("demo.cursor.moveFast")}
       </button>
-      <p className="max-w-40 text-sm text-muted-foreground">e por aqui também</p>
+      <p className="max-w-40 text-sm text-muted-foreground">{t("demo.cursor.alsoHere")}</p>
       <svg width="0" height="0" className="absolute">
         <defs>
           <filter id={filterId} x="-100%" y="-100%" width="400%" height="400%" colorInterpolationFilters="sRGB">
@@ -187,6 +190,7 @@ const ARROW_DEGREES_PER_RADIAN = 57.296;
 const ARROW_SIZE = 24;
 
 export function ArrowPointerCursorDemo() {
+  const { t } = useLang();
   const containerRef = React.useRef<HTMLDivElement>(null);
   const cursorRef = React.useRef<HTMLDivElement>(null);
   const previous = React.useRef({ x: 0, y: 0, angle: 0, angleDisplace: 0 });
@@ -230,7 +234,7 @@ export function ArrowPointerCursorDemo() {
       className="relative flex h-64 w-full items-center justify-center gap-4 overflow-hidden rounded-card border-[length:var(--border-width)] border-ink bg-surface"
       style={{ cursor: "none" }}
     >
-      <p className="max-w-52 text-center text-sm text-muted-foreground">A seta gira pra acompanhar a direção do movimento</p>
+      <p className="max-w-52 text-center text-sm text-muted-foreground">{t("demo.cursor.arrow")}</p>
       <div
         ref={cursorRef}
         className="pointer-events-none absolute select-none"
@@ -421,6 +425,7 @@ const GLITCH_MAX_DISTANCE = 10;
 const GLITCH_STOP_DELAY_MS = 50;
 
 export function GlitchCursorDemo() {
+  const { t } = useLang();
   const containerRef = React.useRef<HTMLDivElement>(null);
   const cursorRef = React.useRef<HTMLDivElement>(null);
   const hoveringRef = React.useRef(false);
@@ -480,9 +485,9 @@ export function GlitchCursorDemo() {
         type="button"
         className="rounded-control border-[length:var(--border-width)] border-ink bg-primary px-4 py-2 text-primary-foreground shadow-brutal"
       >
-        Mova rápido por aqui
+        {t("demo.cursor.moveFast")}
       </button>
-      <p className="max-w-40 text-sm text-muted-foreground">separação cromática</p>
+      <p className="max-w-40 text-sm text-muted-foreground">{t("demo.cursor.chromatic")}</p>
       <div
         ref={cursorRef}
         className="pointer-events-none absolute select-none rounded-full bg-ink"

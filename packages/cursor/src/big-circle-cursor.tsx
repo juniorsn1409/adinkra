@@ -92,11 +92,21 @@ export function BigCircleCursor({
     let lastX = 0;
     let lastY = 0;
 
+    // Uma escrita de transform por frame (o `closest` também só roda aí).
+    let frame = 0;
+    let target: Element | null = null;
+
+    function flush() {
+      frame = 0;
+      hoveringRef.current = target?.closest(CURSOR_HOVER_SELECTOR) != null;
+      applyTransform(lastX, lastY, false);
+    }
+
     function handleMove(event: PointerEvent) {
       lastX = event.clientX;
       lastY = event.clientY;
-      hoveringRef.current = (event.target as Element | null)?.closest(CURSOR_HOVER_SELECTOR) != null;
-      applyTransform(lastX, lastY, false);
+      target = event.target as Element | null;
+      if (frame === 0) frame = requestAnimationFrame(flush);
     }
 
     function handlePointerDown() {
@@ -112,6 +122,7 @@ export function BigCircleCursor({
     document.addEventListener("pointerup", handlePointerUp);
 
     return () => {
+      if (frame) cancelAnimationFrame(frame);
       document.removeEventListener("pointermove", handleMove);
       document.removeEventListener("pointerdown", handlePointerDown);
       document.removeEventListener("pointerup", handlePointerUp);

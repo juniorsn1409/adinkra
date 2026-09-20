@@ -7,7 +7,7 @@ description: Navegação entre páginas de uma lista longa — página anterior,
   <Pagination>
     <PaginationContent>
       <PaginationItem>
-        <PaginationPrevious href="#" />
+        <PaginationPrevious href="#" aria-label={t("sample.previousPage")}>{t("sample.previous")}</PaginationPrevious>
       </PaginationItem>
       <PaginationItem>
         <PaginationLink href="#">1</PaginationLink>
@@ -24,7 +24,7 @@ description: Navegação entre páginas de uma lista longa — página anterior,
         <PaginationEllipsis />
       </PaginationItem>
       <PaginationItem>
-        <PaginationNext href="#" />
+        <PaginationNext href="#" aria-label={t("sample.nextPage")}>{t("sample.next")}</PaginationNext>
       </PaginationItem>
     </PaginationContent>
   </Pagination>
@@ -94,8 +94,8 @@ Sete peças, no espírito da [pagination do neobrutalism.dev](https://www.neobru
   </State>
   <State label="anterior/próxima">
     <div style={{ display: "flex", gap: "0.5rem" }}>
-      <PaginationPrevious href="#" />
-      <PaginationNext href="#" />
+      <PaginationPrevious href="#" aria-label={t("sample.previousPage")}>{t("sample.previous")}</PaginationPrevious>
+      <PaginationNext href="#" aria-label={t("sample.nextPage")}>{t("sample.next")}</PaginationNext>
     </div>
   </State>
   <State label="desativado">

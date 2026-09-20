@@ -118,7 +118,7 @@ Um grupo que abre e fecha, com uma lista por baixo — clique em "Componentes" p
     <SidebarMenu>
       <SidebarMenuItem>
         <SidebarMenuCollapsible defaultOpen>
-          <SidebarMenuCollapsibleTrigger>Componentes</SidebarMenuCollapsibleTrigger>
+          <SidebarMenuCollapsibleTrigger>{t("sample.components")}</SidebarMenuCollapsibleTrigger>
           <SidebarMenuSub>
             <SidebarMenuSubItem>
               <SidebarMenuSubButton isActive>Button</SidebarMenuSubButton>
@@ -163,12 +163,12 @@ Um grupo que abre e fecha, com uma lista por baixo — clique em "Componentes" p
   <div style={{ width: "100%", maxWidth: "18rem" }}>
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton>Notificações</SidebarMenuButton>
+        <SidebarMenuButton>{t("sample.notifications")}</SidebarMenuButton>
         <SidebarMenuBadge>12</SidebarMenuBadge>
       </SidebarMenuItem>
       <SidebarMenuItem>
-        <SidebarMenuButton>Projetos</SidebarMenuButton>
-        <SidebarMenuAction showOnHover aria-label="Mais opções">
+        <SidebarMenuButton>{t("sample.projects")}</SidebarMenuButton>
+        <SidebarMenuAction showOnHover aria-label={t("sample.moreOptions")}>
           ···
         </SidebarMenuAction>
       </SidebarMenuItem>

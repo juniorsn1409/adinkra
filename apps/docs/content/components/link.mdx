@@ -1,0 +1,43 @@
+---
+title: Link
+description: Link de texto curto e espaçado, no estilo dos "SPONSOR" do sidebar.io.
+---
+
+<Preview>
+  <LinkDemo />
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/link
+```
+
+```tsx
+import { Link } from "@adinkra/link";
+
+<Link href="https://exemplo.com">Sponsor</Link>;
+<Link href="https://exemplo.com" uppercase={false}>Sponsor</Link>;
+```
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "uppercase",
+      type: "boolean",
+      default: "true",
+      description: "Exibe o texto em caixa alta. Com false, mantém a caixa como foi escrita.",
+    },
+    {
+      prop: "...props",
+      type: "AnchorHTMLAttributes<HTMLAnchorElement>",
+      description: "Qualquer atributo nativo de <a>.",
+    },
+  ]}
+/>
+
+## Tokens usados
+
+`--primary` · `--secondary` · `--ring`

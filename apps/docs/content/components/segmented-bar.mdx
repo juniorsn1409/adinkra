@@ -6,11 +6,11 @@ description: Uma barra dividida em proporções, cada uma com seu rótulo — n�
 <Preview>
   <SegmentedBar
     segments={[
-      { name: "Custos fixos", value: 30 },
-      { name: "Liberdade financeira", value: 30 },
-      { name: "Conforto", value: 10 },
-      { name: "Metas", value: 18 },
-      { name: "Prazeres", value: 10 },
+      { name: t("sample.fixedCosts"), value: 30 },
+      { name: t("sample.financialFreedom"), value: 30 },
+      { name: t("sample.comfort"), value: 10 },
+      { name: t("sample.goals"), value: 18 },
+      { name: t("sample.pleasures"), value: 10 },
     ]}
     className="w-full"
   />
@@ -85,10 +85,10 @@ O rótulo sempre aparece, mesmo num segmento de 1% — só encolhe (`truncate`) 
 <Preview>
   <SegmentedBar
     segments={[
-      { name: "Ações", value: 48 },
-      { name: "Fiis", value: 45 },
-      { name: "Renda fixa", value: 2 },
-      { name: "Tesouro", value: 5 },
+      { name: t("sample.stocks"), value: 48 },
+      { name: t("sample.reits"), value: 45 },
+      { name: t("sample.fixedIncome"), value: 2 },
+      { name: t("sample.treasury"), value: 5 },
     ]}
     className="w-full"
   />

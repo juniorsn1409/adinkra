@@ -224,9 +224,21 @@ export function ArcLogo({
     const yearEndEl = yearEndRef.current;
     const brandEl = brandRef.current;
 
+    // Um conjunto de escritas de estilo por frame, não por evento.
+    let frame = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+
     function handleMove(event: PointerEvent) {
-      const dx = event.clientX - window.innerWidth / 2;
-      const dy = event.clientY - window.innerHeight / 2;
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      if (frame === 0) frame = requestAnimationFrame(update);
+    }
+
+    function update() {
+      frame = 0;
+      const dx = pointerX - window.innerWidth / 2;
+      const dy = pointerY - window.innerHeight / 2;
       const transform = `translate(${(-dx / PARALLAX_RESISTANCE).toFixed(2)}px, ${(-dy / PARALLAX_RESISTANCE).toFixed(2)}px)`;
       if (iconGroup) iconGroup.style.transform = transform;
       if (sunGroup) sunGroup.style.transform = transform;
@@ -240,6 +252,7 @@ export function ArcLogo({
     document.addEventListener("pointermove", handleMove);
     return () => {
       document.removeEventListener("pointermove", handleMove);
+      if (frame) cancelAnimationFrame(frame);
       if (iconGroup) iconGroup.style.transform = "";
       if (wordGroup) wordGroup.style.transform = "";
       if (raysGroup) raysGroup.style.transform = "";
@@ -397,8 +410,14 @@ export function ArcLogo({
   // junto"): era size*0.05.
   const yearTop = sunCy + sankofaSize / 2 + size * 0.02;
 
+  // Altura real do selo (era sempre `size`, um quadrado, deixando um vão
+  // vazio embaixo do ano): vai até o fim do ano (~26px de linha + borda) ou
+  // até a última letra do trecho reto da palavra, o que descer mais.
+  const lastLetterBottom = letters.length > curveCapacity ? straightTargetY + 14 : 0;
+  const height = Math.ceil(Math.max(yearTop + 26, lastLetterBottom));
+
   return (
-    <div className={cn("relative", className)} style={{ width: size, height: size }}>
+    <div className={cn("relative", className)} style={{ width: size, height }}>
       <style>{`
         @keyframes adinkra-arc-logo-ray {
           from { stroke-dashoffset: var(--ray-length); }
@@ -412,9 +431,9 @@ export function ArcLogo({
       <svg
         ref={raysGroupRef}
         aria-hidden
-        viewBox={`0 0 ${size} ${size}`}
+        viewBox={`0 0 ${size} ${height}`}
         className="absolute inset-0 text-primary transition-transform duration-[2000ms] ease-out"
-        style={{ width: size, height: size }}
+        style={{ width: size, height }}
       >
         {rays.map((ray) => (
           <line
@@ -452,9 +471,9 @@ export function ArcLogo({
       <svg
         ref={sunGroupRef}
         aria-hidden
-        viewBox={`0 0 ${size} ${size}`}
+        viewBox={`0 0 ${size} ${height}`}
         className="group absolute inset-0 text-primary transition-[opacity,transform] duration-[2000ms] ease-out"
-        style={{ width: size, height: size, opacity: mounted ? 1 : 0 }}
+        style={{ width: size, height, opacity: mounted ? 1 : 0 }}
       >
         <circle cx={sunCx} cy={sunCy} r={sunRadius} fill="currentColor" />
         <g className="pointer-events-none opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">

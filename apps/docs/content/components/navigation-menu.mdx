@@ -7,50 +7,50 @@ description: Menu de navegação com dropdowns flutuantes — para links agrupad
   <NavigationMenu>
     <NavigationMenuList>
       <NavigationMenuItem>
-        <NavigationMenuTrigger>Componentes</NavigationMenuTrigger>
+        <NavigationMenuTrigger>{t("sample.components")}</NavigationMenuTrigger>
         <NavigationMenuContent>
           <ul className="grid w-[320px] gap-1 sm:w-[400px] sm:grid-cols-2">
             <li>
               <NavigationMenuLink href="/components/button">
                 <p className="font-display text-sm font-medium text-heading">Button</p>
-                <p className="text-xs text-muted-foreground">Ação principal, secundária ou destrutiva.</p>
+                <p className="text-xs text-muted-foreground">{t("sample.primarySecondaryOrDestructiveAction")}</p>
               </NavigationMenuLink>
             </li>
             <li>
               <NavigationMenuLink href="/components/card">
                 <p className="font-display text-sm font-medium text-heading">Card</p>
-                <p className="text-xs text-muted-foreground">Superfície com borda, raio e sombra.</p>
+                <p className="text-xs text-muted-foreground">{t("sample.surfaceWithBorderRadiusAnd")}</p>
               </NavigationMenuLink>
             </li>
             <li>
               <NavigationMenuLink href="/components/sidebar">
                 <p className="font-display text-sm font-medium text-heading">Sidebar</p>
-                <p className="text-xs text-muted-foreground">Navegação lateral colapsável.</p>
+                <p className="text-xs text-muted-foreground">{t("sample.collapsibleSideNavigation")}</p>
               </NavigationMenuLink>
             </li>
             <li>
               <NavigationMenuLink href="/components/table">
                 <p className="font-display text-sm font-medium text-heading">Table</p>
-                <p className="text-xs text-muted-foreground">Linhas alternadas, sem depender de CSS externo.</p>
+                <p className="text-xs text-muted-foreground">{t("sample.alternatingRowsWithNoExternal")}</p>
               </NavigationMenuLink>
             </li>
           </ul>
         </NavigationMenuContent>
       </NavigationMenuItem>
       <NavigationMenuItem>
-        <NavigationMenuTrigger>Recursos</NavigationMenuTrigger>
+        <NavigationMenuTrigger>{t("sample.resources")}</NavigationMenuTrigger>
         <NavigationMenuContent>
           <ul className="grid w-[220px] gap-1">
             <li>
               <NavigationMenuLink href="/symbols">
-                <p className="font-display text-sm font-medium text-heading">Símbolos</p>
-                <p className="text-xs text-muted-foreground">Os 101 símbolos Adinkra.</p>
+                <p className="font-display text-sm font-medium text-heading">{t("sample.symbols")}</p>
+                <p className="text-xs text-muted-foreground">{t("sample.the101AdinkraSymbols")}</p>
               </NavigationMenuLink>
             </li>
             <li>
               <NavigationMenuLink href="/getting-started">
                 <p className="font-display text-sm font-medium text-heading">Getting started</p>
-                <p className="text-xs text-muted-foreground">Instalação e primeiros passos.</p>
+                <p className="text-xs text-muted-foreground">{t("sample.installationAndFirstSteps")}</p>
               </NavigationMenuLink>
             </li>
           </ul>

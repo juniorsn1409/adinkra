@@ -5,14 +5,14 @@ description: Um botão de dois estados que persiste — ligado ou desligado, nã
 
 <Preview>
   <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-    <Toggle aria-label="Negrito" defaultPressed>
-      <strong>N</strong>
+    <Toggle aria-label={t("sample.bold")} defaultPressed>
+      <strong>{t("sample.b")}</strong>
     </Toggle>
-    <Toggle aria-label="Itálico">
+    <Toggle aria-label={t("sample.italic")}>
       <em>I</em>
     </Toggle>
-    <Toggle aria-label="Sublinhado" variant="outline">
-      <span style={{ textDecoration: "underline" }}>S</span>
+    <Toggle aria-label={t("sample.underline")} variant="outline">
+      <span style={{ textDecoration: "underline" }}>{t("sample.u")}</span>
     </Toggle>
   </div>
 </Preview>
@@ -47,16 +47,16 @@ O mesmo "sobe no hover, afunda ao pressionar" do `Button` (seção 4, `DECISOES.
 
 <StatesGrid>
   <State label="desligado">
-    <Toggle>Notificar</Toggle>
+    <Toggle>{t("sample.notify")}</Toggle>
   </State>
   <State label="ligado">
-    <Toggle pressed>Notificar</Toggle>
+    <Toggle pressed>{t("sample.notify")}</Toggle>
   </State>
   <State label="outline, desligado">
-    <Toggle variant="outline">Notificar</Toggle>
+    <Toggle variant="outline">{t("sample.notify")}</Toggle>
   </State>
   <State label="desativado">
-    <Toggle disabled>Notificar</Toggle>
+    <Toggle disabled>{t("sample.notify")}</Toggle>
   </State>
 </StatesGrid>
 

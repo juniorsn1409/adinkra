@@ -2,77 +2,116 @@ import Link from "next/link";
 import { buttonVariants } from "@adinkra/button";
 import { cn } from "@adinkra/core";
 import { BigCircleCursor } from "@adinkra/cursor";
+import { ArcLogo } from "@adinkra/arc-text";
+import { iconPaths } from "@adinkra/icons";
+import { Link as AdinkraLink } from "@adinkra/link";
+import { LanguageSelect, T } from "../components/language";
 import { SymbolField } from "../components/symbol-field";
 
 export default function HomePage() {
   return (
-    <main className="relative isolate flex min-h-screen flex-col items-start justify-center overflow-hidden bg-surface">
-      {/* Montado só aqui (não no layout raiz) de propósito — pedido do
-          usuário foi "aplicado na homePage", não no site inteiro. Como o
-          App Router desmonta a página ao navegar pra outra rota, o
-          `useEffect` de limpeza do BigCircleCursor tira a classe
-          `adinkra-cursor-active`/`<style>` sozinho, devolvendo o cursor
-          nativo assim que sai da home. size={250} foi pedido explícito do
-          usuário (17/09/2026) — a cor custom por elemento (`data-cursor-
-          color`) que existiu brevemente na CTA abaixo foi removida do
-          pacote inteiro no mesmo dia, a pedido do usuário.
-          backdropFilter={false} (17/09/2026, pedido do usuário): troca o
-          invert()+grayscale() por preenchimento sólido. color="transparent"
-          (mesmo pedido, sessão seguinte — "controlar o backdrop-filter pra
-          ser transparente") deixa o círculo grande invisível. dotColor
-          PRECISA ser passado explícito aqui — o default dele é `= color`
-          (herda o valor de `color`, não o var(--ink) interno do
-          componente), então sem isso o pontinho também ficaria transparente
-          (bug real, reportado pelo usuário: "não to vendo o ponto que
-          deveria ter"). */}
+    <main className="relative isolate min-h-screen overflow-hidden" style={{ display: "flex" }}>
       <BigCircleCursor size={250} backdropFilter={false} color="transparent" dotColor="var(--ink)" />
-      {/* cursorSize casa com o size do BigCircleCursor acima — define o
-          raio em que os ladrilhos reagem virando terracota (17/09/2026). */}
-      <SymbolField cursorSize={200} />
-      {/*
-        pointer-events-none aqui — sem isso este bloco (que cobre boa parte
-        da área dos ladrilhos) bloqueava o pointermove de chegar no
-        SymbolField por baixo, então passar o mouse por cima do texto não
-        acendia nada (pedido do usuário, 15/09/2026). O botão reabilita
-        pointer-events-auto pra continuar clicável.
-      */}
-      <div className="relative mx-auto flex max-w-4xl flex-col items-start gap-6 px-6 py-24 pointer-events-none">
-        <p className="font-display text-xs font-medium uppercase tracking-[0.26em] text-muted-foreground">
-          Design system
-        </p>
-        {/* font-adinkra (Adinkra Alphabet, @adinkra/tokens) mapeia letra
-            latina pra símbolo Adinkra — sem `uppercase` de propósito (ver
-            mesmo comentário em components/sidebar.tsx). Tamanho aumentado
-            duas vezes (17/09/2026, pedidos do usuário — "titulo grande",
-            depois "as fontes podem ser maiores"): text-4xl/5xl →
-            text-5xl/6xl/7xl → text-6xl/7xl/8xl. Container também alargado
-            (max-w-3xl → max-w-4xl) pra sobrar espaço com o título maior. */}
-        <h1 className="font-adinkra text-6xl font-medium tracking-[0.1em] text-heading sm:text-7xl md:text-8xl">
-          Adinkra
-        </h1>
-        <p className="max-w-[60ch] text-xl text-foreground">
-          Componentes React isolados por pacote — instale só o que for usar — com
-          tokens de cor e tipografia prontos para o Tailwind v4.
-        </p>
-        {/*
-          Um só botão agora (17/09/2026, pedido do usuário — "titulo
-          grander com a descricao abaixo, e um boton abaixo com
-          getStarted"): os 3 anteriores (Ver os componentes/Getting
-          Started/Introduction) saíram, sobrou só este. bg-feature/
-          text-feature-foreground em vez de variant="primary" puro —
-          --brand puro não passa AA como fundo de botão (ver comentário em
-          tokens.css); --feature é o par já pronto pra isso (mesmo tom,
-          foreground branco garantido).
-        */}
-        <Link
-          href="/getting-started"
-          className={cn(
-            buttonVariants({ variant: "primary", size: "lg" }),
-            "pointer-events-auto bg-feature text-feature-foreground hover:brightness-95",
-          )}
+      {/* Div à esquerda - 70% com background */}
+      <div className="flex-shrink-0 flex flex-col" style={{ width: "58%", backgroundColor: "var(--background)" }}>
+        {/* Header com ArcLogo e links */}
+        <div className="flex items-center justify-between px-6 py-6">
+        <ArcLogo
+          key={0}
+          text={"Design System"}
+          brandText={"Adinkra"}
+          year={"2026"}
+          size={200}
+          arc={60}
+          tailLength={1.5}
+          logoY={0.35}
+          icon={("sankofa-swirl" in iconPaths ? "sankofa-swirl" : "sankofa") as keyof typeof iconPaths}
+          parallax={true}
+          filled={true}
+          rayDistance={1}
+          showRays={true}
+        />
+          <nav className="flex items-center gap-8 self-start mt-15">
+            <AdinkraLink href="/introduction" className="text-sm">
+              <T k="common.introduction" />
+            </AdinkraLink>
+            <AdinkraLink href="/components/button" className="text-sm">
+              <T k="common.components" />
+            </AdinkraLink>
+            <AdinkraLink href="/symbols" className="text-sm">
+              <T k="common.resources" />
+            </AdinkraLink>
+            <LanguageSelect />
+          </nav>
+        </div>
+
+        {/* Conteúdo principal */}
+        <div className="flex-1 flex flex-col items-start justify-center px-6 py-24">
+        </div>
+      </div>
+
+      {/* Div à direita */}
+      <div className="flex-1 flex flex-col relative" style={{ width: "42%" }}>
+        {/* Divs de cor como background */}
+        <div className="flex flex-col flex-1 absolute inset-0">
+          {/* Parte de cima - 50% com branco */}
+          <div style={{ flex: "1", backgroundColor: "var(--primary)" }} />
+          {/* Parte de baixo - 50% com primary-hover */}
+          <div style={{ flex: "1", backgroundColor: "var(--primary-hover)" }} />
+        </div>
+
+        {/* SymbolField como background */}
+        <div className="absolute inset-0 flex items-center justify-center" style={{ zIndex: 5 }}>
+          <SymbolField cursorSize={300} />
+        </div>
+
+        {/* Conteúdo sobreposto */}
+        {/* O texto herda um degradê duro em 50% (mesma linha das duas cores de
+            fundo, já que este bloco ocupa a coluna inteira): accent-foreground
+            na metade de cima, primary-foreground na de baixo. */}
+        <div
+          className="flex flex-col items-center justify-center px-6 pt-24 pb-32 relative z-10 flex-1 bg-clip-text text-transparent"
+          style={{
+            backgroundImage:
+              "linear-gradient(to bottom, var(--accent-foreground) 50%, var(--primary-foreground) 50%)",
+          }}
         >
-          Get Started
-        </Link>
+          <div className="relative flex flex-col items-center gap-6 pointer-events-none text-center">
+            {/* pl-[Nem] = o mesmo N do tracking: o espaçamento também entra depois
+                da última letra e, sem essa compensação, o texto centralizado
+                parece deslocado pra esquerda (alinhamento óptico). */}
+            <p className="pl-[0.26em] font-display text-xs font-medium uppercase tracking-[0.26em]">
+              Design system
+            </p>
+            <h1 className="pl-[0.1em] font-adinkra text-6xl font-medium tracking-[0.1em] sm:text-7xl md:text-8xl">
+              Adinkra
+            </h1>
+            <p className="max-w-[60ch] text-xl">
+              <T k="home.description" />
+            </p>
+            <p className="max-w-[56ch] text-base">
+              <T k="home.about" />
+            </p>
+            <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 pl-[0.14em] font-display text-xs font-medium uppercase tracking-[0.14em]">
+              <li>
+                <T k="home.highlightSymbols" />
+              </li>
+              <li>
+                <T k="common.packagePerComponent" />
+              </li>
+              <li>React 19 + Tailwind v4</li>
+            </ul>
+            <Link
+              href="/getting-started"
+              className={cn(
+                buttonVariants({ variant: "primary", size: "lg" }),
+                "pointer-events-auto",
+              )}
+            >
+              Get Started
+            </Link>
+          </div>
+        </div>
       </div>
     </main>
   );

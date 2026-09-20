@@ -29,6 +29,7 @@ import {
   UpwardTrendLineChart,
 } from "@adinkra/charts";
 import { Input } from "@adinkra/input";
+import { Select, SelectOptGroup, SelectOption } from "@adinkra/select";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -72,17 +73,21 @@ import {
   GlitchCursorDemo,
   MotionBlurCursorDemo,
   RingDotCursorDemo,
-} from "../../../components/cursor-demo";
-import { ArcLogoDemo } from "../../../components/arc-logo-demo";
-import { DataTableDemo } from "../../../components/data-table-demo";
-import { DatePickerBasicDemo, DatePickerDemo, DateRangePickerDemo, DateTimePickerDemo } from "../../../components/date-picker-demo";
-import { SegmentedBarCurrencyDemo, SegmentedBarDraggableDemo } from "../../../components/segmented-bar-demo";
-import { PropsTable, State, StatesGrid, mdxHtmlOverrides } from "../../../components/mdx-components";
-import { Preview } from "../../../components/preview";
-import { PageTopbar } from "../../../components/page-topbar";
-import { AppSidebar, SidebarShowcase, SidebarUsageExamples } from "../../../components/sidebar";
-import { allSlugs, findNavItem, getAdjacentNavItems } from "../../../config/nav";
-import { readComponentDoc } from "../../../lib/content";
+} from "../../../../components/cursor-demo";
+import { ArcLogoDemo } from "../../../../components/arc-logo-demo";
+import { DataTableDemo } from "../../../../components/data-table-demo";
+import { DatePickerBasicDemo, DatePickerDemo, DateRangePickerDemo, DateTimePickerDemo } from "../../../../components/date-picker-demo";
+import { LinkDemo } from "../../../../components/link-demo";
+import { SegmentedBarCurrencyDemo, SegmentedBarDraggableDemo } from "../../../../components/segmented-bar-demo";
+import { PropsTable, State, StatesGrid, mdxHtmlOverrides } from "../../../../components/mdx-components";
+import { Localized, T } from "../../../../components/language";
+import { en as enMessages } from "../../../../i18n/en";
+import { pt as ptMessages } from "../../../../i18n/pt";
+import { Preview } from "../../../../components/preview";
+import { PageTopbar } from "../../../../components/page-topbar";
+import { AppSidebar, SidebarShowcase, SidebarUsageExamples } from "../../../../components/sidebar";
+import { allSlugs, findNavItem, getAdjacentNavItems } from "../../../../config/nav";
+import { readComponentDoc } from "../../../../lib/content";
 
 interface ComponentDocFrontmatter {
   title: string;
@@ -112,8 +117,12 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
 
   const { prev, next } = getAdjacentNavItems(slug);
 
-  const { content, frontmatter } = await compileMDX<ComponentDocFrontmatter>({
-    source,
+  // Um MDX só (português). Os textos passados aos componentes usam {t("chave")}
+  // e a página compila duas vezes, uma com cada idioma (i18n/pt.ts e i18n/en.ts).
+  const compile = (mdx: string, lang: "pt" | "en") => {
+    const messages = lang === "en" ? enMessages : ptMessages;
+    return compileMDX<ComponentDocFrontmatter>({
+    source: mdx,
     // Cada peça entra pelo próprio nome, importada direto (não através de um
     // objeto guarda-chuva exportado por um módulo "use client" — um objeto
     // assim chega vazio do outro lado da fronteira cliente/servidor: só
@@ -127,7 +136,11 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
       ArcLogoDemo,
       Button,
       Input,
+      Select,
+      SelectOption,
+      SelectOptGroup,
       Badge,
+      LinkDemo,
       Card,
       CardHeader,
       CardTitle,
@@ -213,20 +226,30 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
     // O conteúdo vem do próprio repositório (não de uma fonte remota não
     // confiável), então libera expressões JS nos props do MDX (style={{}},
     // rows={[...]}) — o padrão do next-mdx-remote bloqueia isso por segurança.
-    options: { parseFrontmatter: true, blockJS: false },
+    options: {
+      parseFrontmatter: true,
+      blockJS: false,
+      scope: { t: (key: keyof typeof ptMessages) => messages[key] },
+    },
   });
+  };
+
+  const { content, frontmatter } = await compile(source, "pt");
+  const { content: enContent } = await compile(source, "en");
 
   return (
     <article className="grid w-full gap-10 pb-24">
       <PageTopbar title={frontmatter.title} />
       <header className="grid gap-2 border-b border-hairline pb-6">
         <p className="font-display text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-          Componente
+          <T k="docs.component" />
         </p>
-        <h1 className="font-display text-3xl font-medium text-heading">{frontmatter.title}</h1>
+        <h1 className="-ml-[0.04em] font-display text-3xl font-medium text-heading">{frontmatter.title}</h1>
         <p className="text-muted-foreground">{frontmatter.description}</p>
       </header>
-      <div className="grid gap-8">{content}</div>
+      <div className="grid gap-8">
+        <Localized pt={content} en={enContent} />
+      </div>
       {prev || next ? (
         <Pagination className="border-t border-hairline pt-6">
           <PaginationContent className="w-full justify-between">

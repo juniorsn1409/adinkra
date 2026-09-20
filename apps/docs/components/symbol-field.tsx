@@ -75,13 +75,27 @@ export function SymbolField({ cursorSize = 250 }: SymbolFieldProps) {
       if (el) el.style.color = lit ? "var(--brand)" : "";
     }
 
+    // Um cálculo por frame, não por evento: o mouse dispara mais eventos que
+    // o monitor desenha, e a leitura de layout (getBoundingClientRect) é o
+    // trecho caro daqui.
+    let frame = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+
     function handleMove(event: PointerEvent) {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      if (frame === 0) frame = requestAnimationFrame(update);
+    }
+
+    function update() {
+      frame = 0;
       const rect = container!.getBoundingClientRect();
       const cols = Math.max(1, Math.floor(rect.width / TILE_SIZE));
       const colWidth = rect.width / cols;
 
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
+      const x = pointerX - rect.left;
+      const y = pointerY - rect.top;
 
       const colRange = Math.ceil(radius / colWidth);
       const rowRange = Math.ceil(radius / TILE_SIZE);
@@ -117,6 +131,7 @@ export function SymbolField({ cursorSize = 250 }: SymbolFieldProps) {
     document.addEventListener("pointermove", handleMove);
     return () => {
       document.removeEventListener("pointermove", handleMove);
+      if (frame) cancelAnimationFrame(frame);
       for (const index of litRef.current) paint(index, false);
       litRef.current = new Set();
     };

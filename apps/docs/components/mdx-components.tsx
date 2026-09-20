@@ -1,5 +1,6 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@adinkra/table";
 import type * as React from "react";
+import { T } from "./language";
 
 /**
  * Blocos de documentação usados dentro do MDX (ver content/components/*.mdx)
@@ -50,10 +51,10 @@ export function PropsTable({ rows }: { rows: PropRow[] }) {
     <Table className="min-w-[480px]">
       <TableHeader>
         <TableRow>
-          <TableHead>Prop</TableHead>
-          <TableHead>Tipo</TableHead>
-          <TableHead>Padrão</TableHead>
-          <TableHead>Descrição</TableHead>
+          <TableHead><T k="docs.prop" /></TableHead>
+          <TableHead><T k="docs.type" /></TableHead>
+          <TableHead><T k="docs.default" /></TableHead>
+          <TableHead><T k="docs.description" /></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

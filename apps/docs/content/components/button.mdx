@@ -5,11 +5,11 @@ description: A ação que a pessoa precisa encontrar primeiro numa tela.
 
 <Preview>
   <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-    <Button variant="primary">Publicar</Button>
-    <Button variant="secondary">Salvar rascunho</Button>
-    <Button variant="outline">Visualizar</Button>
-    <Button variant="ghost">Cancelar</Button>
-    <Button variant="destructive">Excluir</Button>
+    <Button variant="primary">{t("sample.publish")}</Button>
+    <Button variant="secondary">{t("sample.saveDraft")}</Button>
+    <Button variant="outline">{t("sample.preview")}</Button>
+    <Button variant="ghost">{t("sample.cancel")}</Button>
+    <Button variant="destructive">{t("sample.delete")}</Button>
   </div>
 </Preview>
 
@@ -31,21 +31,21 @@ O foco visível pelo teclado é obrigatório — sem ele, quem navega por teclad
 
 <StatesGrid>
   <State label="padrão">
-    <Button variant="primary">Assinar</Button>
+    <Button variant="primary">{t("sample.subscribe")}</Button>
   </State>
   <State label="hover">
     <Button variant="primary" className="bg-primary-hover">
-      Assinar
+      {t("sample.subscribe")}
     </Button>
   </State>
   <State label="foco (tab)">
     <Button variant="primary" autoFocus>
-      Assinar
+      {t("sample.subscribe")}
     </Button>
   </State>
   <State label="desativado">
     <Button variant="primary" disabled>
-      Assinar
+      {t("sample.subscribe")}
     </Button>
   </State>
 </StatesGrid>
@@ -56,16 +56,16 @@ Um só botão `primary` por tela (decisão 4, `DECISOES.md`) — o resto usa `se
 
 <StatesGrid>
   <State label="primary">
-    <Button variant="primary">Publicar</Button>
+    <Button variant="primary">{t("sample.publish")}</Button>
   </State>
   <State label="secondary">
-    <Button variant="secondary">Salvar</Button>
+    <Button variant="secondary">{t("sample.save")}</Button>
   </State>
   <State label="outline">
-    <Button variant="outline">Visualizar</Button>
+    <Button variant="outline">{t("sample.preview")}</Button>
   </State>
   <State label="ghost">
-    <Button variant="ghost">Cancelar</Button>
+    <Button variant="ghost">{t("sample.cancel")}</Button>
   </State>
 </StatesGrid>
 

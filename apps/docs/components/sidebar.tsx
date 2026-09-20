@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AbodeSantannIcon } from "@adinkra/icons";
+import { ArcLogo } from "@adinkra/arc-text";
+import { SankofaSwirlIcon } from "@adinkra/icons";
 import {
   Sidebar,
   SidebarContent,
@@ -24,21 +25,19 @@ import {
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
+  useSidebar,
 } from "@adinkra/sidebar";
 import { nav } from "../config/nav";
+import { T, useLang } from "./language";
+import type { MessageKey } from "../i18n/pt";
 
-// Par de chevrons (cima/baixo) — o mesmo aceno de "seletor" que o cabeçalho
-// de referência usa (ex.: um trocador de time), mesmo sem termos um de
-// verdade pra trocar: comunica "isto é um controle", não só um link de
-// marca. Mesmo traço (viewBox 16x16, strokeWidth 1.3) do resto do sistema.
-function ChevronsUpDownIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true" {...props}>
-      <path d="M4.5 6.5 8 3.5l3.5 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M4.5 9.5 8 12.5l3.5-3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
+// Título do grupo em config/nav.ts (português) → chave de i18n.
+const groupTitleKey: Record<string, MessageKey> = {
+  Primitivos: "sidebar.group.primitives",
+  Navegação: "sidebar.group.navigation",
+  Formulário: "sidebar.group.form",
+  Sistema: "sidebar.group.system",
+};
 
 export interface AppSidebarProps {
   /** Repassado para o <Sidebar> interno — usado pra encolher a demo na página de documentação do próprio componente. */
@@ -47,6 +46,9 @@ export interface AppSidebarProps {
 
 export function AppSidebar({ className }: AppSidebarProps = {}) {
   const pathname = usePathname();
+  const { state, isMobile } = useSidebar();
+  const collapsed = state === "collapsed" && !isMobile;
+  const { t } = useLang();
 
   return (
     // "icon" (17/09, era "offcanvas" — sem ícone por item, uma faixa
@@ -67,21 +69,33 @@ export function AppSidebar({ className }: AppSidebarProps = {}) {
           menu.
         */}
         <SidebarHeader className="-mx-3 -mt-3 px-3">
+          {/* ArcLogo no lugar do wordmark (mesma composição da home). Ele mede
+              size×size, não cabe na faixa recolhida (3.25rem) — nesse estado
+              (só no desktop; no mobile a sidebar abre expandida) volta o
+              ícone pequeno. */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 rounded-control border-[length:var(--border-width)] border-transparent px-1.5 py-1.5 hover:border-ink hover:bg-card"
+            aria-label="Adinkra — página inicial"
+            className="flex items-center justify-center rounded-control border-[length:var(--border-width)] border-transparent py-1.5 hover:border-ink hover:bg-card"
           >
-            <AbodeSantannIcon role="img" aria-label="Abode Santann" className="size-5 flex-none text-brand" />
-            {/* font-adinkra (Adinkra Alphabet, @adinkra/tokens) mapeia letra
-                latina pra símbolo Adinkra — sem `uppercase` de propósito
-                aqui: forçar a transformação de caixa mudaria QUAL letra
-                chega até a fonte, arriscando cair fora do mapeamento dela
-                (não documentado publicamente). Texto no JSX já está na
-                caixa que queremos renderizar. */}
-            <p className="min-w-0 flex-1 truncate font-adinkra text-base tracking-[0.15em] text-heading">
-              Adinkra
-            </p>
-            <ChevronsUpDownIcon className="flex-none text-muted-foreground" />
+            {collapsed ? (
+              <SankofaSwirlIcon role="img" aria-label="Sankofa" className="size-5 flex-none text-brand" />
+            ) : (
+              <ArcLogo
+                text="Design System"
+                brandText="Adinkra"
+                year="2026"
+                size={200}
+                arc={60}
+                tailLength={1.5}
+                logoY={0.35}
+                icon="sankofa-swirl"
+                parallax={false}
+                filled
+                rayDistance={1}
+                showRays
+              />
+            )}
           </Link>
         </SidebarHeader>
 
@@ -101,12 +115,12 @@ export function AppSidebar({ className }: AppSidebarProps = {}) {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton isActive={pathname === "/getting-started"} render={<Link href="/getting-started" />}>
-                  Getting started
+                  <T k="common.gettingStarted" />
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton isActive={pathname === "/introduction"} render={<Link href="/introduction" />}>
-                  Introduction
+                  <T k="common.introduction" />
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -122,13 +136,15 @@ export function AppSidebar({ className }: AppSidebarProps = {}) {
           componentes").
         */}
         <SidebarGroup>
-          <SidebarGroupLabel>Componentes</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            <T k="common.components" />
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {nav.map((group) => (
                 <SidebarMenuItem key={group.title}>
                   <SidebarMenuCollapsible>
-                    <SidebarMenuCollapsibleTrigger>{group.title}</SidebarMenuCollapsibleTrigger>
+                    <SidebarMenuCollapsibleTrigger>{groupTitleKey[group.title] ? t(groupTitleKey[group.title]!) : group.title}</SidebarMenuCollapsibleTrigger>
                     <SidebarMenuSub>
                       {group.items.map((item) => {
                         const href = `/components/${item.slug}`;
@@ -140,7 +156,7 @@ export function AppSidebar({ className }: AppSidebarProps = {}) {
                             {isPlanned ? (
                               <span className="flex w-full items-center justify-between gap-2 rounded-control px-2 py-1 font-display text-sm text-muted-foreground">
                                 <span className="truncate">{item.title}</span>
-                                <span className="font-display text-[0.625rem] uppercase tracking-wide">Em breve</span>
+                                <span className="font-display text-[0.625rem] uppercase tracking-wide"><T k="common.comingSoon" /></span>
                               </span>
                             ) : (
                               <SidebarMenuSubButton isActive={isActive} render={<Link href={href} />}>
@@ -159,12 +175,14 @@ export function AppSidebar({ className }: AppSidebarProps = {}) {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Recursos</SidebarGroupLabel>
+          <SidebarGroupLabel>
+            <T k="common.resources" />
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton isActive={pathname === "/symbols"} render={<Link href="/symbols" />}>
-                  Símbolos
+                  <T k="common.symbols" />
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -185,10 +203,10 @@ export function AppSidebar({ className }: AppSidebarProps = {}) {
  */
 
 const mockItems = [
-  { title: "Visão geral", slug: "overview" },
-  { title: "Relatórios", slug: "reports" },
-  { title: "Configurações", slug: "settings" },
-];
+  { key: "demo.sidebar.overview", slug: "overview" },
+  { key: "demo.sidebar.reports", slug: "reports" },
+  { key: "demo.sidebar.settings", slug: "settings" },
+] as const;
 
 /**
  * Preview "hero" no topo de content/components/sidebar.mdx — mock, dados
@@ -198,6 +216,7 @@ const mockItems = [
  * demonstração com a navegação de verdade da própria página que a exibe.
  */
 export function SidebarShowcase() {
+  const { t } = useLang();
   return (
     <SidebarProvider
       defaultOpen
@@ -207,31 +226,31 @@ export function SidebarShowcase() {
       <Sidebar collapsible="offcanvas" className="relative">
         <SidebarHeader>
           <p className="px-1 font-display text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-            Produto
+            {t("demo.sidebar.product")}
           </p>
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>Painel</SidebarGroupLabel>
+            <SidebarGroupLabel>{t("demo.sidebar.panel")}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {mockItems.map((item, index) => (
                   <SidebarMenuItem key={item.slug}>
-                    <SidebarMenuButton isActive={index === 0}>{item.title}</SidebarMenuButton>
+                    <SidebarMenuButton isActive={index === 0}>{t(item.key)}</SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
           <SidebarGroup>
-            <SidebarGroupLabel>Equipe</SidebarGroupLabel>
+            <SidebarGroupLabel>{t("demo.sidebar.team")}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton>Membros</SidebarMenuButton>
+                  <SidebarMenuButton>{t("demo.sidebar.members")}</SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <SidebarMenuButton>Permissões</SidebarMenuButton>
+                  <SidebarMenuButton>{t("demo.sidebar.permissions")}</SidebarMenuButton>
                 </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroupContent>
@@ -239,7 +258,7 @@ export function SidebarShowcase() {
         </SidebarContent>
         <SidebarRail />
       </Sidebar>
-      <div className="flex-1 overflow-auto p-4 text-xs text-muted-foreground">Conteúdo da página</div>
+      <div className="flex-1 overflow-auto p-4 text-xs text-muted-foreground">{t("demo.sidebar.pageContent")}</div>
     </SidebarProvider>
   );
 }
@@ -279,22 +298,23 @@ function DotIcon() {
 }
 
 function BasicExample() {
+  const { t } = useLang();
   return (
     <SidebarProvider className="h-full min-h-0">
       <Sidebar collapsible="none" className="relative">
         <SidebarHeader>
           <p className="px-1 font-display text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-            Produto
+            {t("demo.sidebar.product")}
           </p>
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>Painel</SidebarGroupLabel>
+            <SidebarGroupLabel>{t("demo.sidebar.panel")}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {mockItems.map((item, index) => (
                   <SidebarMenuItem key={item.slug}>
-                    <SidebarMenuButton isActive={index === 0}>{item.title}</SidebarMenuButton>
+                    <SidebarMenuButton isActive={index === 0}>{t(item.key)}</SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
@@ -302,15 +322,16 @@ function BasicExample() {
           </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
-          <p className="px-1 text-xs text-muted-foreground">rodapé livre</p>
+          <p className="px-1 text-xs text-muted-foreground">{t("demo.sidebar.freeFooter")}</p>
         </SidebarFooter>
       </Sidebar>
-      <div className="flex-1 overflow-auto p-4 text-xs text-muted-foreground">Conteúdo da página</div>
+      <div className="flex-1 overflow-auto p-4 text-xs text-muted-foreground">{t("demo.sidebar.pageContent")}</div>
     </SidebarProvider>
   );
 }
 
 function SubmenuExample() {
+  const { t } = useLang();
   return (
     <SidebarProvider className="h-full min-h-0">
       <Sidebar collapsible="none" className="relative">
@@ -318,7 +339,7 @@ function SubmenuExample() {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuCollapsible defaultOpen>
-                <SidebarMenuCollapsibleTrigger>Componentes</SidebarMenuCollapsibleTrigger>
+                <SidebarMenuCollapsibleTrigger>{t("common.components")}</SidebarMenuCollapsibleTrigger>
                 <SidebarMenuSub>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton isActive>Button</SidebarMenuSubButton>
@@ -335,36 +356,38 @@ function SubmenuExample() {
           </SidebarMenu>
         </SidebarContent>
       </Sidebar>
-      <div className="flex-1 overflow-auto p-4 text-xs text-muted-foreground">Conteúdo da página</div>
+      <div className="flex-1 overflow-auto p-4 text-xs text-muted-foreground">{t("demo.sidebar.pageContent")}</div>
     </SidebarProvider>
   );
 }
 
 function BadgeAndActionExample() {
+  const { t } = useLang();
   return (
     <SidebarProvider className="h-full min-h-0">
       <Sidebar collapsible="none" className="relative">
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton>Notificações</SidebarMenuButton>
+              <SidebarMenuButton>{t("demo.sidebar.notifications")}</SidebarMenuButton>
               <SidebarMenuBadge>12</SidebarMenuBadge>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton>Projetos</SidebarMenuButton>
-              <SidebarMenuAction showOnHover aria-label="Mais opções">
+              <SidebarMenuButton>{t("demo.sidebar.projects")}</SidebarMenuButton>
+              <SidebarMenuAction showOnHover aria-label={t("demo.sidebar.moreOptions")}>
                 ···
               </SidebarMenuAction>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>
       </Sidebar>
-      <div className="flex-1 overflow-auto p-4 text-xs text-muted-foreground">Passe o mouse no 2º item</div>
+      <div className="flex-1 overflow-auto p-4 text-xs text-muted-foreground">{t("demo.sidebar.hoverSecond")}</div>
     </SidebarProvider>
   );
 }
 
 function CollapseModesExample() {
+  const { t } = useLang();
   return (
     <div className="grid h-full grid-cols-3 divide-x-[length:var(--border-width)] divide-ink">
       <SidebarProvider defaultOpen className="h-full min-h-0">
@@ -377,7 +400,7 @@ function CollapseModesExample() {
               {mockItems.map((item, index) => (
                 <SidebarMenuItem key={item.slug}>
                   <SidebarMenuButton isActive={index === 0} icon={<DotIcon />}>
-                    {item.title}
+                    {t(item.key)}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -395,7 +418,7 @@ function CollapseModesExample() {
             <SidebarMenu>
               {mockItems.map((item, index) => (
                 <SidebarMenuItem key={item.slug}>
-                  <SidebarMenuButton isActive={index === 0}>{item.title}</SidebarMenuButton>
+                  <SidebarMenuButton isActive={index === 0}>{t(item.key)}</SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -410,7 +433,7 @@ function CollapseModesExample() {
             <SidebarMenu>
               {mockItems.map((item, index) => (
                 <SidebarMenuItem key={item.slug}>
-                  <SidebarMenuButton isActive={index === 0}>{item.title}</SidebarMenuButton>
+                  <SidebarMenuButton isActive={index === 0}>{t(item.key)}</SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -423,30 +446,28 @@ function CollapseModesExample() {
 }
 
 export function SidebarUsageExamples() {
+  const { t } = useLang();
   return (
     <div className="grid gap-8">
-      <ExampleBlock title="Básico" description="Grupo com rótulo, item ativo, rodapé livre.">
+      <ExampleBlock title={t("demo.sidebar.basicTitle")} description={t("demo.sidebar.basicDesc")}>
         <BasicExample />
       </ExampleBlock>
-      <ExampleBlock title="Submenu recolhível" description="<details>/<summary> nativo, sem useState.">
+      <ExampleBlock title={t("demo.sidebar.submenuTitle")} description={t("demo.sidebar.submenuDesc")}>
         <SubmenuExample />
       </ExampleBlock>
-      <ExampleBlock title="Badge e ação de item" description="SidebarMenuBadge fixo; SidebarMenuAction só no hover (showOnHover).">
+      <ExampleBlock title={t("demo.sidebar.badgeTitle")} description={t("demo.sidebar.badgeDesc")}>
         <BadgeAndActionExample />
       </ExampleBlock>
       <ExampleBlock
-        title="Modos de recolhimento"
-        description="icon (faixa de ícones) · offcanvas (largura zero + rail) · none (sempre expandido). Clique no botão do cabeçalho ou na faixa da borda."
+        title={t("demo.sidebar.modesTitle")}
+        description={t("demo.sidebar.modesDesc")}
       >
         <CollapseModesExample />
       </ExampleBlock>
       <div className="grid gap-2">
-        <p className="font-display text-sm font-medium text-heading">Mobile</p>
+        <p className="font-display text-sm font-medium text-heading">{t("demo.sidebar.mobile")}</p>
         <p className="text-xs text-muted-foreground">
-          Sem demo estática aqui — o comportamento depende da largura real da janela
-          (<code>useIsMobile</code>, abaixo de 768px), não de um contêiner pequeno. Qualquer{" "}
-          <code>&lt;Sidebar/&gt;</code> vira gaveta automaticamente nesse caso; veja a seção "Mobile" em{" "}
-          <code>content/components/sidebar.mdx</code>.
+          <T k="demo.sidebar.mobileText" />
         </p>
       </div>
     </div>

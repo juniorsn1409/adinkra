@@ -1,6 +1,6 @@
 "use client";
 
-import type * as React from "react";
+import * as React from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,6 +11,8 @@ import {
 } from "@adinkra/breadcrumb";
 import { useSidebar } from "@adinkra/sidebar";
 import { Toggle } from "@adinkra/toggle";
+import { LanguageSelect, T, useLang } from "./language";
+import { ThemeToggle } from "./theme-toggle";
 
 // Mesmo ícone (retângulo + linha vertical) do <SidebarTrigger/> do pacote —
 // consistência visual, não reexportado de lá (é pequeno demais pra virar
@@ -31,36 +33,61 @@ function SidebarPanelIcon(props: React.SVGProps<SVGSVGElement>) {
  * reabre a gaveta em mobile), este é visível em qualquer largura de tela —
  * "use client" porque `useSidebar()` é hook de verdade.
  */
-export function PageTopbar({ title }: { title: string }) {
+export interface PageTopbarCrumb {
+  label: React.ReactNode;
+  href: string;
+}
+
+// Trilha intermediária entre "Início" e a página atual. O padrão é a das
+// páginas de componente; Introduction, Getting started e Símbolos passam
+// `trail={[]}` porque não ficam dentro de "Componentes".
+const componentsTrail: PageTopbarCrumb[] = [
+  { label: <T k="common.components" />, href: "/components/button" },
+];
+
+export function PageTopbar({ title, trail = componentsTrail }: { title: React.ReactNode; trail?: PageTopbarCrumb[] }) {
   const { toggleSidebar, state, isMobile, openMobile } = useSidebar();
+  const { t } = useLang();
   const expanded = isMobile ? openMobile : state === "expanded";
 
   return (
-    <div className="flex items-end gap-3">
+    <div className="flex items-end justify-between gap-3">
+      <div className="flex items-end gap-3">
       <Toggle
         variant="outline"
         size="sm"
         pressed={expanded}
         onPressedChange={toggleSidebar}
-        aria-label={expanded ? "Recolher menu" : "Expandir menu"}
+        aria-label={expanded ? t("topbar.collapseMenu") : t("topbar.expandMenu")}
       >
         <SidebarPanelIcon />
       </Toggle>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">Início</BreadcrumbLink>
+            <BreadcrumbLink href="/">
+              <T k="common.home" />
+            </BreadcrumbLink>
           </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/components/button">Componentes</BreadcrumbLink>
-          </BreadcrumbItem>
+          {trail.map((crumb) => (
+            <React.Fragment key={crumb.href}>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink href={crumb.href}>{crumb.label}</BreadcrumbLink>
+              </BreadcrumbItem>
+            </React.Fragment>
+          ))}
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage>{title}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
+      </div>
+      <div className="flex items-end gap-2">
+        <ThemeToggle />
+        <LanguageSelect />
+      </div>
     </div>
   );
 }

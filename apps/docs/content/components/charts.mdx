@@ -7,10 +7,10 @@ description: Gráficos com Recharts por baixo e o tema Adinkra por cima — bord
   <SimpleBarChart
     data={[
       { month: "Jan", desktop: 186 },
-      { month: "Fev", desktop: 305 },
+      { month: t("sample.feb"), desktop: 305 },
       { month: "Mar", desktop: 237 },
-      { month: "Abr", desktop: 173 },
-      { month: "Mai", desktop: 209 },
+      { month: t("sample.apr"), desktop: 173 },
+      { month: t("sample.may"), desktop: 209 },
     ]}
     config={{ desktop: { label: "Desktop" } }}
     xAxisKey="month"
@@ -48,10 +48,10 @@ Uma barra por chave do `config`, empilhadas (`stackId` igual em todas) em vez de
   <StackedBarChartWithLegend
     data={[
       { month: "Jan", desktop: 186, mobile: 80 },
-      { month: "Fev", desktop: 305, mobile: 200 },
+      { month: t("sample.feb"), desktop: 305, mobile: 200 },
       { month: "Mar", desktop: 237, mobile: 120 },
-      { month: "Abr", desktop: 173, mobile: 190 },
-      { month: "Mai", desktop: 209, mobile: 130 },
+      { month: t("sample.apr"), desktop: 173, mobile: 190 },
+      { month: t("sample.may"), desktop: 209, mobile: 130 },
     ]}
     config={{ desktop: { label: "Desktop" }, mobile: { label: "Mobile" } }}
     xAxisKey="month"
@@ -80,12 +80,12 @@ Uma série só, cor por sinal: negativo usa `--destructive` (mesma convenção d
   <NegativeBarChart
     data={[
       { month: "Jan", saldo: 186 },
-      { month: "Fev", saldo: -120 },
+      { month: t("sample.feb"), saldo: -120 },
       { month: "Mar", saldo: 237 },
-      { month: "Abr", saldo: -95 },
-      { month: "Mai", saldo: 60 },
+      { month: t("sample.apr"), saldo: -95 },
+      { month: t("sample.may"), saldo: 60 },
     ]}
-    config={{ saldo: { label: "Saldo" } }}
+    config={{ saldo: { label: t("sample.balance") } }}
     xAxisKey="month"
     dataKey="saldo"
     className="w-full"
@@ -187,13 +187,13 @@ Uma `<Radar>` por chave do `config`, área preenchida (não só o contorno) — 
   <FilledRadarChart
     data={[
       { category: "Design", desktop: 186 },
-      { category: "Código", desktop: 305 },
-      { category: "Testes", desktop: 237 },
+      { category: t("sample.code"), desktop: 305 },
+      { category: t("sample.tests"), desktop: 237 },
       { category: "Docs", desktop: 173 },
-      { category: "Suporte", desktop: 209 },
+      { category: t("sample.support"), desktop: 209 },
       { category: "Deploy", desktop: 214 },
     ]}
-    config={{ desktop: { label: "Pontuação" } }}
+    config={{ desktop: { label: t("sample.score") } }}
     angleKey="category"
     className="mx-auto w-full max-w-96"
   />
@@ -253,10 +253,10 @@ Linha completa (eixo + tooltip), só o último valor ganha um marcador maior —
   <LineChartWithEndDot
     data={[
       { month: "Jan", v: 186 },
-      { month: "Fev", v: 305 },
+      { month: t("sample.feb"), v: 305 },
       { month: "Mar", v: 237 },
-      { month: "Abr", v: 273 },
-      { month: "Mai", v: 309 },
+      { month: t("sample.apr"), v: 273 },
+      { month: t("sample.may"), v: 309 },
     ]}
     dataKey="v"
     xAxisKey="month"
@@ -281,7 +281,7 @@ Blocos proporcionais ao valor — compara peso relativo de muitas categorias de 
       { name: "Safari", value: 19 },
       { name: "Edge", value: 9 },
       { name: "Firefox", value: 7 },
-      { name: "Outros", value: 4 },
+      { name: t("sample.others"), value: 4 },
     ]}
     className="w-full"
   />
@@ -300,7 +300,7 @@ Fluxo entre etapas — origem e destino ligados por uma faixa cuja espessura é 
 <Preview>
   <SankeyChart
     data={{
-      nodes: [{ name: "Visitas" }, { name: "Cadastro" }, { name: "Compra" }, { name: "Abandono" }],
+      nodes: [{ name: t("sample.visits") }, { name: t("sample.signUp") }, { name: t("sample.purchase") }, { name: t("sample.dropOff") }],
       links: [
         { source: 0, target: 1, value: 400 },
         { source: 0, target: 3, value: 600 },

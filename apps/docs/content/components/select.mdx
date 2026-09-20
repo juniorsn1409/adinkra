@@ -1,0 +1,86 @@
+---
+title: Select
+description: Um select nativo com rótulo, ajuda e erro já resolvidos.
+---
+
+<Preview>
+  <div style={{ width: "20rem" }}>
+    <Select label={t("sample.fruit")} defaultValue="">
+      <SelectOption value="">{t("sample.chooseAnOption")}</SelectOption>
+      <SelectOption value="maca">{t("sample.apple")}</SelectOption>
+      <SelectOption value="banana">Banana</SelectOption>
+      <SelectOption value="uva">{t("sample.grape")}</SelectOption>
+    </Select>
+  </div>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/select
+```
+
+```tsx
+import { Select, SelectOption } from "@adinkra/select";
+
+<Select label="Fruta" defaultValue="">
+  <SelectOption value="">Escolha uma opção</SelectOption>
+  <SelectOption value="maca">Maçã</SelectOption>
+</Select>;
+```
+
+## Estados
+
+<StatesGrid>
+  <State label="padrão">
+    <Select label={t("sample.fruit")} defaultValue="">
+      <SelectOption value="">{t("sample.chooseAnOption")}</SelectOption>
+      <SelectOption value="maca">{t("sample.apple")}</SelectOption>
+    </Select>
+  </State>
+  <State label="com grupos">
+    <Select label={t("sample.food")} defaultValue="">
+      <SelectOption value="">{t("sample.chooseAnOption")}</SelectOption>
+      <SelectOptGroup label={t("sample.fruits")}>
+        <SelectOption value="maca">{t("sample.apple")}</SelectOption>
+        <SelectOption value="uva">{t("sample.grape")}</SelectOption>
+      </SelectOptGroup>
+      <SelectOptGroup label={t("sample.vegetables")}>
+        <SelectOption value="cenoura">{t("sample.carrot")}</SelectOption>
+      </SelectOptGroup>
+    </Select>
+  </State>
+  <State label="com erro">
+    <Select label={t("sample.fruit")} defaultValue="" error={t("sample.chooseAFruitToContinue")}>
+      <SelectOption value="">{t("sample.chooseAnOption")}</SelectOption>
+      <SelectOption value="maca">{t("sample.apple")}</SelectOption>
+    </Select>
+  </State>
+  <State label="desativado">
+    <Select label={t("sample.fruit")} disabled>
+      <SelectOption value="maca">{t("sample.apple")}</SelectOption>
+    </Select>
+  </State>
+</StatesGrid>
+
+## Props
+
+<PropsTable
+  rows={[
+    { prop: "label", type: "string", description: "Rótulo acima do campo, ligado por htmlFor/id." },
+    { prop: "help", type: "string", description: "Texto de ajuda abaixo do campo. Some quando há erro." },
+    { prop: "error", type: "string", description: "Mensagem de erro: ativa aria-invalid e a borda dupla em tomate." },
+    { prop: "...props", type: "SelectHTMLAttributes<HTMLSelectElement>", description: "Qualquer atributo nativo de <select>." },
+  ]}
+/>
+
+`SelectOption` e `SelectOptGroup` são o `<option>` e o `<optgroup>` nativos, só com as cores do tema (o menu aberto é do navegador).
+
+## Acessibilidade
+
+- É um `<select>` nativo: teclado, leitores de tela e o seletor do celular funcionam sem código extra.
+- `label` é ligado ao campo por `htmlFor`/`id`; com `error`, o campo ganha `aria-invalid` e `aria-describedby`.
+
+## Tokens usados
+
+`--card` · `--border` · `--foreground` · `--muted-foreground` · `--ring` · `--destructive` · `--destructive-foreground` · `--heading` · `--surface`

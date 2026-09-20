@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { GlitchCursor } from "@adinkra/cursor";
-import { DocsShell } from "../../components/docs-shell";
 
 // GlitchCursor já é "use client" por conta própria — este layout continua
 // Server Component, mesmo raciocínio do BigCircleCursor na home
@@ -10,9 +9,9 @@ import { DocsShell } from "../../components/docs-shell";
 // laranja / --brand coral) não precisam de override.
 export default function ComponentsLayout({ children }: { children: ReactNode }) {
   return (
-    <DocsShell>
+    <>
       <GlitchCursor />
       {children}
-    </DocsShell>
+    </>
   );
 }

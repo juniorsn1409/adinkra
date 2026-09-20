@@ -6,6 +6,7 @@ import { iconPaths } from "@adinkra/icons";
 import { Input } from "@adinkra/input";
 import { Switch } from "@adinkra/switch";
 import { Toggle } from "@adinkra/toggle";
+import { useLang } from "./language";
 
 // Precisa de estado (inputs ao vivo + reiniciar a animação) — por isso vive
 // num componente à parte, não direto no MDX (que não tem hooks). `key` no
@@ -13,6 +14,7 @@ import { Toggle } from "@adinkra/toggle";
 // que ensinar o componente a "resetar" sozinho, e o mesmo truque de sempre
 // pra reiniciar animação disparada por mount (useLayoutEffect/useEffect).
 export function ArcLogoDemo() {
+  const { t } = useLang();
   const [text, setText] = React.useState("Adinkra");
   const [brandText, setBrandText] = React.useState("Adinkra");
   const [year, setYear] = React.useState("2026");
@@ -54,14 +56,14 @@ export function ArcLogoDemo() {
           os inputs"), em vez de uma coluna só descendo — muitos campos
           acumulados nas últimas rodadas deixaram a lista comprida demais. */}
       <div className="grid w-full max-w-xl grid-cols-2 gap-3">
-        <Input label="Texto da arco" value={text} onChange={(event) => setText(event.target.value)} />
+        <Input label={t("demo.arc.text")} value={text} onChange={(event) => setText(event.target.value)} />
         {/* Separado do "Texto" (pedido do usuário — "na customizacao pode
             ser palavra diferentes") — antes o nome no meio do ano sempre
             repetia a mesma palavra do arco. */}
-        <Input label="Em baixo do arco" value={brandText} onChange={(event) => setBrandText(event.target.value)} />
-        <Input label="Text no final da arco" value={year} onChange={(event) => setYear(event.target.value)} />
+        <Input label={t("demo.arc.below")} value={brandText} onChange={(event) => setBrandText(event.target.value)} />
+        <Input label={t("demo.arc.year")} value={year} onChange={(event) => setYear(event.target.value)} />
         <Input
-          label="Tamanho (px)"
+          label={t("demo.arc.size")}
           type="number"
           min={120}
           max={320}
@@ -75,7 +77,7 @@ export function ArcLogoDemo() {
             letra, não mais parábola nem rotação por letra), não graus nem
             profundidade. */}
         <Input
-          label="Raio da curva (px)"
+          label={t("demo.arc.radius")}
           type="number"
           min={20}
           max={150}
@@ -87,7 +89,7 @@ export function ArcLogoDemo() {
             pode descer, em múltiplos do raio do sol — pedido do usuário
             depois de aumentar o valor fixo que comprimia letras longas. */}
         <Input
-          label="Trecho reto (× raio do sol)"
+          label={t("demo.arc.tail")}
           type="number"
           min={0.5}
           max={6}
@@ -99,7 +101,7 @@ export function ArcLogoDemo() {
             Sankofa/ano, todos calculados a partir do sol) — pedido do
             usuário pra dar pra ajustar sem editar o componente. */}
         <Input
-          label="Posição do sol (0–1)"
+          label={t("demo.arc.sunY")}
           type="number"
           min={0.2}
           max={0.8}
@@ -111,12 +113,12 @@ export function ArcLogoDemo() {
             pedido do usuário pra animar "o path que tiver servindo de
             icon no momento", não só o Sankofa fixo. Slug inválido cai pro
             Sankofa (ArcLogo já trata isso). */}
-        <Input label="Ícone (slug)" value={icon} onChange={(event) => setIcon(event.target.value)} />
+        <Input label={t("demo.arc.icon")} value={icon} onChange={(event) => setIcon(event.target.value)} />
         {/* Multiplicador da distância do leque de raios até o sol — pedido
             do usuário pra dar pra afastar (ou aproximar) sem editar o
             componente. */}
         <Input
-          label="Distância dos raios (×)"
+          label={t("demo.arc.rayDistance")}
           type="number"
           min={0.5}
           max={3}
@@ -130,7 +132,7 @@ export function ArcLogoDemo() {
           <div className="flex items-center gap-2.5">
             <Switch id="arc-logo-auto-arc" checked={autoArc} onCheckedChange={setAutoArc} />
             <label htmlFor="arc-logo-auto-arc" className="font-display text-sm text-heading">
-              Raio automático
+              {t("demo.arc.autoRadius")}
             </label>
           </div>
           <div className="flex items-center gap-2.5">
@@ -142,13 +144,13 @@ export function ArcLogoDemo() {
           <div className="flex items-center gap-2.5">
             <Switch id="arc-logo-filled" checked={filled} onCheckedChange={setFilled} />
             <label htmlFor="arc-logo-filled" className="font-display text-sm text-heading">
-              Ícone preenchido
+              {t("demo.arc.filled")}
             </label>
           </div>
           <div className="flex items-center gap-2.5">
             <Switch id="arc-logo-show-rays" checked={showRays} onCheckedChange={setShowRays} />
             <label htmlFor="arc-logo-show-rays" className="font-display text-sm text-heading">
-              Mostrar raios
+              {t("demo.arc.showRays")}
             </label>
           </div>
         </div>
@@ -161,7 +163,7 @@ export function ArcLogoDemo() {
           className="col-span-2"
           onPressedChange={() => setReplayCount((count) => count + 1)}
         >
-          Reiniciar animação ↺
+          {t("demo.arc.replay")}
         </Toggle>
       </div>
     </div>

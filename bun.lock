@@ -26,9 +26,11 @@
         "@adinkra/date-picker": "workspace:*",
         "@adinkra/icons": "workspace:*",
         "@adinkra/input": "workspace:*",
+        "@adinkra/link": "workspace:*",
         "@adinkra/navigation-menu": "workspace:*",
         "@adinkra/pagination": "workspace:*",
         "@adinkra/progress": "workspace:*",
+        "@adinkra/select": "workspace:*",
         "@adinkra/sidebar": "workspace:*",
         "@adinkra/skeleton": "workspace:*",
         "@adinkra/switch": "workspace:*",
@@ -250,6 +252,22 @@
         "react-dom": "^19.0.0",
       },
     },
+    "packages/link": {
+      "name": "@adinkra/link",
+      "version": "0.1.0",
+      "dependencies": {
+        "@adinkra/core": "workspace:*",
+      },
+      "devDependencies": {
+        "@types/react": "^19.3.0",
+        "react": "^19.3.0",
+        "tsup": "^8.5.1",
+        "typescript": "^5.9.3",
+      },
+      "peerDependencies": {
+        "react": "^19.0.0",
+      },
+    },
     "packages/navigation-menu": {
       "name": "@adinkra/navigation-menu",
       "version": "0.1.0",
@@ -298,6 +316,25 @@
       },
       "peerDependencies": {
         "react": "^19.0.0",
+      },
+    },
+    "packages/select": {
+      "name": "@adinkra/select",
+      "version": "0.1.0",
+      "dependencies": {
+        "@adinkra/core": "workspace:*",
+      },
+      "devDependencies": {
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.3.0",
+        "react": "^19.3.0",
+        "react-dom": "^19.3.0",
+        "tsup": "^8.5.1",
+        "typescript": "^5.9.3",
+      },
+      "peerDependencies": {
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
       },
     },
     "packages/sidebar": {
@@ -412,11 +449,15 @@
 
     "@adinkra/input": ["@adinkra/input@workspace:packages/input"],
 
+    "@adinkra/link": ["@adinkra/link@workspace:packages/link"],
+
     "@adinkra/navigation-menu": ["@adinkra/navigation-menu@workspace:packages/navigation-menu"],
 
     "@adinkra/pagination": ["@adinkra/pagination@workspace:packages/pagination"],
 
     "@adinkra/progress": ["@adinkra/progress@workspace:packages/progress"],
+
+    "@adinkra/select": ["@adinkra/select@workspace:packages/select"],
 
     "@adinkra/sidebar": ["@adinkra/sidebar@workspace:packages/sidebar"],
 

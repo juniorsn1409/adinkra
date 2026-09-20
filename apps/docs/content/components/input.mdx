@@ -5,8 +5,8 @@ description: Um campo de formulário com rótulo, ajuda e erro já resolvidos.
 
 <Preview>
   <div style={{ display: "grid", gap: "1rem", width: "20rem" }}>
-    <Input label="Nome" placeholder="Ana Souza" />
-    <Input label="E-mail" defaultValue="ana@estudio" error="Falta o final do e-mail, como ana@estudio.com.br" />
+    <Input label={t("sample.name")} placeholder="Ana Souza" />
+    <Input label={t("sample.email")} defaultValue={t("sample.anaStudio")} error={t("sample.theEndOfTheEmail")} />
   </div>
 </Preview>
 
@@ -26,16 +26,16 @@ import { Input } from "@adinkra/input";
 
 <StatesGrid>
   <State label="padrão">
-    <Input label="Nome" placeholder="Ana Souza" />
+    <Input label={t("sample.name")} placeholder="Ana Souza" />
   </State>
   <State label="com ajuda">
-    <Input label="E-mail" help="Enviamos uma edição por mês." />
+    <Input label={t("sample.email")} help={t("sample.weSendOneIssueA")} />
   </State>
   <State label="com erro">
-    <Input label="E-mail" defaultValue="ana@estudio" error="Falta o final do e-mail, como ana@estudio.com.br" />
+    <Input label={t("sample.email")} defaultValue={t("sample.anaStudio")} error={t("sample.theEndOfTheEmail")} />
   </State>
   <State label="desativado">
-    <Input label="Nome" defaultValue="Ana Souza" disabled />
+    <Input label={t("sample.name")} defaultValue="Ana Souza" disabled />
   </State>
 </StatesGrid>
 

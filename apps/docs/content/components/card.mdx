@@ -7,16 +7,16 @@ description: Um contêiner de conteúdo — cabeçalho, corpo e rodapé, com a b
   <div style={{ width: "100%", maxWidth: "20rem" }}>
     <Card>
       <CardHeader>
-        <CardTitle>Publicar ensaio</CardTitle>
-        <CardDescription>Revisão automática antes de ir ao ar.</CardDescription>
+        <CardTitle>{t("sample.publishEssay")}</CardTitle>
+        <CardDescription>{t("sample.automaticReviewBeforeItGoes")}</CardDescription>
       </CardHeader>
       <CardContent>
-        <p style={{ fontSize: "0.875rem" }}>Sankofa: voltar para buscar o que ficou para trás.</p>
+        <p style={{ fontSize: "0.875rem" }}>{t("sample.sankofaGoBackAndFetch")}</p>
       </CardContent>
       <CardFooter>
-        <Button size="sm">Publicar</Button>
+        <Button size="sm">{t("sample.publish")}</Button>
         <Button size="sm" variant="ghost">
-          Cancelar
+          {t("sample.cancel")}
         </Button>
       </CardFooter>
     </Card>
@@ -61,12 +61,12 @@ Seis peças, todas opcionais — use só as que precisar:
 <StatesGrid>
   <State label="padrão">
     <Card style={{ width: "100%", padding: "0" }}>
-      <CardContent style={{ padding: "1rem", fontSize: "0.8125rem" }}>Não clicável</CardContent>
+      <CardContent style={{ padding: "1rem", fontSize: "0.8125rem" }}>{t("sample.notClickable")}</CardContent>
     </Card>
   </State>
   <State label="interactive">
     <Card interactive style={{ width: "100%", padding: "0" }}>
-      <CardContent style={{ padding: "1rem", fontSize: "0.8125rem" }}>Passe o mouse / clique</CardContent>
+      <CardContent style={{ padding: "1rem", fontSize: "0.8125rem" }}>{t("sample.hoverClick")}</CardContent>
     </Card>
   </State>
 </StatesGrid>

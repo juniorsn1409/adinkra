@@ -39,6 +39,7 @@ export const nav: NavGroup[] = [
       { title: "Button", slug: "button", status: "estavel" },
       { title: "Input", slug: "input", status: "estavel" },
       { title: "Badge", slug: "badge", status: "estavel" },
+      { title: "Link", slug: "link", status: "estavel" },
       { title: "Skeleton", slug: "skeleton", status: "estavel" },
       { title: "Card", slug: "card", status: "estavel" },
       { title: "Table", slug: "table", status: "estavel" },
@@ -60,6 +61,7 @@ export const nav: NavGroup[] = [
   {
     title: "Formulário",
     items: [
+      { title: "Select", slug: "select", status: "estavel" },
       { title: "Switch", slug: "switch", status: "estavel" },
       { title: "Toggle", slug: "toggle", status: "estavel" },
     ],
