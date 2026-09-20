@@ -51,8 +51,8 @@ export function PageTopbar({ title, trail = componentsTrail }: { title: React.Re
   const expanded = isMobile ? openMobile : state === "expanded";
 
   return (
-    <div className="flex items-end justify-between gap-3">
-      <div className="flex items-end gap-3">
+    <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-2">
+      <div className="flex min-w-0 flex-wrap items-end gap-3">
       <Toggle
         variant="outline"
         size="sm"

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { SidebarProvider, SidebarTrigger } from "@adinkra/sidebar";
+import { SidebarProvider } from "@adinkra/sidebar";
 import { AppSidebar } from "./sidebar";
 
 /**
@@ -18,17 +18,12 @@ export function DocsShell({ children }: { children: ReactNode }) {
       <AppSidebar />
       <div className="flex min-w-0 flex-1 flex-col">
         {/*
-          Barra só em mobile (abaixo de 768px, igual o breakpoint de
-          useIsMobile no pacote): em desktop o AppSidebar usa
-          collapsible="none" e fica sempre visível, sem gatilho nenhum — em
-          mobile ele vira gaveta fechada por padrão, então precisa de algo
-          pra reabrir.
+          Sem barra própria em mobile (20/09/2026, pedido do usuário — o
+          "Adinkra" + botão de recolher no topo não deviam aparecer em tela
+          pequena): quem abre a gaveta é o Toggle do PageTopbar de cada
+          página, que já entende mobile (useSidebar → openMobile).
         */}
-        <header className="flex items-center gap-2 border-b border-hairline px-4 py-3 md:hidden">
-          <SidebarTrigger />
-          <span className="font-display text-sm font-medium uppercase tracking-[0.2em] text-heading">Adinkra</span>
-        </header>
-        <main className="min-w-0 flex-1 px-8 py-10">{children}</main>
+        <main className="min-w-0 flex-1 px-4 py-6 sm:px-8 sm:py-10">{children}</main>
       </div>
     </SidebarProvider>
   );

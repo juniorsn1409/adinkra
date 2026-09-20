@@ -16,6 +16,8 @@ export const en: Record<MessageKey, string> = {
   // Topbar, theme and language
   "topbar.collapseMenu": "Collapse menu",
   "topbar.expandMenu": "Expand menu",
+  "nav.menu": "Menu",
+  "nav.mainLabel": "Main navigation",
   "theme.toLight": "Switch to light theme",
   "theme.toDark": "Switch to dark theme",
   "language.label": "Language",

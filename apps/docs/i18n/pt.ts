@@ -21,6 +21,8 @@ export const pt = {
   // Barra do topo, tema e idioma
   "topbar.collapseMenu": "Recolher menu",
   "topbar.expandMenu": "Expandir menu",
+  "nav.menu": "Menu",
+  "nav.mainLabel": "Navegação principal",
   "theme.toLight": "Mudar para o tema claro",
   "theme.toDark": "Mudar para o tema escuro",
   "language.label": "Idioma",

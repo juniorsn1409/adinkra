@@ -4,8 +4,8 @@ import { cn } from "@adinkra/core";
 import { BigCircleCursor } from "@adinkra/cursor";
 import { ArcLogo } from "@adinkra/arc-text";
 import { iconPaths } from "@adinkra/icons";
-import { Link as AdinkraLink } from "@adinkra/link";
-import { LanguageSelect, T } from "../components/language";
+import { HomeNav } from "../components/home-nav";
+import { T } from "../components/language";
 import { SymbolField } from "../components/symbol-field";
 
 export default function HomePage() {
@@ -16,7 +16,7 @@ export default function HomePage() {
           pra cima — 58%/42% em telas menores espremia logo, nav e título. */}
       <div className="flex w-full flex-none flex-col bg-background lg:w-[58%]">
         {/* Header com ArcLogo e links */}
-        <div className="flex flex-col gap-6 px-4 py-6 sm:px-6 xl:flex-row xl:items-center xl:justify-between">
+        <div className="flex flex-col gap-6 px-4 py-6 sm:px-6 2xl:flex-row 2xl:items-center 2xl:justify-between">
         <ArcLogo
           key={0}
           text={"Design System"}
@@ -32,18 +32,7 @@ export default function HomePage() {
           rayDistance={1}
           showRays={true}
         />
-          <nav className="flex flex-wrap items-center gap-x-6 gap-y-3 self-start xl:mt-15 xl:justify-end xl:gap-x-8">
-            <AdinkraLink href="/introduction" className="text-sm">
-              <T k="common.introduction" />
-            </AdinkraLink>
-            <AdinkraLink href="/components/button" className="text-sm">
-              <T k="common.components" />
-            </AdinkraLink>
-            <AdinkraLink href="/symbols" className="text-sm">
-              <T k="common.resources" />
-            </AdinkraLink>
-            <LanguageSelect />
-          </nav>
+          <HomeNav />
         </div>
 
         {/* Conteúdo principal */}
