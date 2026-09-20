@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@adinkra/badge": "workspace:*",
+    "@adinkra/checkbox": "workspace:*",
     "@adinkra/core": "workspace:*",
     "@adinkra/date-picker": "workspace:*"
   },

@@ -1,0 +1,84 @@
+---
+title: Textarea
+description: Campo de texto de várias linhas — mesma gramática do Input, com altura mínima e redimensionável na vertical.
+---
+
+<Preview>
+  <div style={{ width: "100%", maxWidth: "24rem" }}>
+    <Field label="Mensagem" description="Até 500 caracteres.">
+      <Textarea placeholder="Como podemos ajudar?" />
+    </Field>
+  </div>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/textarea
+```
+
+```tsx
+import { Textarea } from "@adinkra/textarea";
+
+<Textarea aria-label="Mensagem" placeholder="Como podemos ajudar?" />;
+```
+
+O Textarea é só o controle: não traz rótulo, ajuda nem erro próprios (diferente do Input, que embute os três). Para isso, envolva com o `Field` de `@adinkra/field`, que liga `id`, `aria-describedby` e `aria-invalid`:
+
+```tsx
+<Field label="Mensagem" error="Escreva ao menos uma frase.">
+  <Textarea />
+</Field>
+```
+
+## Estados
+
+Igual ao Input: borda de tinta + sombra dura sempre, sem o gesto de “pressionar” (digitar não é um clique). O foco usa o mesmo anel de 2px dos botões. A altura mínima é 80px (cerca de 3 linhas) e o campo estica só na vertical, pela alça do canto.
+
+<StatesGrid>
+  <State label="padrão">
+    <Textarea aria-label="Padrão" placeholder="Digite aqui" />
+  </State>
+  <State label="preenchido">
+    <Textarea aria-label="Preenchido" defaultValue="Texto já digitado." />
+  </State>
+  <State label="desativado">
+    <Textarea aria-label="Desativado" placeholder="Digite aqui" disabled />
+  </State>
+  <State label="erro (aria-invalid)">
+    <Textarea aria-label="Erro" defaultValue="Ok" aria-invalid />
+  </State>
+</StatesGrid>
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "rows",
+      type: "number",
+      default: "3",
+      description: "Linhas visíveis. A altura mínima de 80px vale de qualquer jeito.",
+    },
+    {
+      prop: "aria-invalid",
+      type: "boolean",
+      description: "Pinta a borda e a sombra em tomate. O Field liga sozinho quando há error.",
+    },
+    {
+      prop: "...props",
+      type: "TextareaHTMLAttributes<HTMLTextAreaElement>",
+      description: "Qualquer atributo nativo de <textarea>: value, defaultValue, onChange, maxLength, disabled, required…",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- É um `<textarea>` nativo. Sempre dê um nome: `Field` com `label`, `<label htmlFor>` ou `aria-label`. Placeholder não é rótulo.
+- O erro nunca vai só em cor: use o `Field` para o texto que diz como resolver (decisão 6).
+- `disabled` tira o campo da ordem de tabulação e desliga o redimensionamento.
+
+## Tokens usados
+
+`--card` · `--ink` · `--border-width` · `--shadow-brutal` · `--destructive` · `--ring` · `--radius-control`

@@ -26,6 +26,9 @@ export const en: Record<MessageKey, string> = {
   "sidebar.group.primitives": "Primitives",
   "sidebar.group.navigation": "Navigation",
   "sidebar.group.form": "Form",
+  "sidebar.group.feedback": "Feedback",
+  "sidebar.group.layers": "Layers",
+  "sidebar.group.content": "Content",
   "sidebar.group.system": "System",
 
   // Home

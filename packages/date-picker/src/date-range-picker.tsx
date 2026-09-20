@@ -6,7 +6,7 @@ import { buttonVariants } from "@adinkra/button";
 import { cn } from "@adinkra/core";
 import { Calendar } from "./calendar";
 import { formatLongDate } from "./format";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@adinkra/popover";
 
 // Mesmo traço do resto do sistema — não lucide-react.
 function CalendarIcon(props: React.SVGProps<SVGSVGElement>) {

@@ -1,0 +1,115 @@
+---
+title: Popover
+description: Painel flutuante preso a um gatilho — para conteúdo extra que não merece uma página nem bloqueia o resto da tela.
+---
+
+<Preview>
+  <PopoverDemo />
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/popover
+```
+
+```tsx
+import { Popover, PopoverClose, PopoverContent, PopoverDescription, PopoverTitle, PopoverTrigger } from "@adinkra/popover";
+import { Button } from "@adinkra/button";
+
+<Popover>
+  <PopoverTrigger render={<Button variant="outline" />}>Ver detalhes</PopoverTrigger>
+  <PopoverContent className="grid w-72 gap-3 p-4">
+    <PopoverTitle>Plano Equipe</PopoverTitle>
+    <PopoverDescription>Até 10 pessoas e 50 GB de espaço.</PopoverDescription>
+    <PopoverClose render={<Button size="sm" variant="secondary" />}>Entendi</PopoverClose>
+  </PopoverContent>
+</Popover>;
+```
+
+Use `render={<Button />}` para dar ao gatilho a aparência de qualquer componente do sistema. Sem isso, o gatilho é um `<button>` sem estilo.
+
+## Composição
+
+O Popover nasceu dentro do `@adinkra/date-picker` e foi extraído para o próprio pacote. O `@adinkra/date-picker` continua re-exportando `Popover`, `PopoverTrigger` e `PopoverContent`, então quem já importava de lá não precisa mudar nada.
+
+- **`Popover`** — a raiz; guarda o estado aberto/fechado. Aceita `open`/`onOpenChange` (controlado) ou `defaultOpen`.
+- **`PopoverTrigger`** — o botão que abre e fecha o painel.
+- **`PopoverContent`** — o painel. Já inclui o portal e o posicionamento; `side`, `align`, `sideOffset` e `alignOffset` escolhem onde ele aparece.
+- **`PopoverTitle`** e **`PopoverDescription`** — o Base UI liga os dois ao `aria-labelledby` e ao `aria-describedby` do painel.
+- **`PopoverClose`** — fecha o painel a partir de dentro.
+
+O painel tem borda e raio, sem a sombra dura dos outros cartões únicos: a sombra atrás dele parecia uma linha solta ao lado do calendário. O padding padrão é zero de propósito — o `Calendar` e as listas de opções trazem o próprio espaçamento. Para texto corrido, passe `className="p-4"`.
+
+## Posições
+
+Se o painel não couber do lado escolhido, o Base UI o vira para o lado oposto sozinho.
+
+<Preview>
+  <PopoverSidesDemo />
+</Preview>
+
+## Movimento
+
+O painel nasce do gatilho: a escala de 0,96 para 1, com fade, parte do ponto onde o gatilho está (`--transform-origin`, calculado pelo Base UI). Abre em 150 ms e fecha em 100 ms com a curva `--ease-out` — abrir é o gesto da pessoa, fechar é só limpeza. Só `opacity` e `scale` animam. Com `prefers-reduced-motion`, a troca é instantânea.
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "Popover open",
+      type: "boolean",
+      description: "Estado controlado. Presente, quem usa decide o próximo valor via onOpenChange.",
+    },
+    {
+      prop: "Popover defaultOpen",
+      type: "boolean",
+      default: "false",
+      description: "Estado inicial, quando não controlado.",
+    },
+    {
+      prop: "Popover onOpenChange",
+      type: "(open: boolean, details) => void",
+      description: "Chamado a cada mudança, com o motivo (clique no gatilho, clique fora, Esc).",
+    },
+    {
+      prop: "PopoverContent side",
+      type: '"top" | "right" | "bottom" | "left"',
+      default: '"bottom"',
+      description: "Em qual borda do gatilho o painel aparece.",
+    },
+    {
+      prop: "PopoverContent align",
+      type: '"start" | "center" | "end"',
+      default: '"start"',
+      description: "Alinhamento do painel ao longo dessa borda.",
+    },
+    {
+      prop: "PopoverContent sideOffset",
+      type: "number",
+      default: "6",
+      description: "Distância, em pixels, entre o gatilho e o painel.",
+    },
+    {
+      prop: "PopoverContent container",
+      type: "HTMLElement | null",
+      description: "Onde o portal monta o painel. O padrão é o ancestral com data-theme mais próximo do gatilho, ou o body.",
+    },
+    {
+      prop: "...props",
+      type: "ComponentProps<typeof BaseUI...>",
+      description: "Qualquer prop do primitivo Base UI correspondente passa direto — className, render, etc.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+Vem do [Base UI](https://base-ui.com/react/components/popover): o gatilho recebe `aria-expanded` e `aria-controls`, Esc fecha o painel, clicar fora também, e o foco volta ao gatilho quando ele fecha. Use `PopoverTitle` quando o painel tiver um título — o leitor de tela o anuncia ao abrir.
+
+Popover não é modal: o resto da página continua ao alcance. Se a pessoa precisa decidir algo antes de seguir, use um [Dialog](/components/dialog).
+
+## Tokens usados
+
+`--ink` · `--border-width` · `--surface` · `--foreground` · `--heading` · `--muted-foreground` · `--ease-out`

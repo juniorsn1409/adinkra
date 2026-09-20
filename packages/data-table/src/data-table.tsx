@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Badge } from "@adinkra/badge";
 import { cn } from "@adinkra/core";
+import { Checkbox } from "@adinkra/checkbox";
 import { Calendar, Popover, PopoverContent, PopoverTrigger, formatLongDate } from "@adinkra/date-picker";
 import type { DataTableColumn, DataTableProps, DataTableRow, SelectOption } from "./types";
 
@@ -98,8 +99,9 @@ function ColumnTypeIcon({ type }: { type: DataTableColumn["type"] }) {
   return <TextLinesIcon className="size-3.5" />;
 }
 
-// Indeterminate não dá pra setar via JSX (não existe prop React pra isso) —
-// só via DOM, daí o ref-callback.
+// O estado indeterminate é resolvido pelo próprio @adinkra/checkbox. A opacidade
+// vai no <input> (não no invólucro): só a caixa some em repouso; o check/traço,
+// irmãos do input, já ficam invisíveis quando não marcado.
 function HeaderCheckbox({
   checked,
   indeterminate,
@@ -110,15 +112,13 @@ function HeaderCheckbox({
   onChange: (checked: boolean) => void;
 }) {
   return (
-    <input
-      type="checkbox"
+    <Checkbox
+      size="sm"
       aria-label="Selecionar todas as linhas"
       checked={checked}
-      ref={(el) => {
-        if (el) el.indeterminate = indeterminate;
-      }}
-      onChange={(event) => onChange(event.currentTarget.checked)}
-      className="size-4 rounded-control opacity-0 accent-[var(--secondary)] checked:opacity-100 indeterminate:opacity-100 group-hover/header:opacity-100 focus-visible:opacity-100"
+      indeterminate={indeterminate}
+      onCheckedChange={onChange}
+      className="opacity-0 checked:opacity-100 indeterminate:opacity-100 group-hover/header:opacity-100 focus-visible:opacity-100"
     />
   );
 }
@@ -505,7 +505,7 @@ function DraggableBulkToolbar({ children }: { children: React.ReactNode }) {
       className="fixed z-50"
       style={position ? { left: position.x, top: position.y } : { left: "50%", bottom: 24, transform: "translateX(-50%)" }}
     >
-      <div className="flex items-center gap-1 rounded-control border-[length:var(--border-width)] border-ink bg-surface px-3 py-2 text-foreground shadow-brutal transition-[opacity,transform] duration-200 ease-[var(--ease-out)] starting:translate-y-3 starting:opacity-0">
+      <div className="flex items-center gap-1 rounded-control border-[length:var(--border-width)] border-ink bg-surface px-3 py-2 text-foreground shadow-brutal transition-[opacity,translate] duration-200 ease-[var(--ease-out)] starting:translate-y-3 starting:opacity-0">
         <button
           type="button"
           aria-label="Mover barra"
@@ -838,12 +838,12 @@ export function DataTable({ columns, rows, onRowsChange, columnLines = true, cla
                   >
                     <DragHandleIcon className="size-3" />
                   </div>
-                  <input
-                    type="checkbox"
+                  <Checkbox
+                    size="sm"
                     aria-label="Selecionar linha"
                     checked={selectedIds.has(row.id)}
-                    onChange={(event) => toggleRowSelected(row.id, event.currentTarget.checked)}
-                    className="size-4 flex-none rounded-control opacity-0 accent-[var(--secondary)] checked:opacity-100 group-hover/row:opacity-100 focus-visible:opacity-100"
+                    onCheckedChange={(next) => toggleRowSelected(row.id, next)}
+                    className="opacity-0 checked:opacity-100 group-hover/row:opacity-100 focus-visible:opacity-100"
                   />
                 </div>
               </td>

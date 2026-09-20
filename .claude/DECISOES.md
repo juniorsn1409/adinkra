@@ -185,6 +185,15 @@ Tokens de etiqueta (categorizar cartões), fixos nos dois temas:
 
 `--tag-coral` **não** é o mesmo hex que `--brand` — nem texto branco nem escuro passam AA em texto pequeno sobre o coral de marca; `--tag-coral` é mais escuro, garantido >4.5:1.
 
+### Refinamento de foco, altura e contraste (20/09/2026)
+
+Pedido: "melhorar o design de todo o sistema mantendo o neobrutalismo" — resposta do usuário: **refinar o que existe**, sem mexer na paleta nem voltar a engrossar borda/sombra. Auditoria dos pacotes achou quatro incoerências reais, três corrigidas (a do Link foi revertida a pedido):
+
+- **Foco do Input/Select quase invisível.** Só trocava a borda de tinta (#1B1D26) por --ring (#1E3550) e crescia a sombra — variação de cor imperceptível (bem abaixo de 3:1 entre foco e repouso). Agora usam o mesmo anel de Button/Toggle/Card/Link: `outline 2px --ring` com `outline-offset: 2px`.
+- **Sombras de 4px sobrando.** O foco e o estado de erro de Input/Select ainda tinham `4px 4px` da época dos 3px de borda; o suavizamento de 17/09 deixou `--shadow-brutal` em 2px. Erro agora usa `2px 2px 0 0 var(--destructive)`, na mesma proporção.
+- **Altura.** Input tinha `py-2` (~40px) contra 36px do Button md e do Select, desalinhando linhas de formulário. Input agora é `h-9`.
+- **Contraste do Link: mantido como estava, por decisão do usuário.** A auditoria apontou que `--primary` (#F36C3D, 2.9:1) com hover em `--secondary` (#60C0F0, 2:1) num texto de 11px não passa no AA, e a troca por `--link` foi feita e depois revertida (20/09/2026) — o usuário prefere o laranja vivo. Risco conhecido e aceito; se voltar a incomodar, `--link` já existe no token.
+
 ### Direção neobrutalista: borda, sombra e cantos
 
 | Token | Valor | Uso |
@@ -565,10 +574,37 @@ Pedido do usuário — "adiciona esse componente [CodePen 'Happy Thanksgiving!' 
   - **Parallax também no sol (mesmo dia, pedido do usuário — "coloca o efeito paralaxx no sol tambem")**: novo `sunGroupRef` no `<svg>` do sol/espinhos, incluído no mesmo `handleMove`, com `SUN_PARALLAX_RESISTANCE=150` — intermediário entre o ícone (60, mais reativo) e a palavra/raios (300, mais sutil), mesma proporção do "sun-container" (150) da referência original do CodePen. **Detalhe evitado**: o `<svg>` do sol já tinha `transition-opacity duration-500` pro fade de entrada — só adicionar `transition-transform` do lado teria SOBRESCRITO o `transition-property` em vez de somar (classes utilitárias do Tailwind de propriedade única se sobrepõem, não se combinam), quebrando a transição suave do parallax ou do fade dependendo da ordem no CSS. Trocado pra `transition-[opacity,transform]` (valor arbitrário, uma classe só cobrindo as duas propriedades).
   - **Tamanho default da demo reduzido e depois revertido (mesmo dia, pedido do usuário — "diminui um pouco a logo")**: `size` inicial da `ArcLogoDemo` 200 → 170px — revertido no pedido seguinte ("deixa 200 o default, mas eu quero que o icon diminua um pouco"): o pedido era sobre o ÍCONE, não a logo inteira. `sankofaSize` (proporção do ícone em relação ao raio do sol) reduzida de `sunRadius * 2.2` pra `sunRadius * 1.9` — o resto da composição (sol, raios, palavra, ano) não muda de tamanho, só o ícone fica um pouco menor dentro do sol.
 
+### Leva de 16 componentes básicos (20/09/2026)
+
+Pacotes novos (todos `@adinkra/<slug>`, do 23º ao 38º; `Progress` entrou no pacote existente `progress`, ao lado do `SegmentedBar`). Cada um tem página `.mdx` no docs, demo quando precisa de estado e entrada no `nav.ts` (17 páginas novas, todas SSG).
+
+- **Formulário**: `field` (`Field`, `Label`, `FieldDescription`, `FieldError`), `checkbox`, `radio-group` (`RadioGroup`, `RadioGroupItem`), `textarea`.
+- **Camadas**: `popover`, `dialog`, `tooltip`, `sheet`, `dropdown-menu`.
+- **Conteúdo/organização**: `tabs`, `accordion`, `separator`, `avatar` (`Avatar`, `AvatarImage`, `AvatarFallback`, `AvatarGroup`).
+- **Feedback**: `alert`, `toast` (`ToastProvider`, `Toaster`, `useToast`; depende de alert, button e Base UI), `progress` (`Progress`), `spinner`.
+- Sidebar do docs ganhou os grupos **Feedback**, **Camadas** e **Conteúdo** (chaves `sidebar.group.*` em pt/en); Field/Checkbox/Radio Group/Textarea entraram em **Formulário**. Não existe mapa de ícone de categoria no `sidebar.tsx` (a sidebar usa o quadrado neutro do pacote), então nada de ícone novo.
+
+Decisões:
+
+- **Checkbox e Radio**: `<input>` nativo com `appearance-none` e ícone irmão (`peer-*`), sem Base UI. Os controles se estilizam por `aria-invalid`; o `Field` só injeta atributos (id, aria-describedby, aria-invalid). `Input` e `Select` NÃO foram refatorados para usar o `Field`.
+- **DropdownMenu**: o item destacado usa `bg-accent` (não `--primary`) porque, no tema escuro, `--secondary-foreground` sobre `--secondary` dá ~1,8:1 medido. `DropdownMenuLabel` vira `div` fora de um `DropdownMenuGroup` (o `GroupLabel` do Base UI dá erro). **Accordion** usa `--accordion-panel-height` do Base UI, não `interpolate-size`. **Tabs**: aba ativa "afundada" como o Toggle; o conteúdo troca sem animação (navegação frequente).
+- **Armadilha nova do Tailwind v4**: `scale-*`/`translate-*` usam as propriedades CSS `scale`/`translate`, não `transform`. A transição precisa listar `scale`/`translate` (`transition-[opacity,scale]`); com `transition-[opacity,transform]` só o fade anima. O Popover antigo e a barra flutuante da data-table tinham isso errado (corrigido na extração e em `DraggableBulkToolbar`); na integração o mesmo erro apareceu em Checkbox, Radio Group e DropdownMenu e foi corrigido. Exceção: `[transform:...]` explícito (o Toast) continua correto com `transition-[transform]`.
+- **Popover extraído** para `@adinkra/popover`; o `date-picker` depende dele e re-exporta (a data-table continua importando de `@adinkra/date-picker`). **Tooltip**: pastilha invertida `bg-ink text-background`, `z-[60]` (acima de dialog/sheet), sem animação ao mover entre tooltips (`data-instant:transition-none`). **Dialog/Sheet**: fundo `bg-background/80`; o Sheet não tem sombra dura e a borda fica só na aresta interna. A gaveta mobile da sidebar NÃO foi refatorada para usar o Sheet (pendência).
+- **Alert**: sem variante "sucesso" (o sistema não tem verde). **Toast** usa o Toast do Base UI. **Progress** determinado anima `width` (não `scaleX`, para não afinar a borda de tinta). Em reduced motion, `motion-reduce:…!` vence a regra global do `tokens.css` (`!important` em camada vence `!important` sem camada).
+- **Data-table**: a seleção de linha e o "selecionar tudo" (com estado indeterminado) passaram a usar `@adinkra/checkbox` (`size="sm"`), mantendo o efeito de aparecer no hover (opacidade no próprio `<input>`). Bug de animação da `DraggableBulkToolbar` corrigido: `transition-[opacity,translate]` (`starting:translate-y-3` continua certo, também usa `translate`).
+- **Integração**: o `bun install` refez os `node_modules` dos pacotes novos (os agentes tinham criado cópias em vez de links); typecheck 39/39 e páginas SSG confirmadas.
+
+**Pendências conhecidas (não corrigidas):**
+
+- **Contraste no tema escuro**: em `[data-theme="dark"]` de `tokens.css`, `--secondary-foreground` (#F0EFF3) sobre `--secondary` (#60C0F0) dá ~1,8:1 (Button/Badge/Toggle `secondary` no escuro). Token NÃO alterado, por decisão do usuário.
+- **Mesma armadilha `transform` nos componentes antigos**: `button`, `card`, `toggle` e `pagination` usam `transition-[transform,...]` com `hover:-translate-*`/`active:translate-*` (propriedade `translate`), então o gesto de subir/afundar não anima. Fora do escopo desta leva; corrigir trocando `transform` por `translate`.
+- Gaveta mobile da sidebar ainda não usa o `Sheet`.
+- `bun run build` (turbo) deu `EPERM` ao regravar `dist/index.d.ts` de pacotes com build anterior (arc-text, cursor, data-table, date-picker, input, progress, select) enquanto os dev servers (`next dev`, `bun run dev`) estavam rodando; refazer com eles parados.
+
 ### Faltam
 
 1. Criar a organização `adinkra` no npm ou GitHub Packages, publicar v0.1.0 de cada pacote.
-2. Tabs, Alert e Select — fora da sidebar por decisão (só entram componentes que já existem de verdade); o mecanismo de status `"planejado"` continua no código, é só reintroduzir um item em `nav.ts`.
+2. ~~Tabs, Alert e Select~~ — feitos (Select numa leva anterior, Tabs e Alert na leva de 20/09). O mecanismo de status `"planejado"` continua no código, é só reintroduzir um item em `nav.ts`.
 3. ~~Gaveta mobile (Sheet) e rail arrastável no `@adinkra/sidebar`~~ — feito 15/09.
 4. Gerar a tabela de Props de verdade a partir do tipo TypeScript (`react-docgen-typescript`) — hoje é escrita à mão em cada `.mdx`.
 5. ~~Redesenhar os SVGs dos símbolos Adinkra~~ — feito 15/09 (vetorizados a partir de adinkrasymbols.org, viraram `@adinkra/icons`); 93 dos 101 ainda usam `PlaceholderIcon`.

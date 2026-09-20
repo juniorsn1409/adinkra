@@ -1,0 +1,168 @@
+---
+title: Dropdown Menu
+description: Menu suspenso de ações, aberto por um botão — para reunir comandos que não cabem todos na tela.
+---
+
+<Preview>
+  <DropdownMenuDemo />
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/dropdown-menu
+```
+
+```tsx
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@adinkra/dropdown-menu";
+
+<DropdownMenu>
+  <DropdownMenuTrigger>Minha conta</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuItem onClick={() => abrirPerfil()}>Perfil</DropdownMenuItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem variant="destructive">Sair</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>;
+```
+
+O gatilho é um `<button>` sem estilo próprio. Para usar um botão do sistema, passe-o em `render`:
+
+```tsx
+<DropdownMenuTrigger render={<Button variant="outline" />}>Minha conta</DropdownMenuTrigger>
+```
+
+## Itens de marcar e de rádio
+
+`DropdownMenuCheckboxItem` liga e desliga uma opção (várias podem ficar ligadas); `DropdownMenuRadioGroup` com `DropdownMenuRadioItem` escolhe uma só. O marcado mostra um check ou um ponto à esquerda. Os dois são controlados por `checked`/`value`.
+
+<Preview>
+  <DropdownMenuChecksDemo />
+</Preview>
+
+```tsx
+<DropdownMenuCheckboxItem checked={mostrarStatus} onCheckedChange={setMostrarStatus}>
+  Status
+</DropdownMenuCheckboxItem>
+
+<DropdownMenuRadioGroup value={ordem} onValueChange={setOrdem}>
+  <DropdownMenuRadioItem value="recentes">Mais recentes</DropdownMenuRadioItem>
+  <DropdownMenuRadioItem value="nome">Nome</DropdownMenuRadioItem>
+</DropdownMenuRadioGroup>
+```
+
+## Composição
+
+Baseado no [Menu do Base UI](https://base-ui.com/react/components/menu), mesma base do `@adinkra/navigation-menu`.
+
+- **`DropdownMenu`** — a raiz; controla abertura (`open`/`onOpenChange`).
+- **`DropdownMenuTrigger`** — o botão que abre o menu.
+- **`DropdownMenuContent`** — o painel flutuante (portal, posição e animação já incluídos).
+- **`DropdownMenuItem`** — uma ação. `variant="destructive"` para irreversíveis, como excluir ou sair.
+- **`DropdownMenuGroup`** e **`DropdownMenuLabel`** — agrupam itens sob um rótulo. Dentro de um grupo, o rótulo vira o nome acessível dele.
+- **`DropdownMenuSeparator`** — linha de tinta entre grupos.
+- **`DropdownMenuCheckboxItem`**, **`DropdownMenuRadioGroup`**, **`DropdownMenuRadioItem`** — opções marcáveis.
+- **`DropdownMenuSub`**, **`DropdownMenuSubTrigger`**, **`DropdownMenuSubContent`** — submenu, que abre à direita.
+
+## Estados
+
+O painel é um cartão único (borda + sombra dura). Os itens são linhas de lista, sem borda nem sombra. O item destacado, por mouse ou teclado, inverte para `bg-accent`/`text-accent-foreground` (contraste de 12.5:1 nos dois temas). Não usa `--primary`, porque o "ligado" dos itens de marcar já tem seu próprio indicador.
+
+<StatesGrid>
+  <State label="padrão">
+    <span className="rounded-control px-2.5 py-1.5 font-display text-sm text-foreground">Perfil</span>
+  </State>
+  <State label="destacado">
+    <span className="rounded-control bg-accent px-2.5 py-1.5 font-display text-sm text-accent-foreground">Perfil</span>
+  </State>
+  <State label="destrutivo">
+    <span className="rounded-control px-2.5 py-1.5 font-display text-sm text-destructive">Sair</span>
+  </State>
+  <State label="desativado">
+    <span className="rounded-control px-2.5 py-1.5 font-display text-sm text-foreground opacity-45">Assinatura</span>
+  </State>
+</StatesGrid>
+
+## Movimento
+
+O menu abre dezenas de vezes por dia, então a entrada é curta e discreta: 130ms, escala 0.96 mais fade, nascendo do próprio gatilho (`--transform-origin`), e sai em 100ms. Os itens não animam nada além da cor, e o destaque acompanha o teclado sem atraso. Com movimento reduzido nas preferências do sistema, abre e fecha na hora.
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "DropdownMenu open",
+      type: "boolean",
+      description: "Menu aberto, quando controlado. Presente, quem usa decide o próximo valor via onOpenChange.",
+    },
+    {
+      prop: "DropdownMenu defaultOpen",
+      type: "boolean",
+      default: "false",
+      description: "Aberto no início, quando não controlado.",
+    },
+    {
+      prop: "DropdownMenu onOpenChange",
+      type: "(open: boolean) => void",
+      description: "Chamado ao abrir ou fechar.",
+    },
+    {
+      prop: "DropdownMenuContent side/align",
+      type: '"top" | "bottom" | "left" | "right" / "start" | "center" | "end"',
+      default: 'side="bottom", align="start"',
+      description: "Onde o painel aparece em relação ao gatilho. sideOffset (6) e alignOffset (0) ajustam a distância.",
+    },
+    {
+      prop: "DropdownMenuItem variant",
+      type: '"default" | "destructive"',
+      default: '"default"',
+      description: "destructive pinta o item com --destructive, para ações irreversíveis.",
+    },
+    {
+      prop: "DropdownMenuItem onClick",
+      type: "(event) => void",
+      description: "Chamado ao escolher o item, por clique, Enter ou Espaço. O menu fecha em seguida (closeOnClick={false} mantém aberto).",
+    },
+    {
+      prop: "DropdownMenuItem disabled",
+      type: "boolean",
+      default: "false",
+      description: "Desativa o item: não recebe destaque nem clique.",
+    },
+    {
+      prop: "DropdownMenuCheckboxItem checked",
+      type: "boolean",
+      description: "Marcado, quando controlado. defaultChecked e onCheckedChange também existem.",
+    },
+    {
+      prop: "DropdownMenuRadioGroup value",
+      type: "string",
+      description: "Valor do RadioItem marcado. defaultValue e onValueChange também existem.",
+    },
+    {
+      prop: "DropdownMenuTrigger render",
+      type: "ReactElement",
+      description: "Elemento que vira o gatilho, por exemplo <Button variant=\"outline\" />.",
+    },
+    {
+      prop: "...props",
+      type: "ComponentProps<typeof BaseUI...>",
+      description: "Qualquer prop do primitivo Base UI correspondente passa direto — className, render, etc.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+Vem do [Base UI](https://base-ui.com/react/components/menu), seguindo o padrão de menu da WAI-ARIA APG: `role="menu"` e `menuitem`/`menuitemcheckbox`/`menuitemradio`. Enter, Espaço ou seta para baixo abrem; setas movem o destaque, Home/End vão às pontas, digitar uma letra salta para o item que começa com ela; seta para a direita abre um submenu e a esquerda volta; Esc fecha e devolve o foco ao gatilho. Com o menu aberto, o resto da página fica inerte.
+
+## Tokens usados
+
+`--ink` · `--surface` · `--foreground` · `--accent`/`--accent-foreground` · `--destructive`/`--destructive-foreground` · `--muted-foreground` · `--border-width` · `--radius-control` · `--shadow-brutal`

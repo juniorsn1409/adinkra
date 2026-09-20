@@ -31,6 +31,9 @@ export const pt = {
   "sidebar.group.primitives": "Primitivos",
   "sidebar.group.navigation": "Navegação",
   "sidebar.group.form": "Formulário",
+  "sidebar.group.feedback": "Feedback",
+  "sidebar.group.layers": "Camadas",
+  "sidebar.group.content": "Conteúdo",
   "sidebar.group.system": "Sistema",
 
   // Home

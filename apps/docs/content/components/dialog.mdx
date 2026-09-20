@@ -1,0 +1,142 @@
+---
+title: Dialog
+description: Janela modal centralizada — para uma decisão ou uma tarefa curta que precisa de toda a atenção antes de seguir.
+---
+
+<Preview>
+  <DialogDemo />
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/dialog
+```
+
+```tsx
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@adinkra/dialog";
+import { Button } from "@adinkra/button";
+
+<Dialog>
+  <DialogTrigger render={<Button variant="outline" />}>Editar perfil</DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Editar perfil</DialogTitle>
+      <DialogDescription>Mude como seu nome aparece para a equipe.</DialogDescription>
+    </DialogHeader>
+    {/* campos */}
+    <DialogFooter>
+      <DialogClose render={<Button variant="ghost" />}>Cancelar</DialogClose>
+      <Button>Salvar alterações</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>;
+```
+
+Controlado, quando o diálogo precisa fechar depois de uma ação (salvar, enviar):
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<Dialog open={open} onOpenChange={setOpen}>
+  …
+  <Button onClick={() => { salvar(); setOpen(false); }}>Salvar</Button>
+</Dialog>;
+```
+
+## Composição
+
+- **`Dialog`** — a raiz; guarda o estado aberto/fechado.
+- **`DialogTrigger`** — o botão que abre. Use `render={<Button />}` para dar a ele a aparência de um botão do sistema.
+- **`DialogContent`** — o painel centralizado, com o fundo escurecido. Já inclui o portal e o botão "X" no canto.
+- **`DialogHeader`**, **`DialogTitle`**, **`DialogDescription`** — o cabeçalho. O Base UI liga título e descrição ao `aria-labelledby` e ao `aria-describedby` do painel.
+- **`DialogFooter`** — a fileira de ações. No celular, os botões empilham com a ação principal por cima; de `sm` pra cima, ficam em linha à direita.
+- **`DialogClose`** — fecha o diálogo direto, sem lógica no meio.
+
+## Confirmação destrutiva
+
+O botão diz o que vai acontecer ("Excluir projeto"), não "OK". O foco inicial cai no primeiro elemento focável, aqui o "Cancelar", o lado seguro. Sem o "X" (`showClose={false}`), porque há duas saídas claras no rodapé.
+
+<Preview>
+  <DialogConfirmDemo />
+</Preview>
+
+## Movimento
+
+Modal não nasce do gatilho: fica no centro da tela, então a escala parte do centro. O painel entra com fade e escala de 0,96 para 1 em 200 ms, e sai em 150 ms, com a curva `--ease-out`. O fundo só faz fade. Só `opacity` e `scale` animam. Com `prefers-reduced-motion`, a troca é instantânea.
+
+O fundo usa `--background` translúcido: no tema claro vira um véu claro, no escuro um véu escuro. Quem separa o painel do resto é a borda de tinta.
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "Dialog open",
+      type: "boolean",
+      description: "Estado controlado. Presente, quem usa decide o próximo valor via onOpenChange.",
+    },
+    {
+      prop: "Dialog defaultOpen",
+      type: "boolean",
+      default: "false",
+      description: "Estado inicial, quando não controlado.",
+    },
+    {
+      prop: "Dialog onOpenChange",
+      type: "(open: boolean, details) => void",
+      description: "Chamado a cada mudança, com o motivo (clique no gatilho, clique fora, Esc, DialogClose).",
+    },
+    {
+      prop: "Dialog disablePointerDismissal",
+      type: "boolean",
+      default: "false",
+      description: "Impede que clicar no fundo feche o diálogo. Útil para formulários longos, onde fechar sem querer perde o que foi digitado.",
+    },
+    {
+      prop: "DialogContent showClose",
+      type: "boolean",
+      default: "true",
+      description: "Mostra o botão \"X\" no canto do painel.",
+    },
+    {
+      prop: "DialogContent closeLabel",
+      type: "string",
+      default: '"Fechar"',
+      description: "Nome acessível do botão \"X\".",
+    },
+    {
+      prop: "DialogContent container",
+      type: "HTMLElement | null",
+      description: "Onde o portal monta o painel. O padrão é o ancestral com data-theme mais próximo do gatilho, ou o body. Diálogo aberto só por código, sem gatilho, cai no body.",
+    },
+    {
+      prop: "...props",
+      type: "ComponentProps<typeof BaseUI...>",
+      description: "Qualquer prop do primitivo Base UI correspondente passa direto — className, render, initialFocus, finalFocus, etc.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+Vem do [Base UI](https://base-ui.com/react/components/dialog): o foco fica preso dentro do painel enquanto ele está aberto, Esc fecha, o resto da página fica inerte, e o foco volta ao gatilho ao fechar. O painel tem `role="dialog"` e `aria-modal`.
+
+- Sempre inclua um `DialogTitle` — sem ele o leitor de tela não sabe do que se trata.
+- Sempre deixe uma saída óbvia: o "X" ou um `DialogClose` no rodapé.
+- Para escolher onde o foco começa, use `initialFocus` no `DialogContent`.
+
+Para uma confirmação que não pode ser dispensada com um clique fora, use `disablePointerDismissal`. Para conteúdo que não bloqueia a página, prefira um [Popover](/components/popover); para conteúdo lateral, uma [Sheet](/components/sheet).
+
+## Tokens usados
+
+`--ink` · `--border-width` · `--card` · `--shadow-brutal` · `--background` · `--foreground` · `--heading` · `--muted-foreground` · `--surface` · `--ring` · `--ease-out`

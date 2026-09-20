@@ -1,0 +1,79 @@
+---
+title: Spinner
+description: Um indicador pequeno de que algo está carregando, quando não dá pra mostrar quanto falta.
+---
+
+<Preview>
+  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "1.5rem" }}>
+    <Spinner size="sm" />
+    <Spinner size="md" />
+    <Spinner size="lg" />
+    <Button disabled>
+      <Spinner size="sm" label="Salvando alterações" />
+      Salvando…
+    </Button>
+  </div>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/spinner
+```
+
+```tsx
+import { Spinner } from "@adinkra/spinner";
+
+<Spinner />;
+<Spinner size="lg" label="Carregando relatório" />;
+```
+
+Dentro de um botão que dispara uma ação demorada, troque o texto por um verbo no gerúndio ("Salvando…") e desative o botão, como no exemplo acima. Se você sabe quanto falta, use o [Progress](/components/progress); se sabe o formato do que vem, o [Skeleton](/components/skeleton).
+
+## Tamanhos
+
+<StatesGrid>
+  <State label="sm · 16px">
+    <Spinner size="sm" />
+  </State>
+  <State label="md · 24px">
+    <Spinner size="md" />
+  </State>
+  <State label="lg · 40px">
+    <Spinner size="lg" />
+  </State>
+</StatesGrid>
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "size",
+      type: '"sm" | "md" | "lg"',
+      default: '"md"',
+      description: "Diâmetro do anel: 16, 24 ou 40px.",
+    },
+    {
+      prop: "label",
+      type: "string",
+      default: '"Carregando"',
+      description: "Texto para leitores de tela. Seja específico: \"Salvando alterações\".",
+    },
+    {
+      prop: "...props",
+      type: "HTMLAttributes<HTMLSpanElement>",
+      description: "Qualquer atributo nativo de <span>.",
+    },
+  ]}
+/>
+
+## Movimento e acessibilidade
+
+- É um loop funcional, o único movimento contínuo do sistema além do Skeleton. Com `prefers-reduced-motion`, o anel para de girar e pulsa suavemente (2s).
+- `role="status"` com o rótulo em texto escondido visualmente — leitores de tela anunciam "Carregando" (ou o seu `label`) quando ele aparece.
+- Arco de `--ink` sobre trilha `--hairline`: contraste do arco de 16:1 contra o fundo, bem acima dos 3:1 exigidos.
+
+## Tokens usados
+
+`--ink` · `--hairline`

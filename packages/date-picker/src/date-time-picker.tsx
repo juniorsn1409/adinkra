@@ -5,7 +5,7 @@ import { buttonVariants } from "@adinkra/button";
 import { cn } from "@adinkra/core";
 import { Calendar } from "./calendar";
 import { formatLongDate, formatTime12h } from "./format";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@adinkra/popover";
 import { TimePicker } from "./time-picker";
 
 // Mesmo traço do resto do sistema — não lucide-react.

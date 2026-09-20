@@ -16,8 +16,8 @@ export interface NavGroup {
 // automação (DECISOES.md, seção 3).
 //
 // Só entram aqui componentes que já existem de verdade (status "estavel") —
-// Select, Alert e Tabs continuam no roteiro (DECISOES.md, seção 11), mas
-// saíram da sidebar até estarem prontos. O status "planejado" (e o jeito de
+// (histórico) Select, Alert e Tabs estiveram no roteiro (DECISOES.md, seção 11) e
+// ficaram fora da sidebar até estarem prontos — hoje todos existem. O status "planejado" (e o jeito de
 // renderizá-lo, em AppSidebar) continua existindo no código: é só
 // reintroduzir um item assim que o próximo componente começar a ser
 // construído. Card saiu dessa lista em 15/09/2026 — foi construído. Switch
@@ -64,6 +64,38 @@ export const nav: NavGroup[] = [
       { title: "Select", slug: "select", status: "estavel" },
       { title: "Switch", slug: "switch", status: "estavel" },
       { title: "Toggle", slug: "toggle", status: "estavel" },
+      { title: "Field", slug: "field", status: "estavel" },
+      { title: "Checkbox", slug: "checkbox", status: "estavel" },
+      { title: "Radio Group", slug: "radio-group", status: "estavel" },
+      { title: "Textarea", slug: "textarea", status: "estavel" },
+    ],
+  },
+  {
+    title: "Feedback",
+    items: [
+      { title: "Alert", slug: "alert", status: "estavel" },
+      { title: "Toast", slug: "toast", status: "estavel" },
+      { title: "Progress", slug: "progress", status: "estavel" },
+      { title: "Spinner", slug: "spinner", status: "estavel" },
+    ],
+  },
+  {
+    title: "Camadas",
+    items: [
+      { title: "Popover", slug: "popover", status: "estavel" },
+      { title: "Dialog", slug: "dialog", status: "estavel" },
+      { title: "Tooltip", slug: "tooltip", status: "estavel" },
+      { title: "Sheet", slug: "sheet", status: "estavel" },
+      { title: "Dropdown Menu", slug: "dropdown-menu", status: "estavel" },
+    ],
+  },
+  {
+    title: "Conteúdo",
+    items: [
+      { title: "Tabs", slug: "tabs", status: "estavel" },
+      { title: "Accordion", slug: "accordion", status: "estavel" },
+      { title: "Separator", slug: "separator", status: "estavel" },
+      { title: "Avatar", slug: "avatar", status: "estavel" },
     ],
   },
   {

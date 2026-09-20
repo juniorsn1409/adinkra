@@ -1,0 +1,116 @@
+---
+title: Sheet
+description: Gaveta que desliza de uma borda da tela — para filtros, detalhes e menus que não merecem uma página.
+---
+
+<Preview>
+  <SheetDemo />
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/sheet
+```
+
+```tsx
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@adinkra/sheet";
+import { Button } from "@adinkra/button";
+
+<Sheet>
+  <SheetTrigger render={<Button variant="outline" />}>Abrir filtros</SheetTrigger>
+  <SheetContent side="right">
+    <SheetHeader>
+      <SheetTitle>Filtros</SheetTitle>
+      <SheetDescription>Refine a lista de pedidos.</SheetDescription>
+    </SheetHeader>
+    {/* campos */}
+    <SheetFooter>
+      <SheetClose render={<Button variant="ghost" />}>Limpar</SheetClose>
+      <SheetClose render={<Button />}>Aplicar filtros</SheetClose>
+    </SheetFooter>
+  </SheetContent>
+</Sheet>;
+```
+
+## Composição
+
+É o mesmo Dialog do Base UI, colado numa borda da tela. Tem as mesmas peças do [Dialog](/components/dialog), com o prefixo `Sheet`, e uma prop a mais:
+
+- **`SheetContent side`** — `"right"` (padrão), `"left"`, `"top"` ou `"bottom"`. A gaveta entra e sai pela borda onde está colada.
+- **`SheetHeader`**, **`SheetTitle`**, **`SheetDescription`** — o cabeçalho, ligado ao `aria-labelledby` e ao `aria-describedby`.
+- **`SheetFooter`** — a fileira de ações; num painel lateral, ela desce até o fim da gaveta.
+- **`SheetClose`** — fecha a gaveta direto.
+
+## Lados
+
+<Preview>
+  <SheetSidesDemo />
+</Preview>
+
+Gavetas laterais ocupam 75% da largura (no máximo 24 rem); as de topo e base crescem com o conteúdo, até 85% da altura da tela, e rolam depois disso.
+
+## Movimento
+
+A gaveta desliza por `translate` de 100% do próprio tamanho — porcentagem, não pixels, então serve para qualquer largura. Entra em 300 ms e sai em 250 ms com a curva `--ease-drawer`, sempre pela mesma borda. O fundo só faz fade. Só `translate` e `opacity` animam. Com `prefers-reduced-motion`, a troca é instantânea.
+
+Só a aresta voltada para o conteúdo tem borda de tinta, e não há sombra dura: uma sombra deslocada para baixo e para a direita seria cortada pela borda da janela.
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "Sheet open / defaultOpen / onOpenChange",
+      type: "boolean / boolean / (open: boolean, details) => void",
+      description: "Estado aberto: controlado (open + onOpenChange) ou inicial (defaultOpen).",
+    },
+    {
+      prop: "SheetContent side",
+      type: '"left" | "right" | "top" | "bottom"',
+      default: '"right"',
+      description: "Borda da tela onde a gaveta gruda, e por onde entra e sai.",
+    },
+    {
+      prop: "SheetContent showClose",
+      type: "boolean",
+      default: "true",
+      description: "Mostra o botão \"X\" no canto.",
+    },
+    {
+      prop: "SheetContent closeLabel",
+      type: "string",
+      default: '"Fechar"',
+      description: "Nome acessível do botão \"X\".",
+    },
+    {
+      prop: "SheetContent container",
+      type: "HTMLElement | null",
+      description: "Onde o portal monta a gaveta. O padrão é o ancestral com data-theme mais próximo do gatilho, ou o body.",
+    },
+    {
+      prop: "...props",
+      type: "ComponentProps<typeof BaseUI...>",
+      description: "Qualquer prop do primitivo Base UI correspondente passa direto — className, render, initialFocus, etc.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+Vem do [Base UI](https://base-ui.com/react/components/dialog), igual ao Dialog: foco preso dentro da gaveta enquanto aberta, Esc fecha, clique no fundo fecha, o resto da página fica inerte e o foco volta ao gatilho. Sempre inclua um `SheetTitle`.
+
+A gaveta que abre o menu no celular, dentro do `@adinkra/sidebar`, tem implementação própria e ainda não usa esta Sheet.
+
+## Tokens usados
+
+`--ink` · `--border-width` · `--card` · `--background` · `--foreground` · `--heading` · `--muted-foreground` · `--surface` · `--ring` · `--ease-out` · `--ease-drawer`

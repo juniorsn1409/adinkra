@@ -1,0 +1,172 @@
+---
+title: Field
+description: Rótulo, texto de ajuda e mensagem de erro ligados por id e aria a qualquer controle — Input, Textarea, Checkbox, RadioGroup.
+---
+
+<Preview>
+  <div style={{ display: "grid", gap: "1.5rem", width: "100%", maxWidth: "24rem" }}>
+    <Field label="Bio" description="Aparece no seu perfil público.">
+      <Textarea placeholder="Conte um pouco sobre você" />
+    </Field>
+    <Field label="Comentário" error="Escreva ao menos uma frase, como “Adorei o atendimento”.">
+      <Textarea defaultValue="Ok" />
+    </Field>
+  </div>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/field
+```
+
+```tsx
+import { Field } from "@adinkra/field";
+import { Textarea } from "@adinkra/textarea";
+
+<Field label="Bio" description="Aparece no seu perfil público.">
+  <Textarea />
+</Field>;
+```
+
+O Field clona o filho e injeta `id`, `aria-describedby` e `aria-invalid` — a mesma ligação que o Input e o Select já fazem por dentro com as props `label`/`help`/`error`, só que separada do controle. Por isso serve para qualquer um. O erro substitui a descrição (como no Input) e, seguindo a decisão 6, deve dizer o que deu errado e como resolver.
+
+O `<Label>`, o `<FieldDescription>` e o `<FieldError>` também são exportados isolados, para montar um layout próprio.
+
+## Orientação e grupos
+
+Para Checkbox (e Switch), o rótulo vai ao lado do controle com `orientation="horizontal"`:
+
+<Preview>
+  <div style={{ width: "100%", maxWidth: "24rem" }}>
+    <Field orientation="horizontal" label="Receber o resumo semanal" description="Toda segunda, no seu e-mail.">
+      <Checkbox defaultChecked />
+    </Field>
+  </div>
+</Preview>
+
+```tsx
+<Field orientation="horizontal" label="Receber o resumo semanal">
+  <Checkbox />
+</Field>
+```
+
+Quando o controle é um grupo (RadioGroup), não existe um único `<input>` para o `<label htmlFor>` apontar. Use `group`: o título vira `aria-labelledby` do grupo.
+
+<Preview>
+  <div style={{ width: "100%", maxWidth: "24rem" }}>
+    <Field group label="Plano" description="Você pode trocar quando quiser.">
+      <RadioGroup defaultValue="mensal">
+        <RadioGroupItem value="mensal" label="Mensal" />
+        <RadioGroupItem value="anual" label="Anual" />
+      </RadioGroup>
+    </Field>
+  </div>
+</Preview>
+
+Para uma lista de Checkbox, passe uma função em `children`. Ela recebe as props de ligação para você espalhar num contêiner:
+
+```tsx
+<Field group label="Notificações">
+  {(control) => (
+    <div role="group" {...control} className="grid gap-2.5">
+      <Checkbox label="Novidades" />
+      <Checkbox label="Resumo semanal" />
+    </div>
+  )}
+</Field>
+```
+
+## Estados
+
+<StatesGrid>
+  <State label="só rótulo">
+    <Field label="Nome">
+      <Textarea rows={2} />
+    </Field>
+  </State>
+  <State label="com ajuda">
+    <Field label="Nome" description="Como no documento.">
+      <Textarea rows={2} />
+    </Field>
+  </State>
+  <State label="obrigatório">
+    <Field label="Nome" required>
+      <Textarea rows={2} required />
+    </Field>
+  </State>
+  <State label="erro">
+    <Field label="Nome" error="Falta o sobrenome.">
+      <Textarea rows={2} />
+    </Field>
+  </State>
+</StatesGrid>
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "label",
+      type: "ReactNode",
+      description: "Rótulo. Vira <label htmlFor> do controle (ou o título do grupo, com group).",
+    },
+    {
+      prop: "description",
+      type: "ReactNode",
+      description: "Texto de ajuda abaixo do controle. Some quando há erro.",
+    },
+    {
+      prop: "error",
+      type: "ReactNode",
+      description: "Mensagem de erro com o ícone “!”. Liga aria-invalid e aria-describedby no controle.",
+    },
+    {
+      prop: "required",
+      type: "boolean",
+      default: "false",
+      description: "Só o asterisco visual. Marque também o próprio controle com required.",
+    },
+    {
+      prop: "orientation",
+      type: '"vertical" | "horizontal"',
+      default: '"vertical"',
+      description: "Vertical: rótulo acima. Horizontal: controle à esquerda (Checkbox, Switch).",
+    },
+    {
+      prop: "group",
+      type: "boolean",
+      default: "false",
+      description: "O controle é um grupo (RadioGroup): o título liga por aria-labelledby, sem htmlFor.",
+    },
+    {
+      prop: "id",
+      type: "string",
+      description: "Id do controle. Padrão: o id do filho, ou um gerado.",
+    },
+    {
+      prop: "children",
+      type: "ReactElement | (control) => ReactNode",
+      description: "Um elemento (recebe as props por cloneElement) ou uma função que recebe { id, aria-* }.",
+    },
+    {
+      prop: "...props",
+      type: "HTMLAttributes<HTMLDivElement>",
+      description: "Qualquer atributo nativo de <div>.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- O rótulo é um `<label htmlFor>` de verdade; no modo `group`, o título liga por `aria-labelledby`.
+- A ajuda ou o erro entram em `aria-describedby` do controle (mantendo os ids que o filho já tivesse), e o erro liga `aria-invalid`. Leitor de tela lê o rótulo, o tipo e a mensagem juntos.
+- O erro nunca vai só em cor: sempre ícone “!”, texto e a borda em tomate (decisão 7).
+
+## Tokens usados
+
+`--heading` · `--muted-foreground` · `--destructive` · `--destructive-foreground`
+
+## Fora deste pacote
+
+Input e Select continuam com rótulo, ajuda e erro embutidos (`label`/`help`/`error`). Não foram refatorados para usar o Field; os dois caminhos convivem.

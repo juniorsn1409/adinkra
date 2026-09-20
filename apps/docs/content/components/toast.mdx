@@ -1,0 +1,140 @@
+---
+title: Toast
+description: Uma notificação temporária no canto da tela — confirma o que acabou de acontecer e some sozinha.
+---
+
+<Preview>
+  <ToastDemo />
+</Preview>
+
+## Como usar
+
+O Toast usa o motor do Base UI (fila, timers, região `aria-live`, arrastar pra dispensar). Instale junto com ele:
+
+```bash
+bun add @adinkra/toast @base-ui-components/react
+```
+
+Envolva o app com `ToastProvider`, ponha um `Toaster` (só um) e chame `useToast()` de qualquer componente cliente:
+
+```tsx
+import { ToastProvider, Toaster, useToast } from "@adinkra/toast";
+
+function SaveButton() {
+  const { toast } = useToast();
+  return (
+    <Button onClick={() => toast({ title: "Rascunho salvo", description: "Você pode continuar depois." })}>
+      Salvar rascunho
+    </Button>
+  );
+}
+
+<ToastProvider>
+  <SaveButton />
+  <Toaster />
+</ToastProvider>;
+```
+
+Com ação. Clicar no botão chama o `onClick` e fecha o toast; o tempo padrão sobe de 5s para 8s:
+
+```tsx
+toast({
+  variant: "info",
+  title: "Arquivo movido para a lixeira",
+  action: { label: "Desfazer", onClick: restaurar },
+});
+```
+
+Use o mesmo verbo do botão que disparou o toast: quem clicou em "Salvar" lê "Rascunho salvo", não "Operação concluída". Erro diz o que fazer: "Não foi possível enviar. Verifique a conexão e tente de novo."
+
+Atualizar um toast em andamento:
+
+```tsx
+const { toast, update } = useToast();
+const id = toast({ title: "Enviando…", duration: 0 });
+// depois…
+update(id, { title: "Enviado", duration: 3000 });
+```
+
+## Comportamento
+
+- **Fecha sozinho** depois de `duration` ms (padrão 5000; `0` = fica até fechar). O tempo **pausa** com o mouse por cima ou com o foco dentro da região.
+- **Teclado:** `F6` leva o foco até os toasts; o botão de fechar é um `<button>` de verdade.
+- **Empilhamento:** até 3 ao mesmo tempo (`limit`); o novo entra embaixo e os antigos sobem. O mais antigo sai quando passa do limite.
+- **Arrastar** pra baixo ou pra direita dispensa (toque e mouse).
+- **Movimento:** entra subindo da borda de baixo (350ms) e sai voltando pela mesma borda (200ms), em `--ease-out`. É transição CSS, então quando um toast novo empurra os outros a animação se ajusta no meio do caminho em vez de reiniciar. Com `prefers-reduced-motion`, sobra só um fade de opacidade.
+- Variantes iguais às do [Alert](/components/alert): `default`, `info`, `warning`, `destructive`. Não há `success` — o sistema não tem verde.
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "toast(options)",
+      type: "(options: ToastOptions) => string",
+      description: "Mostra um toast e devolve o id. Vem de useToast().",
+    },
+    {
+      prop: "options.title / description",
+      type: "ReactNode",
+      description: "O que aconteceu e o que fazer agora.",
+    },
+    {
+      prop: "options.variant",
+      type: '"default" | "info" | "warning" | "destructive"',
+      default: '"default"',
+      description: "Cor e formato do ícone. warning e destructive são anunciados de forma assertiva.",
+    },
+    {
+      prop: "options.duration",
+      type: "number",
+      default: "5000 (8000 com action)",
+      description: "Milissegundos até fechar sozinho. 0 = só fecha quando a pessoa fechar.",
+    },
+    {
+      prop: "options.action",
+      type: "{ label: string; onClick: () => void }",
+      description: "Botão opcional dentro do toast. Clicar chama onClick e fecha.",
+    },
+    {
+      prop: "options.onClose",
+      type: "() => void",
+      description: "Chamado quando o toast fecha, por qualquer motivo.",
+    },
+    {
+      prop: "dismiss(id) · update(id, options)",
+      type: "(id: string, …) => void",
+      description: "Fecha ou altera um toast já aberto. Também vêm de useToast().",
+    },
+    {
+      prop: "ToastProvider.limit",
+      type: "number",
+      default: "3",
+      description: "Quantos toasts ao mesmo tempo.",
+    },
+    {
+      prop: "ToastProvider.duration",
+      type: "number",
+      default: "5000",
+      description: "Duração padrão, em ms.",
+    },
+    {
+      prop: "Toaster.aria-label",
+      type: "string",
+      default: '"Notificações"',
+      description: "Nome da região aria-live. Traduza se a interface não for em português.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- O `Toaster` é uma região `aria-live="polite"` rotulada; cada toast novo é anunciado. `warning` e `destructive` têm prioridade alta e são anunciados na hora.
+- Toasts somem sozinhos, então **nunca** deixe informação essencial só num toast: erro que bloqueia a tarefa também deve aparecer no lugar (um [Alert](/components/alert) ou junto do campo).
+- Pausa no hover e no foco dá tempo de ler; com ação, o tempo padrão é maior (WCAG 2.2.1). Use `duration: 0` quando a pessoa precisa agir.
+- Ícone por formato, não só cor; contraste de texto igual ao do Alert (corpo em `--card`).
+- Foco visível: anel de 2px em `--ring` no toast e nos botões.
+
+## Tokens usados
+
+`--card` · `--ink` · `--border-width` · `--shadow-brutal` · `--radius-card` · `--heading` · `--foreground` · `--ring` · `--ease-out` · `--tag-sky` · `--tag-mustard` · `--destructive`

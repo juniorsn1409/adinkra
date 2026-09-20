@@ -1,0 +1,160 @@
+---
+title: Accordion
+description: Seções recolhíveis — para conteúdo longo que a pessoa lê por partes, como perguntas frequentes.
+---
+
+<Preview>
+  <Accordion defaultValue={["envio"]} className="max-w-md">
+    <AccordionItem value="envio">
+      <AccordionTrigger>Quanto tempo leva o envio?</AccordionTrigger>
+      <AccordionContent>De 3 a 5 dias úteis para capitais e até 10 dias para o interior.</AccordionContent>
+    </AccordionItem>
+    <AccordionItem value="troca">
+      <AccordionTrigger>Posso trocar um produto?</AccordionTrigger>
+      <AccordionContent>Sim, em até 30 dias, com a embalagem original e a nota fiscal.</AccordionContent>
+    </AccordionItem>
+    <AccordionItem value="pagamento">
+      <AccordionTrigger>Quais formas de pagamento vocês aceitam?</AccordionTrigger>
+      <AccordionContent>Cartão de crédito em até 6 vezes, Pix e boleto.</AccordionContent>
+    </AccordionItem>
+  </Accordion>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/accordion
+```
+
+```tsx
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@adinkra/accordion";
+
+<Accordion type="single" defaultValue={["envio"]}>
+  <AccordionItem value="envio">
+    <AccordionTrigger>Quanto tempo leva o envio?</AccordionTrigger>
+    <AccordionContent>De 3 a 5 dias úteis.</AccordionContent>
+  </AccordionItem>
+</Accordion>;
+```
+
+Vários itens abertos ao mesmo tempo:
+
+```tsx
+<Accordion type="multiple">…</Accordion>
+```
+
+Controlado, quando o estado precisa viver fora do componente. O valor é sempre uma lista com os `value` dos itens abertos:
+
+```tsx
+const [abertos, setAbertos] = useState<string[]>([]);
+
+<Accordion value={abertos} onValueChange={setAbertos}>…</Accordion>;
+```
+
+## Composição
+
+Baseado no [Accordion do Base UI](https://base-ui.com/react/components/accordion), mesma base do `@adinkra/navigation-menu`.
+
+- **`Accordion`** — o cartão que agrupa tudo (borda + sombra dura). `type` decide se abre um item por vez ou vários.
+- **`AccordionItem`** — uma seção; `value` a identifica.
+- **`AccordionTrigger`** — a linha clicável, já com a seta que gira. Vem dentro de um título (`h3`) para leitores de tela.
+- **`AccordionContent`** — o painel que abre e fecha.
+
+## Tipos
+
+<Preview>
+  <div className="grid w-full max-w-md gap-6">
+    <div className="grid gap-2">
+      <p className="font-mono text-xs text-muted-foreground">type="single": abrir um fecha o outro</p>
+      <Accordion type="single" defaultValue={["a"]}>
+        <AccordionItem value="a">
+          <AccordionTrigger>Primeiro</AccordionTrigger>
+          <AccordionContent>Abrir o segundo fecha este.</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="b">
+          <AccordionTrigger>Segundo</AccordionTrigger>
+          <AccordionContent>Um item aberto por vez.</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
+    <div className="grid gap-2">
+      <p className="font-mono text-xs text-muted-foreground">type="multiple": abrir vários</p>
+      <Accordion type="multiple" defaultValue={["a", "b"]}>
+        <AccordionItem value="a">
+          <AccordionTrigger>Primeiro</AccordionTrigger>
+          <AccordionContent>Continua aberto quando o segundo abre.</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="b">
+          <AccordionTrigger>Segundo</AccordionTrigger>
+          <AccordionContent>Os dois podem ficar abertos.</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="c" disabled>
+          <AccordionTrigger>Terceiro (desativado)</AccordionTrigger>
+          <AccordionContent>Não abre.</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
+  </div>
+</Preview>
+
+## Movimento
+
+O acordeão abre de vez em quando, então vale animar: altura e opacidade em 200ms com `--ease-out`, e a seta gira 180° junto. Altura é a exceção à regra "só `transform`/`opacity`", porque o conteúdo abaixo precisa ceder espaço. A altura vem de `--accordion-panel-height`, que o Base UI mede em pixels (em vez de `interpolate-size`, que ainda não roda em todo navegador). Com movimento reduzido nas preferências do sistema, a troca é instantânea.
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "Accordion type",
+      type: '"single" | "multiple"',
+      default: '"single"',
+      description: "Um item aberto por vez, ou vários ao mesmo tempo.",
+    },
+    {
+      prop: "Accordion value",
+      type: "string[]",
+      description: "Itens abertos, quando controlado. Presente, quem usa decide o próximo valor via onValueChange.",
+    },
+    {
+      prop: "Accordion defaultValue",
+      type: "string[]",
+      description: "Itens abertos no início, quando não controlado.",
+    },
+    {
+      prop: "Accordion onValueChange",
+      type: "(value: string[]) => void",
+      description: "Chamado ao abrir ou fechar um item, com a lista nova.",
+    },
+    {
+      prop: "Accordion disabled",
+      type: "boolean",
+      default: "false",
+      description: "Desativa o acordeão inteiro.",
+    },
+    {
+      prop: "AccordionItem value",
+      type: "string",
+      description: "Identifica o item nas listas de value/defaultValue.",
+    },
+    {
+      prop: "AccordionItem disabled",
+      type: "boolean",
+      default: "false",
+      description: "Desativa só este item.",
+    },
+    {
+      prop: "...props",
+      type: "ComponentProps<typeof BaseUI...>",
+      description: "Qualquer prop do primitivo Base UI correspondente passa direto — className, render, keepMounted, hiddenUntilFound, etc.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+Vem do [Base UI](https://base-ui.com/react/components/accordion), seguindo o padrão de accordion da WAI-ARIA APG: cada gatilho é um `<button>` com `aria-expanded` e `aria-controls` dentro de um título. Enter e Espaço abrem/fecham; setas para cima/baixo, Home e End movem o foco entre os gatilhos. Foco visível com o anel padrão do sistema (`--ring`), desenhado por dentro do cartão para não ser cortado.
+
+## Tokens usados
+
+`--ink` · `--card` · `--surface` · `--heading` · `--foreground` · `--ring` · `--border-width` · `--radius-card` · `--shadow-brutal`

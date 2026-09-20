@@ -32,6 +32,7 @@
   "dependencies": {
     "@adinkra/button": "workspace:*",
     "@adinkra/core": "workspace:*",
+    "@adinkra/popover": "workspace:*",
     "@base-ui-components/react": "^1.0.0-rc.0",
     "react-day-picker": "^9.14.0"
   },

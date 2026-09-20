@@ -36,6 +36,9 @@ const groupTitleKey: Record<string, MessageKey> = {
   Primitivos: "sidebar.group.primitives",
   Navegação: "sidebar.group.navigation",
   Formulário: "sidebar.group.form",
+  Feedback: "sidebar.group.feedback",
+  Camadas: "sidebar.group.layers",
+  Conteúdo: "sidebar.group.content",
   Sistema: "sidebar.group.system",
 };
 

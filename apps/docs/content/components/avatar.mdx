@@ -1,0 +1,98 @@
+---
+title: Avatar
+description: A foto ou as iniciais de uma pessoa, num círculo com borda de tinta.
+---
+
+<Preview>
+  <AvatarDemo />
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/avatar
+```
+
+```tsx
+import { Avatar, AvatarImage, AvatarFallback } from "@adinkra/avatar";
+
+<Avatar>
+  <AvatarImage src="/fotos/ana.jpg" alt="Ana Souza" />
+  <AvatarFallback>AS</AvatarFallback>
+</Avatar>;
+```
+
+O `AvatarFallback` (até duas letras) aparece enquanto a imagem carrega e se ela falhar ou não existir — nunca fica um círculo vazio nem o ícone de imagem quebrada. A `<img>` só entra quando já está pronta.
+
+Um grupo sobreposto, com "+2" no final. Um leitor de tela não sabe contar círculos: dê ao grupo um nome que diga quem são:
+
+```tsx
+<AvatarGroup role="group" aria-label="Quem está editando: Ana, Bruno e mais 2 pessoas">
+  <Avatar><AvatarFallback>AS</AvatarFallback></Avatar>
+  <Avatar><AvatarFallback>BL</AvatarFallback></Avatar>
+  <Avatar><AvatarFallback>+2</AvatarFallback></Avatar>
+</AvatarGroup>;
+```
+
+## Tamanhos
+
+<StatesGrid>
+  <State label="sm · 28px">
+    <Avatar size="sm">
+      <AvatarFallback>AS</AvatarFallback>
+    </Avatar>
+  </State>
+  <State label="md · 36px">
+    <Avatar>
+      <AvatarFallback>AS</AvatarFallback>
+    </Avatar>
+  </State>
+  <State label="lg · 48px">
+    <Avatar size="lg">
+      <AvatarFallback>AS</AvatarFallback>
+    </Avatar>
+  </State>
+</StatesGrid>
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "Avatar.size",
+      type: '"sm" | "md" | "lg"',
+      default: '"md"',
+      description: "Tamanho do círculo. O md tem 36px, a mesma altura do Button md.",
+    },
+    {
+      prop: "AvatarImage.src",
+      type: "string",
+      description: "Endereço da imagem. Ausente ou com erro, mostra o AvatarFallback.",
+    },
+    {
+      prop: "AvatarImage.alt",
+      type: "string",
+      description: "Obrigatório. O nome da pessoa; use alt=\"\" se o nome já aparece em texto ao lado.",
+    },
+    {
+      prop: "AvatarFallback",
+      type: "ReactNode",
+      description: "Conteúdo mostrado enquanto a imagem não está pronta, normalmente as iniciais.",
+    },
+    {
+      prop: "AvatarGroup",
+      type: "HTMLAttributes<HTMLDivElement>",
+      description: "Sobrepõe os avatares filhos (-8px). Não é lista semântica: nomeie com role=\"group\" e aria-label.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- A imagem leva `alt` com o nome da pessoa. As iniciais do fallback são texto de verdade, então também são lidas — se o nome já está escrito ao lado, ponha `aria-hidden` no Avatar pra não repetir.
+- Iniciais em `--heading` sobre `--surface`: contraste alto nos dois temas.
+- Não é interativo e não tem animação. Pra torná-lo clicável, envolva num `<button>` ou `<a>` — o foco visível vem do seu elemento.
+
+## Tokens usados
+
+`--ink` · `--border-width` · `--surface` · `--heading` · `--background`

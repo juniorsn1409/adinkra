@@ -1,0 +1,197 @@
+---
+title: Radio Group
+description: Grupo de opções exclusivas — escolhe-se exatamente uma, e todas ficam visíveis de uma vez.
+---
+
+<Preview>
+  <RadioGroupDemo />
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/radio-group
+```
+
+```tsx
+import { RadioGroup, RadioGroupItem } from "@adinkra/radio-group";
+
+<RadioGroup defaultValue="mensal" aria-label="Plano de cobrança">
+  <RadioGroupItem value="mensal" label="Mensal" />
+  <RadioGroupItem value="anual" label="Anual" />
+</RadioGroup>;
+```
+
+Controlado, quando o valor precisa viver fora do componente:
+
+```tsx
+const [plano, setPlano] = useState("mensal");
+
+<RadioGroup value={plano} onValueChange={setPlano}>
+  {/* ... */}
+</RadioGroup>;
+```
+
+Para poucas opções que cabem na tela, prefira o RadioGroup ao Select: ninguém precisa abrir nada para ver as escolhas.
+
+## Estados, tamanhos e disposição
+
+Mesmo tratamento do Checkbox e do Switch: borda de tinta + sombra dura, cor `--card` → `--primary`, e a bolinha de tinta entra com um respiro de escala e opacidade (150ms).
+
+<StatesGrid>
+  <State label="desmarcada">
+    <RadioGroup aria-label="Exemplo desmarcada">
+      <RadioGroupItem value="a" label="Opção" />
+    </RadioGroup>
+  </State>
+  <State label="marcada">
+    <RadioGroup defaultValue="a" aria-label="Exemplo marcada">
+      <RadioGroupItem value="a" label="Opção" />
+    </RadioGroup>
+  </State>
+  <State label="sm">
+    <RadioGroup defaultValue="a" size="sm" aria-label="Exemplo sm">
+      <RadioGroupItem value="a" label="Opção" />
+    </RadioGroup>
+  </State>
+  <State label="desativada">
+    <RadioGroup disabled aria-label="Exemplo desativada">
+      <RadioGroupItem value="a" label="Opção" />
+    </RadioGroup>
+  </State>
+  <State label="item desativado">
+    <RadioGroup defaultValue="a" aria-label="Exemplo item desativado">
+      <RadioGroupItem value="a" label="Ativa" />
+      <RadioGroupItem value="b" label="Desativada" disabled />
+    </RadioGroup>
+  </State>
+  <State label="erro (aria-invalid)">
+    <RadioGroup aria-invalid aria-label="Exemplo erro">
+      <RadioGroupItem value="a" label="Opção" />
+    </RadioGroup>
+  </State>
+</StatesGrid>
+
+Na horizontal, as opções quebram de linha em telas estreitas:
+
+<Preview>
+  <RadioGroup orientation="horizontal" defaultValue="p" aria-label="Tamanho">
+    <RadioGroupItem value="p" label="P" />
+    <RadioGroupItem value="m" label="M" />
+    <RadioGroupItem value="g" label="G" />
+  </RadioGroup>
+</Preview>
+
+Com o `Field` (`group`), o título, a ajuda e o erro ficam ligados ao grupo:
+
+<Preview>
+  <RadioGroupFieldDemo />
+</Preview>
+
+## Props
+
+### RadioGroup
+
+<PropsTable
+  rows={[
+    {
+      prop: "value",
+      type: "string",
+      description: "Opção marcada. Presente, o grupo é controlado: quem usa decide via onValueChange.",
+    },
+    {
+      prop: "defaultValue",
+      type: "string",
+      description: "Opção inicial, quando não controlado. Sem ela, nenhuma vem marcada.",
+    },
+    {
+      prop: "onValueChange",
+      type: "(value: string) => void",
+      description: "Chamado ao marcar uma opção, com o valor dela.",
+    },
+    {
+      prop: "name",
+      type: "string",
+      default: "id gerado",
+      description: "name dos inputs, para envio em <form>. O navegador precisa dele para agrupar as opções.",
+    },
+    {
+      prop: "orientation",
+      type: '"vertical" | "horizontal"',
+      default: '"vertical"',
+      description: "Disposição das opções.",
+    },
+    {
+      prop: "size",
+      type: '"sm" | "md"',
+      default: '"md"',
+      description: "Tamanho de todas as opções (cada item pode sobrescrever).",
+    },
+    {
+      prop: "disabled",
+      type: "boolean",
+      default: "false",
+      description: "Desativa todas as opções.",
+    },
+    {
+      prop: "required",
+      type: "boolean",
+      default: "false",
+      description: "Escolha obrigatória no <form>.",
+    },
+    {
+      prop: "aria-invalid",
+      type: "boolean",
+      description: "Pinta as bolinhas com a borda de tomate. O Field liga sozinho quando há error.",
+    },
+    {
+      prop: "...props",
+      type: "HTMLAttributes<HTMLDivElement>",
+      description: "Qualquer atributo nativo de <div>, como aria-label e aria-labelledby.",
+    },
+  ]}
+/>
+
+### RadioGroupItem
+
+<PropsTable
+  rows={[
+    {
+      prop: "value",
+      type: "string",
+      description: "Valor da opção: o que onValueChange recebe e o que vai no <form>.",
+    },
+    {
+      prop: "label",
+      type: "ReactNode",
+      description: "Texto ao lado da bolinha, dentro de um <label> (o clique no texto também marca).",
+    },
+    {
+      prop: "size",
+      type: '"sm" | "md"',
+      description: "Sobrescreve o tamanho do grupo.",
+    },
+    {
+      prop: "disabled",
+      type: "boolean",
+      default: "false",
+      description: "Desativa só esta opção. As setas a pulam.",
+    },
+    {
+      prop: "...props",
+      type: "InputHTMLAttributes<HTMLInputElement>",
+      description: "Qualquer atributo nativo de <input>, incluindo id (menos type, name, checked e onChange).",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- `<div role="radiogroup">` com `<input type="radio">` nativos de mesmo `name`. Por isso o teclado é o do navegador: Tab entra só na opção marcada, as setas movem e marcam (dando a volta no fim), Espaço marca a opção em foco, e opções desativadas são puladas.
+- Sempre dê um nome ao grupo: `aria-label`, `aria-labelledby` ou o `Field` com `group`.
+- `disabled` no grupo desativa todas as opções; no item, só ela.
+- O foco visível é o mesmo anel de 2px dos botões.
+
+## Tokens usados
+
+`--primary` · `--card` · `--ink` · `--border-width` · `--destructive` · `--ring`

@@ -1,0 +1,102 @@
+---
+title: Separator
+description: Uma linha que divide o conteúdo em partes — grossa entre seções, fina entre itens.
+---
+
+<Preview>
+  <div style={{ width: "100%", maxWidth: "24rem" }}>
+    <div style={{ display: "grid", gap: "0.25rem" }}>
+      <strong style={{ fontFamily: "var(--font-display)", color: "var(--heading)" }}>Adinkra</strong>
+      <span style={{ fontSize: "0.875rem" }}>Componentes com identidade própria.</span>
+    </div>
+    <Separator style={{ margin: "1rem 0" }} />
+    <div style={{ display: "flex", alignItems: "center", gap: "1rem", height: "1.5rem", fontSize: "0.875rem" }}>
+      <span>Componentes</span>
+      <Separator orientation="vertical" weight="subtle" />
+      <span>Tokens</span>
+      <Separator orientation="vertical" weight="subtle" />
+      <span>Símbolos</span>
+    </div>
+  </div>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/separator
+```
+
+```tsx
+import { Separator } from "@adinkra/separator";
+
+<Separator />;
+<Separator weight="subtle" />;
+<div style={{ display: "flex", alignItems: "center", gap: "1rem", height: "1.5rem" }}>
+  <span>Componentes</span>
+  <Separator orientation="vertical" />
+  <span>Tokens</span>
+</div>;
+```
+
+A vertical não tem altura própria: ela preenche o pai, que precisa ser flex/grid (ou ter altura).
+
+**Decorativo ou semântico?** Por padrão a linha é só visual e some da árvore de acessibilidade (`role="none"`). Passe `decorative={false}` só quando a divisão importa pra quem não vê a tela — por exemplo, entre dois grupos de uma barra de ferramentas.
+
+## Pesos e direções
+
+<StatesGrid>
+  <State label="solid · horizontal">
+    <Separator />
+  </State>
+  <State label="subtle · horizontal">
+    <Separator weight="subtle" />
+  </State>
+  <State label="solid · vertical">
+    <div style={{ height: "2rem", display: "flex" }}>
+      <Separator orientation="vertical" />
+    </div>
+  </State>
+  <State label="semântico">
+    <Separator decorative={false} />
+  </State>
+</StatesGrid>
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "orientation",
+      type: '"horizontal" | "vertical"',
+      default: '"horizontal"',
+      description: "Direção da linha.",
+    },
+    {
+      prop: "weight",
+      type: '"solid" | "subtle"',
+      default: '"solid"',
+      description: "solid: traço grosso de tinta (divide seções). subtle: 1px em --hairline (divide itens; só decorativo).",
+    },
+    {
+      prop: "decorative",
+      type: "boolean",
+      default: "true",
+      description: "true: role=\"none\". false: role=\"separator\" com aria-orientation.",
+    },
+    {
+      prop: "...props",
+      type: "HTMLAttributes<HTMLDivElement>",
+      description: "Qualquer atributo nativo de <div>.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- Semântico: `role="separator"` + `aria-orientation`. Decorativo: `role="none"`, ignorado por leitores de tela.
+- `subtle` usa `--hairline`, que não atinge 3:1 contra o fundo — por isso só serve como enfeite. Se a linha carrega significado, use `solid`.
+- Não recebe foco nem interação.
+
+## Tokens usados
+
+`--ink` · `--hairline` · `--border-width`

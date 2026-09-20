@@ -1,0 +1,140 @@
+---
+title: Checkbox
+description: Caixa de seleção com estado indeterminado — para escolher várias opções, ou ligar uma opção que só vale ao enviar.
+---
+
+<Preview>
+  <CheckboxDemo />
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/checkbox
+```
+
+```tsx
+import { Checkbox } from "@adinkra/checkbox";
+
+<Checkbox label="Receber o resumo semanal" />;
+```
+
+Sem `label`, use `<label htmlFor>` com o `id` (ou o `Field`, de `@adinkra/field`):
+
+```tsx
+<div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
+  <Checkbox id="termos" />
+  <label htmlFor="termos">Li e aceito os termos</label>
+</div>;
+```
+
+Controlado, quando o estado precisa viver fora do componente (mesmo contrato do Switch):
+
+```tsx
+const [checked, setChecked] = useState(false);
+
+<Checkbox checked={checked} onCheckedChange={setChecked} />;
+```
+
+### Estado indeterminado
+
+Serve para o “selecionar tudo” quando só parte dos itens está marcada (veja o exemplo acima). Quem usa calcula `indeterminate` a partir dos itens; o clique do usuário só chama `onCheckedChange`.
+
+```tsx
+<Checkbox
+  label="Todas"
+  checked={todas}
+  indeterminate={algumas}
+  onCheckedChange={(marcar) => setMarcadas(marcar ? TODAS : [])}
+/>
+```
+
+## Estados e tamanhos
+
+Igual ao Switch e ao Input: borda de tinta + sombra dura sempre, sem o gesto de “subir no hover” (pequena demais para isso). Só a cor muda, e o ícone entra com um respiro de escala e opacidade (150ms).
+
+<StatesGrid>
+  <State label="desmarcada">
+    <Checkbox label="Opção" />
+  </State>
+  <State label="marcada">
+    <Checkbox label="Opção" defaultChecked />
+  </State>
+  <State label="indeterminada">
+    <Checkbox label="Opção" indeterminate />
+  </State>
+  <State label="sm">
+    <Checkbox label="Opção" size="sm" defaultChecked />
+  </State>
+  <State label="desativada">
+    <Checkbox label="Opção" disabled />
+  </State>
+  <State label="desativada marcada">
+    <Checkbox label="Opção" disabled defaultChecked />
+  </State>
+  <State label="erro (aria-invalid)">
+    <Checkbox aria-invalid label="Opção" />
+  </State>
+</StatesGrid>
+
+Com o `Field`, o erro fica ligado ao rótulo e à mensagem:
+
+<Preview>
+  <CheckboxFieldDemo />
+</Preview>
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "checked",
+      type: "boolean",
+      description: "Estado controlado. Presente, quem usa decide o próximo valor via onCheckedChange.",
+    },
+    {
+      prop: "defaultChecked",
+      type: "boolean",
+      default: "false",
+      description: "Estado inicial, quando não controlado.",
+    },
+    {
+      prop: "onCheckedChange",
+      type: "(checked: boolean) => void",
+      description: "Chamado a cada clique com o próximo valor.",
+    },
+    {
+      prop: "indeterminate",
+      type: "boolean",
+      default: "false",
+      description: "Estado misto: mostra um traço, vence o checked na aparência e é anunciado como “mixed”.",
+    },
+    {
+      prop: "label",
+      type: "ReactNode",
+      description: "Texto ao lado da caixa, dentro de um <label> (o clique no texto também alterna).",
+    },
+    {
+      prop: "size",
+      type: '"sm" | "md"',
+      default: '"md"',
+      description: "16px ou 20px.",
+    },
+    {
+      prop: "...props",
+      type: "InputHTMLAttributes<HTMLInputElement>",
+      description: "Qualquer atributo nativo de <input>, incluindo id, name, value e required (menos type e onChange).",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- É um `<input type="checkbox">` nativo, só com aparência própria: Espaço alterna, entra no `<form>` com `name`/`value`, e o estado indeterminado sai como `aria-checked="mixed"` sem código extra.
+- Sempre dê um nome: `label`, `<label htmlFor>`, `Field` ou `aria-label`.
+- `aria-invalid` pinta a borda de tomate; o texto do erro (via `Field`) diz o que fazer, nunca só a cor.
+- O foco visível é o mesmo anel de 2px dos botões. `disabled` tira a caixa da ordem de tabulação.
+
+## Tokens usados
+
+`--primary` · `--card` · `--ink` · `--border-width` · `--destructive` · `--ring`

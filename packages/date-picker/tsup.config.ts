@@ -6,5 +6,5 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   clean: true,
-  external: ["react", "@adinkra/core", "@adinkra/button", "@base-ui-components/react", "react-day-picker"],
+  external: ["react", "@adinkra/core", "@adinkra/button", "@adinkra/popover", "@base-ui-components/react", "react-day-picker"],
 });

@@ -1,0 +1,148 @@
+---
+title: Tabs
+description: Abas para alternar entre painéis de um mesmo contexto, sem sair da página.
+---
+
+<Preview>
+  <Tabs defaultValue="conta" className="w-full max-w-md">
+    <TabsList>
+      <TabsTrigger value="conta">Conta</TabsTrigger>
+      <TabsTrigger value="senha">Senha</TabsTrigger>
+      <TabsTrigger value="avisos">Avisos</TabsTrigger>
+    </TabsList>
+    <TabsContent value="conta">Altere o nome e o e-mail que aparecem no seu perfil.</TabsContent>
+    <TabsContent value="senha">Escolha uma senha nova com pelo menos 12 caracteres.</TabsContent>
+    <TabsContent value="avisos">Decida quais avisos chegam por e-mail e quais ficam só no painel.</TabsContent>
+  </Tabs>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/tabs
+```
+
+```tsx
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@adinkra/tabs";
+
+<Tabs defaultValue="conta">
+  <TabsList>
+    <TabsTrigger value="conta">Conta</TabsTrigger>
+    <TabsTrigger value="senha">Senha</TabsTrigger>
+  </TabsList>
+  <TabsContent value="conta">Dados da conta.</TabsContent>
+  <TabsContent value="senha">Troca de senha.</TabsContent>
+</Tabs>;
+```
+
+Controlado, quando o estado precisa viver fora do componente:
+
+```tsx
+const [aba, setAba] = useState("conta");
+
+<Tabs value={aba} onValueChange={setAba}>
+  …
+</Tabs>;
+```
+
+## Composição
+
+Baseado no [Tabs do Base UI](https://base-ui.com/react/components/tabs), mesma base do `@adinkra/navigation-menu`.
+
+- **`Tabs`** — a raiz; guarda qual aba está ativa.
+- **`TabsList`** — o trilho que agrupa os gatilhos (borda + `bg-surface`, igual ao NavigationMenu).
+- **`TabsTrigger`** — uma aba. Cada `value` casa com o de um `TabsContent`.
+- **`TabsContent`** — o painel da aba, mostrado só quando ela está ativa.
+
+## Estados
+
+A aba ativa fica "afundada", a mesma linguagem do `Toggle` ligado e da página atual da `Pagination`: borda de tinta e fundo `--primary`. É indicador de estado, não ação, então repetir a primária é permitido (regra 6). As inativas descansam sem borda e só ganham `bg-card` no hover.
+
+<StatesGrid>
+  <State label="ativa">
+    <Tabs defaultValue="a">
+      <TabsList>
+        <TabsTrigger value="a">Ativa</TabsTrigger>
+      </TabsList>
+    </Tabs>
+  </State>
+  <State label="inativa">
+    <Tabs defaultValue="b">
+      <TabsList>
+        <TabsTrigger value="a">Inativa</TabsTrigger>
+        <TabsTrigger value="b">Outra</TabsTrigger>
+      </TabsList>
+    </Tabs>
+  </State>
+  <State label="desativada">
+    <Tabs defaultValue="b">
+      <TabsList>
+        <TabsTrigger value="a" disabled>Bloqueada</TabsTrigger>
+        <TabsTrigger value="b">Outra</TabsTrigger>
+      </TabsList>
+    </Tabs>
+  </State>
+</StatesGrid>
+
+## Movimento
+
+Trocar de aba é navegação frequente, então o conteúdo troca na hora, sem animação. Só a cor da aba transiciona (150ms, `--ease-out`).
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "Tabs value",
+      type: "string | number | null",
+      description: "Aba ativa, quando controlado. Presente, quem usa decide o próximo valor via onValueChange.",
+    },
+    {
+      prop: "Tabs defaultValue",
+      type: "string | number | null",
+      default: "0",
+      description: "Aba ativa inicial, quando não controlado.",
+    },
+    {
+      prop: "Tabs onValueChange",
+      type: "(value) => void",
+      description: "Chamado ao trocar de aba.",
+    },
+    {
+      prop: "Tabs orientation",
+      type: '"horizontal" | "vertical"',
+      default: '"horizontal"',
+      description: "No vertical, a lista fica ao lado dos painéis e as setas para cima/baixo movem o foco.",
+    },
+    {
+      prop: "TabsList activateOnFocus",
+      type: "boolean",
+      default: "false",
+      description: "Ativa a aba assim que ela recebe o foco pelas setas, sem esperar Enter ou Espaço.",
+    },
+    {
+      prop: "TabsTrigger value",
+      type: "string | number",
+      description: "Identifica a aba; precisa casar com o value de um TabsContent.",
+    },
+    {
+      prop: "TabsTrigger disabled",
+      type: "boolean",
+      default: "false",
+      description: "Desativa a aba: não recebe clique nem foco por seta.",
+    },
+    {
+      prop: "...props",
+      type: "ComponentProps<typeof BaseUI...>",
+      description: "Qualquer prop do primitivo Base UI correspondente passa direto — className, render, etc.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+Vem do [Base UI](https://base-ui.com/react/components/tabs), seguindo o padrão de tabs da WAI-ARIA APG: `role="tablist"`, `tab` e `tabpanel` ligados por `aria-controls`/`aria-selected`. Tab entra na lista e sai dela; setas (esquerda/direita, ou cima/baixo no vertical) movem entre as abas, Home/End vão às pontas. Foco visível com o anel padrão do sistema (`--ring`).
+
+## Tokens usados
+
+`--ink` · `--surface` · `--card` · `--foreground` · `--primary`/`--primary-foreground` · `--ring` · `--border-width` · `--radius-control`

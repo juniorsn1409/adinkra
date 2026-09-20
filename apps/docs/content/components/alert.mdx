@@ -1,0 +1,121 @@
+---
+title: Alert
+description: Um aviso em bloco dentro da página — informa, alerta ou reporta um erro, sempre com ícone e texto, nunca só cor.
+---
+
+<Preview>
+  <div style={{ display: "grid", gap: "1rem", width: "100%", maxWidth: "36rem" }}>
+    <Alert variant="info">
+      <AlertTitle>Manutenção na sexta-feira</AlertTitle>
+      <AlertDescription>O painel fica fora do ar das 22h às 23h. Salve o que estiver em andamento antes disso.</AlertDescription>
+    </Alert>
+    <Alert
+      variant="destructive"
+      action={<Button size="sm" variant="outline">Tentar de novo</Button>}
+    >
+      <AlertTitle>Não foi possível salvar as alterações</AlertTitle>
+      <AlertDescription>Sua conexão caiu durante o envio. Verifique a rede e tente de novo — nada foi perdido.</AlertDescription>
+    </Alert>
+  </div>
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/alert
+```
+
+```tsx
+import { Alert, AlertTitle, AlertDescription } from "@adinkra/alert";
+
+<Alert variant="warning">
+  <AlertTitle>Seu plano vence em 3 dias</AlertTitle>
+  <AlertDescription>Renove até quinta para manter o acesso aos relatórios.</AlertDescription>
+</Alert>;
+```
+
+Com uma ação — um botão que você mesmo passa. À direita no desktop, abaixo do texto no celular:
+
+```tsx
+<Alert variant="destructive" action={<Button size="sm" variant="outline">Tentar de novo</Button>}>
+  <AlertTitle>Não foi possível salvar</AlertTitle>
+  <AlertDescription>Verifique a conexão e tente de novo.</AlertDescription>
+</Alert>;
+```
+
+Escreva o título como o que aconteceu e a descrição como o que a pessoa faz agora. "E-mail inválido" só aponta o erro; "Falta o final do endereço, como ana@exemplo.com" resolve.
+
+## Variantes
+
+O corpo é sempre `--card` com o texto do tema (contraste de sobra). A cor de estado mora só na pastilha do ícone, que também muda de **formato** por variante — quem não distingue cores ainda vê a diferença.
+
+<StatesGrid>
+  <State label="default">
+    <Alert variant="default" style={{ width: "100%" }}>
+      <AlertTitle>Novidade</AlertTitle>
+    </Alert>
+  </State>
+  <State label="info">
+    <Alert variant="info" style={{ width: "100%" }}>
+      <AlertTitle>Dica</AlertTitle>
+    </Alert>
+  </State>
+  <State label="warning">
+    <Alert variant="warning" style={{ width: "100%" }}>
+      <AlertTitle>Atenção</AlertTitle>
+    </Alert>
+  </State>
+  <State label="destructive">
+    <Alert variant="destructive" style={{ width: "100%" }}>
+      <AlertTitle>Erro</AlertTitle>
+    </Alert>
+  </State>
+</StatesGrid>
+
+Não há variante de sucesso: o sistema não tem verde. Uma confirmação ("Alterações salvas") usa `default` ou `info`.
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "variant",
+      type: '"default" | "info" | "warning" | "destructive"',
+      default: '"default"',
+      description: "Cor e formato do ícone. Também define o papel ARIA.",
+    },
+    {
+      prop: "icon",
+      type: "ReactNode",
+      description: "Troca o ícone padrão da variante (continua dentro da pastilha e decorativo).",
+    },
+    {
+      prop: "action",
+      type: "ReactNode",
+      description: "Ação opcional, normalmente um Button size=\"sm\" variant=\"outline\".",
+    },
+    {
+      prop: "role",
+      type: "string",
+      default: "alert (warning, destructive) · status (default, info)",
+      description: "Sobrescreve o papel ARIA padrão.",
+    },
+    {
+      prop: "...props",
+      type: "HTMLAttributes<HTMLDivElement>",
+      description: "Qualquer atributo nativo de <div>. AlertTitle e AlertDescription também aceitam className e atributos de <div>.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+- `warning` e `destructive` usam `role="alert"` (anunciado na hora); `default` e `info` usam `role="status"` (anunciado quando o leitor de tela estiver livre). O anúncio só acontece quando o alerta **aparece** depois do carregamento da página.
+- O ícone é decorativo (`aria-hidden`): o texto já diz tudo. A cor nunca é a única pista — cada variante tem um formato de ícone próprio (balão, círculo, triângulo, octógono).
+- Contraste medido: `--tag-sky` e `--tag-mustard` com o texto escuro deles (5.5:1 e 8.1:1), `--destructive` com `--destructive-foreground` (5.69:1 no dia).
+- O alerta em si não é interativo e não tem hover. Se houver `action`, o botão leva foco visível e os três estados do Button.
+- Sem animação de entrada: o alerta faz parte da página, e o que avisa quem usa leitor de tela é o `role`. Pra algo que aparece e some sozinho, use o [Toast](/components/toast).
+
+## Tokens usados
+
+`--card` · `--ink` · `--border-width` · `--shadow-brutal` · `--radius-card` · `--heading` · `--foreground` · `--background` · `--tag-sky` · `--tag-mustard` · `--destructive`

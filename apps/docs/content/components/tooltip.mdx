@@ -1,0 +1,121 @@
+---
+title: Tooltip
+description: Dica curta que aparece ao passar o mouse ou focar um elemento — explica sem ocupar espaço na tela.
+---
+
+<Preview>
+  <TooltipDemo />
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/tooltip
+```
+
+Envolva o app (ou só a região com vários gatilhos) em um `TooltipProvider`, uma vez:
+
+```tsx
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@adinkra/tooltip";
+import { Button } from "@adinkra/button";
+
+<TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger render={<Button variant="outline" size="sm" />}>Salvar</TooltipTrigger>
+    <TooltipContent>Salvar as alterações (Ctrl+S)</TooltipContent>
+  </Tooltip>
+</TooltipProvider>;
+```
+
+## Composição
+
+- **`TooltipProvider`** — define o atraso de abertura (400 ms por padrão) e liga os tooltips vizinhos entre si.
+- **`Tooltip`** — a raiz de uma dica.
+- **`TooltipTrigger`** — o elemento que a dica descreve. Use `render` para trocar o `<button>` padrão por outro componente.
+- **`TooltipContent`** — o texto da dica.
+
+## Sem espera de uma dica para outra
+
+Com o `TooltipProvider`, depois que uma dica abre, as vizinhas abrem na hora, sem atraso e sem animação de entrada. Isso vale também por 300 ms depois de a dica fechar. Passe o mouse sobre o primeiro botão e mova para os outros: a troca é instantânea, como numa barra de ferramentas nativa. O primeiro tooltip espera; os seguintes não.
+
+## Posições
+
+<Preview>
+  <TooltipSidesDemo />
+</Preview>
+
+## Movimento
+
+Tooltip aparece dezenas de vezes por dia, então o movimento é quase imperceptível: fade com escala de 0,97 para 1 em 125 ms, e saída em 100 ms, com a curva `--ease-out`. Quando a dica abre logo depois de outra, o Base UI marca o painel com `data-instant` e a transição é cortada. Só `opacity` e `scale` animam. Com `prefers-reduced-motion`, a troca é instantânea.
+
+O visual é uma pastilha invertida (`--ink` com `--background`): escura no tema claro, clara no escuro. Sem borda nem sombra, porque tooltip não é uma superfície clicável.
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "TooltipProvider delay",
+      type: "number",
+      default: "400",
+      description: "Milissegundos até a primeira dica abrir.",
+    },
+    {
+      prop: "TooltipProvider closeDelay",
+      type: "number",
+      default: "0",
+      description: "Milissegundos até a dica fechar depois que o mouse sai.",
+    },
+    {
+      prop: "TooltipProvider timeout",
+      type: "number",
+      default: "300",
+      description: "Depois de uma dica fechar, outra abre sem atraso se isso acontecer dentro desse tempo, em milissegundos.",
+    },
+    {
+      prop: "Tooltip open / defaultOpen / onOpenChange",
+      type: "boolean / boolean / (open: boolean, details) => void",
+      description: "Controle do estado aberto, quando quem usa precisa decidir.",
+    },
+    {
+      prop: "TooltipTrigger delay",
+      type: "number",
+      description: "Atraso só deste gatilho, no lugar do valor do provider.",
+    },
+    {
+      prop: "TooltipContent side",
+      type: '"top" | "right" | "bottom" | "left"',
+      default: '"top"',
+      description: "Em qual borda do gatilho a dica aparece.",
+    },
+    {
+      prop: "TooltipContent align",
+      type: '"start" | "center" | "end"',
+      default: '"center"',
+      description: "Alinhamento da dica ao longo dessa borda.",
+    },
+    {
+      prop: "TooltipContent sideOffset",
+      type: "number",
+      default: "6",
+      description: "Distância, em pixels, entre o gatilho e a dica.",
+    },
+    {
+      prop: "...props",
+      type: "ComponentProps<typeof BaseUI...>",
+      description: "Qualquer prop do primitivo Base UI correspondente passa direto — className, render, etc.",
+    },
+  ]}
+/>
+
+## Acessibilidade
+
+Vem do [Base UI](https://base-ui.com/react/components/tooltip): a dica abre no hover e também no foco do teclado, Esc fecha, e o texto fica ligado ao gatilho por `aria-describedby`.
+
+- Tooltip só complementa. Não guarde nele nada essencial: no toque não há hover, e leitor de tela só o lê como descrição.
+- Nada clicável dentro da dica. Se precisa de link ou botão, use um [Popover](/components/popover).
+- Um botão só com ícone precisa de nome acessível (`aria-label`) além do tooltip — a dica não substitui o nome.
+
+## Tokens usados
+
+`--ink` · `--background` · `--ease-out`

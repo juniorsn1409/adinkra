@@ -1,0 +1,103 @@
+---
+title: Progress
+description: Uma barra que mostra quanto de uma tarefa já foi feito — ou que ela está em andamento, quando não dá pra saber.
+---
+
+<Preview>
+  <ProgressDemo />
+</Preview>
+
+## Como usar
+
+```bash
+bun add @adinkra/progress
+```
+
+```tsx
+import { Progress } from "@adinkra/progress";
+
+<Progress value={40} aria-label="Enviando fotos" />;
+<Progress value={3} max={5} valueText="3 de 5 arquivos enviados" aria-label="Upload" />;
+<Progress aria-label="Carregando relatório" />; // indeterminada
+```
+
+O pacote `@adinkra/progress` também exporta o `SegmentedBar` (uma quebra de total em partes, em [outra página](/components/segmented-bar)). O `Progress` é a barra simples, uma só.
+
+Sempre dê um nome à barra (`aria-label` ou `aria-labelledby`) e mostre o número por perto quando ele importar — a barra sozinha diz "mais ou menos", o número diz "quanto".
+
+Sem `value`, a barra é **indeterminada**: use quando não há como saber quanto falta. Se você sabe, mostre o valor.
+
+## Estados e tamanhos
+
+<StatesGrid>
+  <State label="0%">
+    <Progress value={0} aria-label="Exemplo 0%" />
+  </State>
+  <State label="60%">
+    <Progress value={60} aria-label="Exemplo 60%" />
+  </State>
+  <State label="100%">
+    <Progress value={100} aria-label="Exemplo 100%" />
+  </State>
+  <State label="indeterminada">
+    <Progress aria-label="Exemplo indeterminado" />
+  </State>
+  <State label="sm">
+    <Progress size="sm" value={60} aria-label="Exemplo sm" />
+  </State>
+  <State label="md">
+    <Progress size="md" value={60} aria-label="Exemplo md" />
+  </State>
+  <State label="lg">
+    <Progress size="lg" value={60} aria-label="Exemplo lg" />
+  </State>
+</StatesGrid>
+
+## Props
+
+<PropsTable
+  rows={[
+    {
+      prop: "value",
+      type: "number | null",
+      description: "Valor atual, de 0 a max. Ausente ou null = indeterminada.",
+    },
+    {
+      prop: "max",
+      type: "number",
+      default: "100",
+      description: "Valor que representa 100%.",
+    },
+    {
+      prop: "valueText",
+      type: "string",
+      description: "Texto lido por leitores de tela no lugar de \"N%\" (ex.: \"3 de 5 arquivos enviados\").",
+    },
+    {
+      prop: "size",
+      type: '"sm" | "md" | "lg"',
+      default: '"md"',
+      description: "Altura da barra.",
+    },
+    {
+      prop: "...props",
+      type: "HTMLAttributes<HTMLDivElement>",
+      description: "Qualquer atributo nativo de <div>, incluindo aria-label e aria-labelledby.",
+    },
+  ]}
+/>
+
+## Movimento
+
+- **Determinada:** o valor é um dado que a pessoa lê, então o movimento é mínimo — a largura acompanha o valor em 300ms com `--ease-out`, só pra não saltar. Usa `width` (e não `scaleX`) porque `scaleX` afinaria a borda de tinta do preenchimento.
+- **Indeterminada:** um trecho de 40% percorre a barra em 1,4s, em loop — é funcional, diz "estou trabalhando". Com `prefers-reduced-motion`, vira uma barra cheia que pulsa devagar (2s).
+
+## Acessibilidade
+
+- `role="progressbar"` com `aria-valuemin`, `aria-valuemax` e `aria-valuenow`. Na indeterminada o `aria-valuenow` é omitido, que é como o padrão ARIA diz "não sei quanto falta".
+- O preenchimento em `--primary` sozinho não passa 3:1 contra `--card`; quem separa cheio de vazio é a borda de tinta (`--ink`), do lado direito do preenchimento e ao redor da trilha.
+- A barra não é interativa: sem hover, foco ou sombra.
+
+## Tokens usados
+
+`--primary` · `--card` · `--ink` · `--border-width` · `--radius-control` · `--ease-out`
