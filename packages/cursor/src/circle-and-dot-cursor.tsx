@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@adinkra/core";
-import { CURSOR_HOVER_SELECTOR } from "./hover-selector";
+import { isHoverTarget } from "./hover-selector";
 import { useCursorActive } from "./use-cursor-active";
 
 export interface CircleAndDotCursorProps {
@@ -64,7 +64,7 @@ export function CircleAndDotCursor({ size = 20, color = "var(--ink)", className 
       previousY = y;
       const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
 
-      const hovering = (event.target as Element | null)?.closest(CURSOR_HOVER_SELECTOR) != null;
+      const hovering = isHoverTarget(event.target);
       if (hovering !== hoveringRef.current) {
         hoveringRef.current = hovering;
         applyBorder(hovering);

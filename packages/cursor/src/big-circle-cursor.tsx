@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@adinkra/core";
-import { CURSOR_HOVER_SELECTOR } from "./hover-selector";
+import { isHoverTarget } from "./hover-selector";
 import { useCursorActive } from "./use-cursor-active";
 
 export interface BigCircleCursorProps {
@@ -94,18 +94,18 @@ export function BigCircleCursor({
 
     // Uma escrita de transform por frame (o `closest` também só roda aí).
     let frame = 0;
-    let target: Element | null = null;
+    let target: EventTarget | null = null;
 
     function flush() {
       frame = 0;
-      hoveringRef.current = target?.closest(CURSOR_HOVER_SELECTOR) != null;
+      hoveringRef.current = isHoverTarget(target);
       applyTransform(lastX, lastY, false);
     }
 
     function handleMove(event: PointerEvent) {
       lastX = event.clientX;
       lastY = event.clientY;
-      target = event.target as Element | null;
+      target = event.target;
       if (frame === 0) frame = requestAnimationFrame(flush);
     }
 

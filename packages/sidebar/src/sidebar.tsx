@@ -182,14 +182,19 @@ export function Sidebar({ collapsible = "icon", className, children, ...props }:
   if (isMobile) {
     return (
       <>
-        {openMobile ? (
-          <button
-            type="button"
-            aria-label="Fechar menu"
-            onClick={() => setOpenMobile(false)}
-            className="fixed inset-0 z-40 bg-ink/40"
-          />
-        ) : null}
+        {/* Sempre montado: o fade acompanha a gaveta nos dois sentidos.
+            Fechado, sai do foco (tabIndex/aria-hidden) e não recebe clique. */}
+        <button
+          type="button"
+          aria-label="Fechar menu"
+          aria-hidden={openMobile ? undefined : true}
+          tabIndex={openMobile ? 0 : -1}
+          onClick={() => setOpenMobile(false)}
+          className={cn(
+            "fixed inset-0 z-40 bg-ink/40 transition-opacity duration-200 ease-[var(--ease-out)]",
+            openMobile ? "opacity-100" : "pointer-events-none opacity-0",
+          )}
+        />
         <div
           data-slot="sidebar"
           data-mobile="true"
@@ -197,7 +202,7 @@ export function Sidebar({ collapsible = "icon", className, children, ...props }:
           className={cn(
             "group/sidebar fixed inset-y-0 left-0 z-50 flex h-screen w-[var(--sidebar-width)] flex-none flex-col overflow-hidden",
             "border-r-[length:var(--border-width)] border-ink bg-surface",
-            "transition-transform duration-200",
+            "transition-transform duration-[250ms] ease-[var(--ease-drawer)]",
             openMobile ? "translate-x-0" : "-translate-x-full",
             className,
           )}

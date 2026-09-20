@@ -10,12 +10,13 @@ import { SymbolField } from "../components/symbol-field";
 
 export default function HomePage() {
   return (
-    <main className="relative isolate min-h-screen overflow-hidden" style={{ display: "flex" }}>
+    <main className="relative isolate flex min-h-screen flex-col overflow-hidden lg:flex-row">
       <BigCircleCursor size={250} backdropFilter={false} color="transparent" dotColor="var(--ink)" />
-      {/* Div à esquerda - 70% com background */}
-      <div className="flex-shrink-0 flex flex-col" style={{ width: "58%", backgroundColor: "var(--background)" }}>
+      {/* Empilhado (esquerda em cima, direita embaixo) até lg; lado a lado só de lg
+          pra cima — 58%/42% em telas menores espremia logo, nav e título. */}
+      <div className="flex w-full flex-none flex-col bg-background lg:w-[58%]">
         {/* Header com ArcLogo e links */}
-        <div className="flex items-center justify-between px-6 py-6">
+        <div className="flex flex-col gap-6 px-4 py-6 sm:px-6 xl:flex-row xl:items-center xl:justify-between">
         <ArcLogo
           key={0}
           text={"Design System"}
@@ -31,7 +32,7 @@ export default function HomePage() {
           rayDistance={1}
           showRays={true}
         />
-          <nav className="flex items-center gap-8 self-start mt-15">
+          <nav className="flex flex-wrap items-center gap-x-6 gap-y-3 self-start xl:mt-15 xl:justify-end xl:gap-x-8">
             <AdinkraLink href="/introduction" className="text-sm">
               <T k="common.introduction" />
             </AdinkraLink>
@@ -46,12 +47,12 @@ export default function HomePage() {
         </div>
 
         {/* Conteúdo principal */}
-        <div className="flex-1 flex flex-col items-start justify-center px-6 py-24">
+        <div className="hidden flex-1 flex-col items-start justify-center px-6 py-24 lg:flex">
         </div>
       </div>
 
-      {/* Div à direita */}
-      <div className="flex-1 flex flex-col relative" style={{ width: "42%" }}>
+      {/* Div à direita. @container: o título dimensiona pela largura desta coluna (cqw), não da tela. */}
+      <div className="@container relative flex w-full flex-1 flex-col lg:w-[42%]">
         {/* Divs de cor como background */}
         <div className="flex flex-col flex-1 absolute inset-0">
           {/* Parte de cima - 50% com branco */}
@@ -70,7 +71,7 @@ export default function HomePage() {
             fundo, já que este bloco ocupa a coluna inteira): accent-foreground
             na metade de cima, primary-foreground na de baixo. */}
         <div
-          className="flex flex-col items-center justify-center px-6 pt-24 pb-32 relative z-10 flex-1 bg-clip-text text-transparent"
+          className="hero-enter flex flex-col items-center justify-center px-4 pt-16 pb-20 sm:px-6 lg:pt-24 lg:pb-32 relative z-10 flex-1 bg-clip-text text-transparent"
           style={{
             backgroundImage:
               "linear-gradient(to bottom, var(--accent-foreground) 50%, var(--primary-foreground) 50%)",
@@ -83,10 +84,10 @@ export default function HomePage() {
             <p className="pl-[0.26em] font-display text-xs font-medium uppercase tracking-[0.26em]">
               Design system
             </p>
-            <h1 className="pl-[0.1em] font-adinkra text-6xl font-medium tracking-[0.1em] sm:text-7xl md:text-8xl">
+            <h1 className="pl-[0.1em] font-adinkra text-[clamp(2.25rem,11cqw,6rem)] font-medium tracking-[0.1em]">
               Adinkra
             </h1>
-            <p className="max-w-[60ch] text-xl">
+            <p className="max-w-[60ch] text-lg sm:text-xl">
               <T k="home.description" />
             </p>
             <p className="max-w-[56ch] text-base">

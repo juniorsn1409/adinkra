@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@adinkra/core";
-import { CURSOR_HOVER_SELECTOR } from "./hover-selector";
+import { isHoverTarget } from "./hover-selector";
 import { useCursorActive } from "./use-cursor-active";
 
 export interface GlitchCursorProps {
@@ -84,7 +84,7 @@ export function GlitchCursor({ size = 15, hoverSize = 30, colorA = "var(--primar
       previousX = x;
       previousY = y;
 
-      const hovering = (event.target as Element | null)?.closest(CURSOR_HOVER_SELECTOR) != null;
+      const hovering = isHoverTarget(event.target);
       if (hovering !== hoveringRef.current) {
         hoveringRef.current = hovering;
         applySize(hovering);

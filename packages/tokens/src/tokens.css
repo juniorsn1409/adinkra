@@ -267,6 +267,16 @@
   --radius-card: 6px;
 }
 
+/* Curvas de movimento compartilhadas. Ficam como variável comum (não em
+   `@theme`) de propósito: `--ease-out` no tema do Tailwind sobrescreveria a
+   utilidade `ease-out`, que o ArcText/ArcLogo já usam com a curva padrão.
+   Uso: `ease-[var(--ease-out)]`. --ease-out serve entradas e saídas de
+   painéis; --ease-drawer, gavetas que deslizam pra dentro da tela. */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
 /*
  * O gesto de "subir no hover, afundar ao pressionar" (seção 4, DECISOES.md)
  * é o coração da mecânica neobrutalista — mas quem pediu menos movimento ao

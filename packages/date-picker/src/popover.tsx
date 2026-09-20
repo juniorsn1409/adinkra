@@ -74,6 +74,11 @@ function PopoverContent({
           data-slot="popover-content"
           className={cn(
             "w-auto rounded-control border-[length:var(--border-width)] border-ink bg-surface p-0 text-foreground outline-none",
+            // Nasce do gatilho (origin vem do Base UI) e some mais rápido do
+            // que entra — abrir é o gesto do usuário, fechar é só limpeza.
+            "origin-(--transform-origin) transition-[opacity,transform] duration-150 ease-[var(--ease-out)]",
+            "data-starting-style:scale-[0.96] data-starting-style:opacity-0",
+            "data-ending-style:scale-[0.96] data-ending-style:opacity-0 data-ending-style:duration-100",
             className,
           )}
           {...props}

@@ -28,3 +28,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+/*
+ * Entrada única do bloco de texto do hero da home (visita rara, então cabe
+ * um respiro): sobe 12px e aparece, 400ms, sem atraso pra não segurar a
+ * leitura enquanto o ArcLogo faz a sequência dele. Anima o próprio elemento
+ * que tem `bg-clip-text` — animar os filhos poderia derrubar o recorte do
+ * degradê no texto. `backwards` (não `both`) pra não deixar `transform`
+ * pendurado depois do fim. O `prefers-reduced-motion` global de tokens.css
+ * já zera a duração.
+ */
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+.hero-enter {
+  animation: hero-enter 400ms var(--ease-out) backwards;
+}

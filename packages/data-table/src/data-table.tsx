@@ -494,23 +494,30 @@ function DraggableBulkToolbar({ children }: { children: React.ReactNode }) {
     if (dragOffset.current?.pointerId === event.pointerId) dragOffset.current = null;
   }
 
+  // Dois elementos de propósito: o de fora só posiciona (left/top e a
+  // centralização, sem transição nenhuma — senão a barra ficaria atrás do
+  // ponteiro ao arrastar); o de dentro cuida da entrada (sobe 12px + fade,
+  // 200ms) via `starting:`. A saída continua instantânea: a barra desmonta
+  // quando a seleção zera.
   return (
     <div
       ref={barRef}
-      className="fixed z-50 flex items-center gap-1 rounded-control border-[length:var(--border-width)] border-ink bg-surface px-3 py-2 text-foreground shadow-brutal"
+      className="fixed z-50"
       style={position ? { left: position.x, top: position.y } : { left: "50%", bottom: 24, transform: "translateX(-50%)" }}
     >
-      <button
-        type="button"
-        aria-label="Mover barra"
-        onPointerDown={onHandlePointerDown}
-        onPointerMove={onHandlePointerMove}
-        onPointerUp={onHandlePointerUp}
-        className="flex size-6 flex-none cursor-grab touch-none items-center justify-center rounded-control text-muted-foreground hover:bg-card active:cursor-grabbing"
-      >
-        <DragHandleIcon />
-      </button>
-      {children}
+      <div className="flex items-center gap-1 rounded-control border-[length:var(--border-width)] border-ink bg-surface px-3 py-2 text-foreground shadow-brutal transition-[opacity,transform] duration-200 ease-[var(--ease-out)] starting:translate-y-3 starting:opacity-0">
+        <button
+          type="button"
+          aria-label="Mover barra"
+          onPointerDown={onHandlePointerDown}
+          onPointerMove={onHandlePointerMove}
+          onPointerUp={onHandlePointerUp}
+          className="flex size-6 flex-none cursor-grab touch-none items-center justify-center rounded-control text-muted-foreground hover:bg-card active:cursor-grabbing"
+        >
+          <DragHandleIcon />
+        </button>
+        {children}
+      </div>
     </div>
   );
 }
@@ -729,7 +736,7 @@ export function DataTable({ columns, rows, onRowsChange, columnLines = true, cla
             type="button"
             aria-label="Excluir linhas selecionadas"
             onClick={bulkDeleteSelected}
-            className="ml-auto flex size-7 flex-none items-center justify-center rounded-control text-foreground hover:bg-card hover:text-destructive focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            className="ml-auto flex size-7 flex-none items-center justify-center rounded-control text-foreground transition-transform duration-100 ease-[var(--ease-out)] active:scale-95 hover:bg-card hover:text-destructive focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             <TrashIcon className="size-4" />
           </button>
@@ -813,7 +820,7 @@ export function DataTable({ columns, rows, onRowsChange, columnLines = true, cla
                     type="button"
                     aria-label="Inserir linha abaixo"
                     onClick={() => insertRowAfter(row.id)}
-                    className="flex size-5 flex-none items-center justify-center rounded-control text-muted-foreground opacity-0 hover:bg-card hover:text-foreground group-hover/row:opacity-100 focus-visible:opacity-100"
+                    className="flex size-5 flex-none items-center justify-center rounded-control text-muted-foreground opacity-0 transition-transform duration-100 ease-[var(--ease-out)] active:scale-95 hover:bg-card hover:text-foreground group-hover/row:opacity-100 focus-visible:opacity-100"
                   >
                     <PlusIcon className="size-3" />
                   </button>

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@adinkra/core";
-import { CURSOR_HOVER_SELECTOR } from "./hover-selector";
+import { isHoverTarget } from "./hover-selector";
 import { useCursorActive } from "./use-cursor-active";
 
 export interface RingDotCursorProps {
@@ -64,7 +64,7 @@ export function RingDotCursor({ size = 20, hoverSize = 40, color = "var(--primar
     }
 
     function handleMove(event: PointerEvent) {
-      const hovering = (event.target as Element | null)?.closest(CURSOR_HOVER_SELECTOR) != null;
+      const hovering = isHoverTarget(event.target);
       if (hovering !== hoveringRef.current) {
         hoveringRef.current = hovering;
         applySize(hovering);
