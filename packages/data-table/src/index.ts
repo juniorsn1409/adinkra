@@ -1,2 +1,26 @@
 export { DataTable } from "./data-table";
-export type { ColumnType, DataTableColumn, DataTableProps, DataTableRow, SelectColor, SelectOption } from "./types";
+export { DataTableViews } from "./views";
+export { createEmptyRow } from "./logic";
+export type {
+  Aggregate,
+  ColumnType,
+  DataTableColumn,
+  DataTableFilter,
+  DataTableProps,
+  DataTableRow,
+  DataTableSort,
+  DataTableSource,
+  DataTableView,
+  DataTableViewConfig,
+  DataTableViewRenderContext,
+  DataTableViewsHandle,
+  DataTableViewsProps,
+  FilterOperator,
+  MobileCardConfig,
+  RelationConfig,
+  RelationIcon,
+  SelectColor,
+  SelectOption,
+  StatusColor,
+  StatusOption,
+} from "./types";

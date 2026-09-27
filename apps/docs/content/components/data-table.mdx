@@ -1,19 +1,21 @@
 ---
 title: Data Table
-description: Tabela de dados editável, estilo Notion — células por tipo, adicionar e remover linha.
+description: Tabela de dados editável, estilo Notion — colunas tipadas, visões, filtros e ordenação em chips, agregação no rodapé e cartões no mobile.
 ---
 
 <Preview>
   <DataTableDemo />
 </Preview>
 
-Clique numa célula pra editar. Nas de texto/número, `Enter` confirma; nas de select, clique numa opção da lista (ou fora, pra fechar sem mudar o valor único); na de data, o `DatePicker` abre o calendário e fecha sozinho ao escolher um dia. "Nova linha" adiciona uma linha vazia; o × ao lado de cada linha remove ela.
+O preview é um `DataTableViews`: cada aba (Transações, Faturas, Transferências, Rendimentos, Gráfico) é uma tabela própria, com colunas e uma "API" de mentira própria (atraso curto, AbortSignal). A primeira abertura de cada aba mostra o carregamento. Todo campo é editável: clique numa célula pra editar. Nas de texto/número, `Enter` confirma e `Escape` desiste; nas de select e status, clique numa opção da lista (ou fora, pra fechar sem mudar o valor único); na de data, o calendário abre e fecha sozinho ao escolher um dia; a caixa marca com um clique. No Tipo e na Meta (relações), o texto edita e o glifo à esquerda abre. No Saldo (fórmula), digitar grava um valor manual e apagar volta ao calculado. Passe o mouse na Descrição pra ver o botão **Abrir**. O cabeçalho de cada coluna abre o menu (ordenar, filtrar, congelar, esconder) e cada célula do rodapé troca a agregação. Estreite a página: abaixo de 610 de largura do container, a grade vira lista de cartões.
 
 ## Como usar
 
 ```bash
 bun add @adinkra/data-table
 ```
+
+O exemplo mínimo continua o mesmo de antes — só colunas, linhas e `onRowsChange`:
 
 ```tsx
 import { DataTable, type DataTableColumn, type DataTableRow } from "@adinkra/data-table";
@@ -40,18 +42,230 @@ function Example() {
 }
 ```
 
-## Tipos de coluna (v1)
+O exemplo do preview (resumido), com as partes novas:
 
-Escopo fechado com o usuário antes de construir — ficou de fora da v1, por decisão explícita: adicionar/remover/renomear coluna, mudar o tipo de uma coluna já criada, ordenar, filtrar (mais perto do editor de schema do Notion de verdade, escopo bem maior).
+```tsx
+import { DataTable, createEmptyRow, type DataTableColumn, type DataTableFilter } from "@adinkra/data-table";
 
-- **`text`** — texto livre.
-- **`select`** — etiqueta colorida (via `@adinkra/badge` — nenhuma cor nova, só as variantes que já existem: `accent`, `secondary`, `tag-coral`, `tag-sky`, `tag-mustard`), de uma lista fixa (`options`). Com `multi: true` vira várias etiquetas por célula (tags) em vez de uma só (status).
-- **`number`** — número; com `currency: true` formata como R$ (`Intl.NumberFormat`, pt-BR) e fica vermelho (`--destructive`) quando negativo.
-- **`date`** — data; usa o `@adinkra/date-picker` (`DatePicker`, Popover+Calendar) como gatilho da própria célula, sem passo separado de edição — mostra formatada por extenso (`Intl.DateTimeFormat`, pt-BR) direto no botão.
+const columns: DataTableColumn[] = [
+  { id: "descricao", header: "Descrição", type: "text", primary: true, frozen: true, width: 233 },
+  {
+    id: "status",
+    header: "Status",
+    type: "status",
+    options: [
+      { value: "sincronizado", label: "Sincronizado", color: "mist" },
+      { value: "pendente", label: "Pendente", color: "tag-mustard" },
+      { value: "erro", label: "Erro", color: "destructive" },
+    ],
+  },
+  {
+    id: "tipo",
+    header: "Tipo",
+    type: "relation",
+    options: [
+      { value: "saida", label: "Saída", color: "tag-coral" },
+      { value: "entrada", label: "Entrada", color: "tag-sky" },
+    ],
+    relation: { icon: (value) => (value === "entrada" ? "in" : "out") },
+  },
+  { id: "valor", header: "Valor", type: "number", currency: true, aggregate: "sum" },
+  {
+    id: "saldo",
+    header: "Saldo",
+    type: "formula",
+    format: "currency",
+    aggregate: "sum",
+    formula: (row) => (row.tipo === "entrada" ? 1 : -1) * Number(row.valor),
+  },
+  { id: "data", header: "Data", type: "date", dateStyle: "short" },
+  { id: "tags", header: "Tags", type: "select", multi: true, selectStyle: "dot", options: [/* … */] },
+  { id: "conferida", header: "", type: "checkbox", width: 55 },
+];
+
+function Transacoes() {
+  const [rows, setRows] = useState(initialRows);
+  const [filters, setFilters] = useState<DataTableFilter[]>([]);
+  const [view, setView] = useState("transacoes");
+  return (
+    <DataTable
+      columns={columns}
+      rows={rows}
+      onRowsChange={setRows}
+      views={[{ id: "transacoes", label: "Transações" }, { id: "faturas", label: "Faturas" }]}
+      activeView={view}
+      onViewChange={setView}
+      searchable
+      filters={filters}
+      onFiltersChange={setFilters}
+      defaultSorts={[{ columnId: "data", direction: "asc" }]}
+      onAddRow={() => setRows([...rows, createEmptyRow(columns)])}
+      onOpenRow={(row) => router.push(`/transacoes/${row.id}`)}
+      toolbar={<Button size="sm">Nova transação</Button>}
+    />
+  );
+}
+```
+
+## Tipos de coluna
+
+Todo cabeçalho mostra o ícone do tipo (13px): Aa, #, Σ, calendário, etiqueta, relação ↗, status, caixa.
+
+- **`text`** — texto livre. A primeira coluna de texto (ou a marcada com `primary`) é a **principal**: ícone de página, texto em seminegrito, botão Abrir no hover (com `onOpenRow`) e título do cartão no mobile.
+- **`select`** — etiqueta colorida de uma lista fixa (`options`), cores só das que já existem: `primary`, `accent`, `secondary`, `tag-coral`, `tag-sky`, `tag-mustard`, `tag-navy`. Com `multi: true` vira várias etiquetas por célula. `selectStyle: "badge"` (padrão, o `@adinkra/badge` de sempre) ou `"dot"` (ponto de 13 com borda + texto, o visual das etiquetas do redesenho). O badge continua padrão pra não mudar tabelas que já existem.
+- **`status`** — valor único de `options`, mostrado como pílula (26 de altura, raio 13, borda 2, ponto na cor do texto). Além das cores de etiqueta aceita `mist` (névoa azul) e `destructive`.
+- **`number`** — número em mono à direita; com `currency: true` formata como R$ (`Intl.NumberFormat`, pt-BR). Fica sempre na cor neutra: a cor por sinal foi testada e revertida.
+- **`formula`** — calculada por `formula: (row) => number | string`, com `format: "currency" | "number"` opcional. Negativo sai em `--destructive`. Só entra em soma/média/mínimo/máximo quando tem `format`. **Editável como sobrescrita manual**: o valor digitado é gravado em `row[column.id]` e, enquanto existir, aparece no lugar do calculado com um anel pequeno na frente (e "valor manual" pro leitor de tela). Apagar o campo grava `undefined` e a fórmula volta a valer. Abrir e sair sem mudar nada não grava. Filtro, ordenação, busca e agregação usam sempre o valor efetivo: o manual quando há, senão o calculado.
+- **`date`** — data guardada como `"yyyy-mm-dd"`; o clique abre o `Calendar` do `@adinkra/date-picker`. `dateStyle: "long"` (padrão, "21 de Setembro, 2026") ou `"short"` ("21 set 2026").
+- **`relation`** — rótulo da página ligada, sublinhado, com glifo na frente. Editável: com `options`, edita pelo mesmo seletor do select (grava o `value` da opção, mostra o `label`); sem `options`, edita como texto. O link fica no **glifo**: `relation.href(row)` vira `<a>`, `relation.onClick(row)` vira botão, cada um com `aria-label="Abrir …"`. Clicar no texto edita, clicar no glifo abre. Escolhido em vez de "abrir no hover" porque funciona igual no toque e no teclado (dois alvos de Tab). `relation.icon`: `"link"`, `"in"` (entrada, em primary), `"out"` (saída, em destructive), `"calendar"`, `"pie"`, ou uma função `(value, row) => ícone`, que recebe o valor salvo.
+- **`checkbox`** — booleano, marca e desmarca com um clique.
+
+## Visões, busca e ações
+
+A barra superior aparece quando há `views`, `toolbar` ou `searchable`. A prop `views` do `DataTable` são abas sobre **esta** tabela (`@adinkra/tabs`): a tabela só mostra qual está ativa e avisa a troca (`onViewChange`), e quem usa decide o que cada aba muda. Pra abas com dados, colunas ou API diferentes, use o `DataTableViews` (abaixo). À direita ficam as ferramentas de 34 (filtros, ordenação, busca, colunas visíveis) e o slot `toolbar`. A busca filtra as linhas por qualquer coluna, sem diferenciar maiúscula nem acento.
+
+## Abas com dados próprios: `DataTableViews`
+
+Quando cada aba é uma tabela diferente (colunas, dados e API próprios), use `DataTableViews`. É o caminho recomendado sempre que as abas não compartilham os mesmos dados. A prop `views` do `DataTable` continua valendo pra abas sobre a mesma tabela.
+
+- **Cada visão é independente**: `columns`, dados e as demais props do `DataTable` (`defaultFilters`, `defaultSorts`, `onAddRow`, `onOpenRow`, `mobileCard`, `toolbar`, `searchable`, `filterable`…). Uma aba que não é tabela usa `render(ctx)`. No preview, o Gráfico lê as linhas de Transações com `ctx.rowsOf("transacoes")` e declara `dependsOn: ["transacoes"]` pra carregá-las mesmo se Transações nunca foi aberta.
+- **Três modos de dado por visão**: `source` (API, com cache interno), `rows` + `onRowsChange` (controlado por quem usa) ou nenhum dos dois (estado local, começa vazio).
+- **Carga preguiçosa com cache**: a `source` carrega na primeira vez que a aba abre e guarda o resultado. Trocar de aba não recarrega, a não ser com `refetchOnActivate` (no preview, Rendimentos). A carga recebe um `AbortSignal` e é cancelada ao sair da aba, ao recarregar ou ao desmontar.
+- **Estado preservado por visão**: cada aba monta na primeira abertura e fica montada, escondida. Filtros, ordenação, busca, larguras e colunas escondidas continuam lá quando você volta.
+- **Estados**:
+  - carregando: linhas de `@adinkra/skeleton` na altura real de 42 (cartões no mobile);
+  - erro de carga: `@adinkra/alert` destructive com **Tentar de novo**;
+  - vazio: mensagem simples ("Nenhuma linha ainda." ou "Nenhuma linha com esses filtros.", troque com `emptyMessage`).
+- **Edição otimista**: a tela muda na hora e cada diferença vai pra API (`onRowChange` com só as chaves alteradas, `onAddRow` com o rascunho, `onDeleteRows` com os ids). Se a API rejeitar, só aquela mudança volta e um alerta explica. Reordenar por arraste é só local.
+- **Recarregar**: `ref` com `reload(viewId?)` (padrão: a aba ativa). Escolhido em vez de uma `reloadKey` porque recarregar é um comando, não um estado.
+- **Aba ativa**: controlada (`activeView` + `onViewChange`) ou não (`defaultView`).
+
+No preview, **Simular erro na próxima chamada** faz a próxima chamada de qualquer aba falhar. Depois disso, **Recarregar aba** mostra o erro de carga; editar uma célula mostra o desfazer.
+
+```tsx
+import { DataTableViews, type DataTableSource, type DataTableViewsHandle } from "@adinkra/data-table";
+
+// Uma fonte por API. `load` recebe o AbortSignal e passa pro fetch.
+function restSource(base: string): DataTableSource {
+  return {
+    async load({ signal }) {
+      const res = await fetch(base, { signal });
+      if (!res.ok) throw new Error(`Falha ao carregar (${res.status}).`);
+      return res.json();
+    },
+    async onRowChange(row, patch) {
+      const res = await fetch(`${base}/${row.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      });
+      if (!res.ok) throw new Error("Não deu pra salvar a alteração.");
+    },
+    async onAddRow(draft) {
+      const res = await fetch(base, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(draft) });
+      if (!res.ok) throw new Error("Não deu pra criar a linha.");
+      return res.json(); // a linha salva (com o id do servidor) troca o rascunho
+    },
+    async onDeleteRows(ids) {
+      const res = await fetch(`${base}?ids=${ids.join(",")}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Não deu pra excluir.");
+    },
+  };
+}
+
+const transacoes = restSource("/api/transacoes");
+const faturas = restSource("https://faturas.exemplo.com/v1/faturas"); // outra API
+const rendimentos = restSource("/api/investimentos/rendimentos");
+
+function Financas() {
+  const ref = useRef<DataTableViewsHandle>(null);
+  return (
+    <DataTableViews
+      ref={ref}
+      defaultView="transacoes"
+      views={[
+        { id: "transacoes", label: "Transações", columns: transacaoColumns, source: transacoes, searchable: true },
+        { id: "faturas", label: "Faturas", columns: faturaColumns, source: faturas },
+        { id: "rendimentos", label: "Rendimentos", columns: rendimentoColumns, source: rendimentos, refetchOnActivate: true },
+        {
+          id: "grafico",
+          label: "Gráfico",
+          dependsOn: ["transacoes"],
+          render: (ctx) => <MeuGrafico rows={ctx.rowsOf("transacoes") ?? []} />,
+        },
+      ]}
+    />
+  );
+}
+// Depois de salvar em outra tela: ref.current?.reload("faturas")
+```
+
+### Props do `DataTableViews`
+
+<PropsTable
+  rows={[
+    { prop: "views", type: "DataTableViewConfig[]", description: "Uma entrada por aba (ver abaixo)." },
+    { prop: "activeView / onViewChange", type: "string / (id: string) => void", description: "Aba ativa controlada." },
+    { prop: "defaultView", type: "string", default: "a primeira", description: "Aba inicial quando não controlada." },
+    { prop: "ref", type: "Ref<DataTableViewsHandle>", description: "{ reload(viewId?) } recarrega a source da aba (padrão: a ativa), descartando o cache." },
+    { prop: "className", type: "string", description: "Vai no container externo." },
+  ]}
+/>
+
+### `DataTableViewConfig` (cada aba)
+
+<PropsTable
+  rows={[
+    { prop: "id / label / icon", type: "string / string / ReactNode", description: "Identidade e rótulo da aba." },
+    { prop: "columns", type: "DataTableColumn[]", description: "Colunas da tabela desta aba. Dispensável só com render." },
+    { prop: "source", type: "DataTableSource", description: "Fonte assíncrona (API). Com ela a aba guarda as linhas em cache e as edições são otimistas." },
+    { prop: "rows / onRowsChange", type: "DataTableRow[] / (rows) => void", description: "Linhas controladas por quem usa, quando não há source." },
+    { prop: "refetchOnActivate", type: "boolean", default: "false", description: "Recarrega a source toda vez que a aba volta a ficar ativa." },
+    { prop: "render", type: "(ctx) => ReactNode", description: "Aba que não é tabela. ctx: rowsOf(viewId), isLoading(viewId), reload(viewId?)." },
+    { prop: "dependsOn", type: "string[]", description: "Visões com source que precisam estar carregadas quando esta abre (ex.: o gráfico)." },
+    { prop: "...props do DataTable", type: "defaultFilters, defaultSorts, filters, sorts, onAddRow, onOpenRow, mobileCard, toolbar, searchable, filterable, emptyMessage, notice…", description: "Repassadas pra tabela da aba. Sem onAddRow, a \"Nova linha\" aparece quando a source tem onAddRow." },
+  ]}
+/>
+
+### `DataTableSource`
+
+<PropsTable
+  rows={[
+    { prop: "load", type: "(ctx: { signal: AbortSignal }) => Promise<DataTableRow[]>", description: "Obrigatório. Busca as linhas; rejeitar mostra o erro com \"Tentar de novo\"." },
+    { prop: "onRowChange", type: "(row, patch) => Promise<void> | void", description: "Uma linha mudou; patch tem só as chaves alteradas. Rejeitar desfaz essas chaves." },
+    { prop: "onAddRow", type: "(draft) => Promise<DataTableRow | void> | DataTableRow | void", description: "Linha nova (\"Nova linha\" ou o \"+\" do gutter), já na tela como rascunho. Devolver uma linha troca o rascunho; rejeitar remove." },
+    { prop: "onDeleteRows", type: "(ids: string[]) => Promise<void> | void", description: "Linhas excluídas pela barra de seleção. Rejeitar devolve as linhas no lugar." },
+  ]}
+/>
+
+## Filtros e ordenação
+
+Rodam no cliente, sobre `rows`: busca → filtros → ordenação. Editar continua mexendo no array original pelo `id`, então a ordenação nunca reordena `rows`. Com ordenação ativa, a alça de arrastar some.
+
+- **Chips** de 26 abaixo da barra: em céu quando ativos. O chip de ordenação troca a direção ou remove; os de filtro abrem o construtor. A linha de chips aparece quando há filtro ou ordenação (ou sempre, com `filterable`).
+- **Construtor** (popover de 610): regras "coluna / operador / valor", todas juntas ("e"). Operadores por tipo: texto e relação sem opções — contém, não contém, é, está vazio; número e fórmula — =, &gt;, &lt;; select, status e relação com opções — é, não é (em select `multi`, lê "contém/não contém"); data — é, antes de, depois de; caixa — marcado, desmarcado. Regra sem valor ainda não filtra.
+- **Controlado ou não**: `filters` + `onFiltersChange` (ou só `defaultFilters`), `sorts` + `onSortsChange` (ou só `defaultSorts`).
+
+## Menu da coluna
+
+Clicar no cabeçalho abre o `@adinkra/dropdown-menu`: ordenar crescente/decrescente, filtrar (cria uma regra da coluna e abre o construtor), congelar/descongelar e esconder. Coluna escondida volta pela lista de "Colunas visíveis" (olho na barra superior, ou chip "N colunas ocultas" quando não há barra). Excluir coluna e mudar tipo não existem: as colunas vêm de quem usa.
+
+## Coluna congelada
+
+`frozen: true` gruda a coluna à esquerda ao rolar na horizontal, com borda de tinta à direita da última congelada. O gutter de seleção congela junto. Coluna congelada sempre tem largura explícita (`width`, a arrastada ou 144), porque o deslocamento de cada uma é a soma das anteriores.
+
+## Rodapé
+
+- **Nova linha**: só aparece com `onAddRow`. Antes a linha aparecia sempre e a própria tabela criava a linha vazia. Pra manter aquele comportamento, use o helper exportado: `onAddRow={() => onRowsChange([...rows, createEmptyRow(columns)])}`.
+- **Agregação**: a linha de 34 aparece quando alguma coluna tem `aggregate` (`"none" | "sum" | "avg" | "min" | "max" | "count"`). Cada célula abre o menu pra trocar. Valores em mono, em R$ quando a coluna é moeda, e em cima só das linhas visíveis (depois de busca e filtro). A coluna principal mostra a contagem de linhas.
+
+## Mobile
+
+Abaixo de 610 de largura **do container** (container query do Tailwind v4, `@container` + `@[610px]:`, não da janela), a grade vira lista de cartões. Heurística: título = coluna principal; valor à direita = primeira fórmula com `format`, senão o primeiro número; etiquetas = primeiro status + primeiro select; rodapé = primeira data + segundo select (ou primeira relação). `mobileCard: { title, value, badges, meta }` troca qualquer um por `column.id`. Cada campo do cartão edita ali mesmo, com os mesmos editores da célula (seletor, calendário, campo de texto/número, caixa). Tocar no título edita o título; abrir a linha é só pelo botão **Abrir**, sempre visível no cartão quando há `onOpenRow`.
 
 ## Controlado, sem estado próprio de dados
 
-`DataTable` não guarda `rows` sozinho — só o estado efêmero de qual célula está aberta pra edição. Quem usa decide onde as linhas moram (`useState`, uma store, uma query) e como persistir (`onRowsChange` recebe o array inteiro já atualizado). `DataTableDemo`, usado no preview acima, é só um `useState` local (`apps/docs/components/data-table-demo.tsx`) — não está ligado a nada real.
+`DataTable` não guarda `rows` sozinho. O estado interno é só de interface: célula em edição, seleção, larguras, colunas congeladas/escondidas, agregação escolhida e, sem as props controladas, filtros e ordenação. Quem usa decide onde as linhas moram e como persistir (`onRowsChange` recebe o array inteiro já atualizado). Com `DataTableViews` + `source`, quem guarda as linhas (em cache) é a visão, e a persistência vai pela `source`. `DataTableDemo`, usado no preview acima, liga cada aba a uma API de mentira em memória (`apps/docs/components/data-table-demo.tsx`).
 
 ## Props
 
@@ -60,33 +274,106 @@ Escopo fechado com o usuário antes de construir — ficou de fora da v1, por de
     {
       prop: "columns",
       type: "DataTableColumn[]",
-      description: "id, header, type (\"text\" | \"select\" | \"number\" | \"date\"), e as opções específicas do tipo (options/multi para select, currency para number).",
+      description: "id, header, type (\"text\" | \"select\" | \"number\" | \"date\" | \"status\" | \"relation\" | \"formula\" | \"checkbox\") e as opções do tipo — options/multi/selectStyle (select, status; options também em relation), currency (number), formula/format (formula, editável como sobrescrita), relation (relation: href/onClick no glifo, icon), dateStyle (date). Todo tipo é editável. Comuns a todos: width, frozen, primary, hidden, aggregate.",
     },
     {
       prop: "rows",
       type: "DataTableRow[]",
-      description: "Cada linha é um objeto com id + um valor por coluna (chave = column.id).",
+      description: "Cada linha é um objeto com id + um valor por coluna (chave = column.id). Pode ter campos que não são coluna (usados por fórmula/relação). Em coluna formula, row[column.id] guarda a sobrescrita manual (vazio = calculado).",
     },
     {
       prop: "onRowsChange",
       type: "(rows: DataTableRow[]) => void",
-      description: "Chamado com o array inteiro atualizado a cada edição de célula, nova linha ou remoção.",
+      description: "Chamado com o array inteiro atualizado a cada edição de célula, inserção pelo \"+\" do gutter, reordenação, edição em massa ou exclusão pela barra de seleção.",
     },
     {
-      prop: "...props",
-      type: "className",
-      description: "Só className passa direto pro container — a tabela em si tem estrutura fixa demais (thead/tbody/coluna de ação) pra aceitar spread de atributos nativos.",
+      prop: "columnLines",
+      type: "boolean",
+      default: "true",
+      description: "Linhas verticais finas entre colunas.",
+    },
+    {
+      prop: "onAddRow",
+      type: "() => void",
+      description: "Mostra a linha \"Nova linha\" (e o botão tracejado no mobile). Sem ela, a linha não aparece.",
+    },
+    {
+      prop: "onOpenRow",
+      type: "(row: DataTableRow) => void",
+      description: "Mostra o botão \"Abrir\" na coluna principal: no hover na grade, sempre visível no cartão do mobile. É o único jeito de abrir a linha; clicar no texto edita.",
+    },
+    {
+      prop: "views / activeView / onViewChange",
+      type: "DataTableView[] / string / (id: string) => void",
+      description: "Abas sobre ESTA tabela, na barra superior ({ id, label, icon? }). A troca é só avisada; o que muda é de quem usa. Pra dados diferentes por aba, use DataTableViews.",
+    },
+    {
+      prop: "loading",
+      type: "boolean",
+      default: "false",
+      description: "Linhas de skeleton na altura real (42) no lugar das linhas (cartões de skeleton no mobile).",
+    },
+    {
+      prop: "emptyMessage",
+      type: "ReactNode | null",
+      description: "Texto quando não há linha visível. Sem a prop: \"Nenhuma linha ainda.\" ou \"Nenhuma linha com esses filtros.\"; null desliga.",
+    },
+    {
+      prop: "notice",
+      type: "ReactNode",
+      description: "Slot entre os chips e a grade (o DataTableViews põe ali o Alert de erro).",
+    },
+    {
+      prop: "toolbar",
+      type: "ReactNode",
+      description: "Ações à direita da barra superior (ex.: botão \"Nova transação\").",
+    },
+    {
+      prop: "searchable",
+      type: "boolean",
+      default: "false",
+      description: "Botão de busca na barra superior; filtra as linhas por qualquer coluna.",
+    },
+    {
+      prop: "filterable",
+      type: "boolean",
+      default: "false",
+      description: "Mostra a linha de chips (com \"+ Filtro\") mesmo sem filtro nem ordenação ativos.",
+    },
+    {
+      prop: "filters / defaultFilters / onFiltersChange",
+      type: "DataTableFilter[] / DataTableFilter[] / (filters) => void",
+      description: "Regras { id, columnId, operator, value? }. Controlado com filters, não controlado com defaultFilters.",
+    },
+    {
+      prop: "sorts / defaultSorts / onSortsChange",
+      type: "DataTableSort[] / DataTableSort[] / (sorts) => void",
+      description: "Ordenação { columnId, direction: \"asc\" | \"desc\" }, na ordem de prioridade. Controlado ou não, como os filtros.",
+    },
+    {
+      prop: "mobileCard",
+      type: "{ title?, value?, badges?, meta? }",
+      description: "Quais column.id o cartão do mobile mostra. O que faltar cai na heurística (ver \"Mobile\").",
+    },
+    {
+      prop: "className",
+      type: "string",
+      description: "Vai no container externo (o que define o @container). A tabela em si tem estrutura fixa demais pra aceitar spread de atributos nativos.",
     },
   ]}
 />
 
+Também exportado: `createEmptyRow(columns)`, que monta uma linha vazia com o valor certo por tipo (e id novo).
+
 ## Acessibilidade
 
-- Célula de texto/número é um `<button>` que vira um `<input>` de verdade ao editar — funciona com Tab/Enter/Escape como qualquer campo de formulário nativo.
-- O dropdown de select fecha com `Escape` ou clicando fora, e cada opção marcada leva um `✓` (não só a cor, pra quem não distingue cor).
-- A célula de data é o próprio `DatePicker` do `@adinkra/date-picker` (Popover do Base UI) — mesmo comportamento de teclado/foco documentado na página dele.
-- O botão de excluir linha (`×`) tem `aria-label="Excluir linha"` — fica sempre visível, não só no hover/foco da linha (decisão de 16/09/2026, revertendo o comportamento anterior).
+- Célula de texto/número/fórmula (e relação sem opções) é um `<button>` que vira um `<input>` de verdade ao editar — funciona com Tab/Enter/Escape como qualquer campo de formulário nativo.
+- O glifo da relação é um alvo separado do texto (`<a>` ou `<button>` com `aria-label="Abrir …"`), então editar e abrir são dois passos de Tab. A sobrescrita de fórmula é anunciada como "valor manual".
+- O dropdown de select/status/relação fecha com `Escape` ou clicando fora, e cada opção marcada leva um `✓` (não só a cor, pra quem não distingue cor).
+- Menus de coluna, ordenação, colunas visíveis e agregação são o `@adinkra/dropdown-menu` (setas, Home/End, Esc). Filtros usam `<select>` nativo (`@adinkra/select`), com `aria-label` em coluna, operador e valor.
+- Visões são abas de verdade (`@adinkra/tabs`, `role="tab"`). Ferramentas ligadas anunciam `aria-pressed`.
+- Coluna de caixa e seleção de linha usam `@adinkra/checkbox` com `aria-label`. A lixeira da barra de seleção tem `aria-label="Excluir linhas selecionadas"`.
 
 ## Tokens usados
 
-`--ink` · `--card` · `--hairline` · `--destructive` · `--surface` · `--shadow-brutal` · cores do `@adinkra/badge`
+`--ink` · `--card` · `--surface` · `--hairline` · `--secondary` · `--primary` · `--destructive` · `--muted-foreground` · `--tag-*` · `--shadow-brutal` · cores do `@adinkra/badge`
