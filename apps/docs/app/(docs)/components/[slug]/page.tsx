@@ -386,7 +386,7 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
         <h1 className="-ml-[0.04em] font-display text-3xl font-medium text-heading">{frontmatter.title}</h1>
         <p className="text-muted-foreground">{frontmatter.description}</p>
       </header>
-      <div className="grid gap-8">
+      <div className="grid gap-6">
         <Localized pt={content} en={enContent} />
       </div>
       {prev || next ? (

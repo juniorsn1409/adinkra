@@ -15,8 +15,8 @@ import { cn } from "@adinkra/core";
  */
 const cardVariants = cva(
   [
-    "flex flex-col gap-6 rounded-card border-[length:var(--border-width)] border-ink",
-    "bg-card py-6 text-foreground shadow-brutal",
+    "flex flex-col gap-5 rounded-card border-[length:var(--border-width)] border-ink",
+    "bg-card py-5 text-foreground shadow-brutal",
     "transition-[transform,box-shadow] duration-150",
   ],
   {
@@ -52,7 +52,7 @@ export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDiv
   return (
     <div
       data-slot="card-header"
-      className={cn("grid auto-rows-min grid-cols-[1fr_auto] items-start gap-1.5 px-6", className)}
+      className={cn("grid auto-rows-min grid-cols-[1fr_auto] items-start gap-1.5 px-5", className)}
       {...props}
     />
   );
@@ -84,9 +84,9 @@ export function CardAction({ className, ...props }: React.HTMLAttributes<HTMLDiv
 }
 
 export function CardContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div data-slot="card-content" className={cn("px-6", className)} {...props} />;
+  return <div data-slot="card-content" className={cn("px-5", className)} {...props} />;
 }
 
 export function CardFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div data-slot="card-footer" className={cn("flex items-center gap-2 px-6", className)} {...props} />;
+  return <div data-slot="card-footer" className={cn("flex items-center gap-3 px-5", className)} {...props} />;
 }

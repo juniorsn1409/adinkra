@@ -45,7 +45,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             aria-invalid={error ? true : undefined}
             aria-describedby={describedByIds}
             className={cn(
-              "peer h-9 w-full cursor-pointer appearance-none rounded-control border-[length:var(--border-width)] bg-card py-0 pl-3 pr-9 text-sm text-foreground",
+              "peer h-[36px] w-full cursor-pointer appearance-none rounded-control border-[length:var(--border-width)] bg-card py-0 pl-3 pr-[36px] text-sm text-foreground",
               "shadow-brutal transition-[border-color,box-shadow] duration-150",
               // Mesmo anel dos botões (outline --ring com respiro de 2px). Trocar só a cor da
             // borda de tinta pra --ring (marinho, quase igual à tinta) e crescer a sombra
@@ -65,7 +65,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           <p id={errorId} className="flex items-center gap-1.5 font-display text-xs font-medium text-destructive">
             <span
               aria-hidden="true"
-              className="grid h-4 w-4 flex-none place-items-center rounded-full bg-destructive text-[0.6875rem] text-destructive-foreground"
+              className="grid h-[16px] w-[16px] flex-none place-items-center rounded-full bg-destructive text-xs text-destructive-foreground"
             >
               !
             </span>

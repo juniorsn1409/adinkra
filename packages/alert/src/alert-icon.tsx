@@ -20,7 +20,7 @@ import { cn } from "@adinkra/core";
  * @adinkra/toast.
  */
 const alertIconVariants = cva(
-  "inline-flex size-8 shrink-0 items-center justify-center rounded-control border-[length:var(--border-width)] border-ink",
+  "inline-flex size-[34px] shrink-0 items-center justify-center rounded-control border-[length:var(--border-width)] border-ink",
   {
     variants: {
       variant: {
@@ -44,7 +44,7 @@ const svgProps = {
   strokeLinecap: "round",
   strokeLinejoin: "round",
   "aria-hidden": true,
-  className: "size-4",
+  className: "size-[16px]",
 } as const;
 
 // Um formato por variante — nunca só a cor diferencia.

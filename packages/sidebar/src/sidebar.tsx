@@ -248,7 +248,7 @@ export function SidebarHeader({ className, ...props }: React.ComponentPropsWitho
   return (
     <div
       data-slot="sidebar-header"
-      className={cn("flex flex-col gap-2 border-b-[length:var(--border-width)] border-ink p-3", className)}
+      className={cn("flex flex-col gap-3 border-b-[length:var(--border-width)] border-ink p-4", className)}
       {...props}
     />
   );
@@ -258,14 +258,14 @@ export function SidebarContent({ className, ...props }: React.ComponentPropsWith
   return (
     <div
       data-slot="sidebar-content"
-      className={cn("flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overflow-x-hidden p-3", className)}
+      className={cn("flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overflow-x-hidden p-4", className)}
       {...props}
     />
   );
 }
 
 export function SidebarFooter({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
-  return <div data-slot="sidebar-footer" className={cn("flex flex-col gap-2 p-3", className)} {...props} />;
+  return <div data-slot="sidebar-footer" className={cn("flex flex-col gap-3 p-4", className)} {...props} />;
 }
 
 export function SidebarGroup({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
@@ -273,12 +273,12 @@ export function SidebarGroup({ className, ...props }: React.ComponentPropsWithou
     <div
       data-slot="sidebar-group"
       className={cn(
-        "flex flex-col gap-1",
-        // -mx-3/px-3 cancela e repõe o p-3 do SidebarContent — sem isso a
+        "flex flex-col gap-2",
+        // -mx-4/px-4 cancela e repõe o p-4 do SidebarContent — sem isso a
         // borda ficaria inset (só a largura do conteúdo), não de ponta a
         // ponta da sidebar. Aplicado sempre (não só :not(:first-child)) pra
         // o primeiro grupo não ficar desalinhado dos outros.
-        "-mx-3 px-3",
+        "-mx-4 px-4",
         // Separação mais forte entre um grupo e o seguinte do que só o
         // rótulo pequeno dava: uma linha grossa (mesma espessura/cor do
         // border-b do SidebarHeader) por cima de cada grupo, menos o
@@ -329,7 +329,7 @@ export function SidebarMenuBadge({ className, ...props }: React.ComponentPropsWi
       data-slot="sidebar-menu-badge"
       className={cn(
         "pointer-events-none absolute right-2 top-1/2 flex h-5 min-w-5 -translate-y-1/2 select-none items-center justify-center",
-        "rounded-control px-1 font-mono text-[10px] font-medium text-muted-foreground",
+        "rounded-control px-1 font-mono text-xs font-medium text-muted-foreground",
         // Some junto com o rótulo de texto quando a sidebar recolhe a ícones
         // — não sobra espaço pra badge numa faixa de só ícone.
         "group-data-[state=collapsed]/sidebar:hidden",

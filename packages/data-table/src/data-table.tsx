@@ -75,7 +75,7 @@ function TagGlyphIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function HashGlyph() {
   return (
-    <span aria-hidden="true" className="flex size-3.5 items-center justify-center font-mono text-[11px] font-bold leading-none">
+    <span aria-hidden="true" className="flex size-3.5 items-center justify-center font-mono text-xs font-bold leading-none">
       #
     </span>
   );

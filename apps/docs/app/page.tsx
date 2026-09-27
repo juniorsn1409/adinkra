@@ -73,7 +73,7 @@ export default function HomePage() {
               resto (sobre, destaques, botão) na de baixo. Cada metade
               encosta no centro (justify-end / justify-start, 2rem de
               respiro da linha) em vez de flutuar no meio da própria metade. */}
-          <div className="pointer-events-none flex flex-col items-center justify-end gap-6 pb-8 text-center">
+          <div className="pointer-events-none flex flex-col items-center justify-end gap-6 pb-6 text-center">
             {/* pl-[Nem] = o mesmo N do tracking: o espaçamento também entra depois
                 da última letra e, sem essa compensação, o texto centralizado
                 parece deslocado pra esquerda (alinhamento óptico). */}
@@ -87,7 +87,7 @@ export default function HomePage() {
               <T k="home.description" />
             </p>
           </div>
-          <div className="pointer-events-none flex flex-col items-center justify-start gap-6 pt-8 text-center">
+          <div className="pointer-events-none flex flex-col items-center justify-start gap-6 pt-6 text-center">
             <p className="max-w-[56ch] text-base">
               <T k="home.about" />
             </p>

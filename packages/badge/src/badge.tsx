@@ -22,7 +22,7 @@ import { cn } from "@adinkra/core";
  * do Toggle e o submenu aberto da Sidebar. `accent` continua disponível.
  */
 const badgeVariants = cva(
-  "inline-flex items-center rounded-control border-[length:var(--border-width)] border-ink py-0.5 pl-[calc(0.5rem+0.14em)] pr-2 font-display text-[0.6875rem] font-medium uppercase tracking-[0.14em]",
+  "inline-flex items-center rounded-control border-[length:var(--border-width)] border-ink py-0.5 pl-[calc(0.5rem+0.14em)] pr-2 font-display text-xs font-medium uppercase tracking-[0.14em]",
   {
     variants: {
       variant: {

@@ -33,9 +33,9 @@ export function HomeNav() {
   return (
     <nav
       aria-label={t("nav.mainLabel")}
-      className="flex items-center gap-x-5 self-start 2xl:mt-15 2xl:justify-end 2xl:gap-x-8"
+      className="flex items-center gap-x-5 self-start 2xl:mt-15 2xl:justify-end 2xl:gap-x-6"
     >
-      <div className="hidden items-center gap-x-5 sm:flex 2xl:gap-x-8">
+      <div className="hidden items-center gap-x-5 sm:flex 2xl:gap-x-6">
         {links.map((link) => (
           <AdinkraLink key={link.href} href={link.href} className="text-sm">
             <T k={link.label} />

@@ -23,7 +23,7 @@ export function DocsShell({ children }: { children: ReactNode }) {
           pequena): quem abre a gaveta é o Toggle do PageTopbar de cada
           página, que já entende mobile (useSidebar → openMobile).
         */}
-        <main className="min-w-0 flex-1 px-4 py-6 sm:px-8 sm:py-10">{children}</main>
+        <main className="min-w-0 flex-1 px-4 py-5 sm:px-6 sm:py-10">{children}</main>
       </div>
     </SidebarProvider>
   );
