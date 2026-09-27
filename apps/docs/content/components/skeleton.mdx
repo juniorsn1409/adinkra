@@ -4,11 +4,11 @@ description: Um placeholder de carregamento — o formato do que está vindo, an
 ---
 
 <Preview>
-  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-    <Skeleton className="h-10 w-10 rounded-full" />
+  <div style={{ display: "flex", alignItems: "center", gap: "13px" }}>
+    <Skeleton className="h-[42px] w-[42px] rounded-full" />
     <div style={{ display: "grid", gap: "0.5rem" }}>
-      <Skeleton className="h-4 w-40" />
-      <Skeleton className="h-3 w-24" />
+      <Skeleton className="h-4 w-[144px]" />
+      <Skeleton className="h-3 w-[89px]" />
     </div>
   </div>
 </Preview>
@@ -22,18 +22,18 @@ bun add @adinkra/skeleton
 ```tsx
 import { Skeleton } from "@adinkra/skeleton";
 
-<Skeleton className="h-4 w-40" />;
+<Skeleton className="h-4 w-[144px]" />;
 ```
 
-Não tem variante: forma e tamanho vêm inteiros de `className`, igual à referência do shadcn/ui — um retângulo vira `h-4 w-40`, um avatar vira `h-10 w-10 rounded-full`.
+Não tem variante: forma e tamanho vêm inteiros de `className`, igual à referência do shadcn/ui — um retângulo vira `h-4 w-[144px]`, um avatar vira `h-[42px] w-[42px] rounded-full`.
 
 ## Um cartão de exemplo
 
 <Preview>
-  <div style={{ display: "grid", gap: "0.75rem", width: "16rem" }}>
-    <Skeleton className="h-32 w-full" />
-    <Skeleton className="h-4 w-3/4" />
-    <Skeleton className="h-4 w-1/2" />
+  <div style={{ display: "grid", gap: "13px", width: "233px" }}>
+    <Skeleton className="h-[144px] w-full" />
+    <Skeleton className="h-4 w-[61.8%]" />
+    <Skeleton className="h-4 w-[38.2%]" />
   </div>
 </Preview>
 

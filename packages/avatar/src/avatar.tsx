@@ -29,9 +29,9 @@ const avatarVariants = cva(
   {
     variants: {
       size: {
-        sm: "size-[28px] text-xs",
-        md: "size-[36px] text-xs",
-        lg: "size-12 text-base",
+        sm: "size-[34px] text-sm",
+        md: "size-[42px] text-base",
+        lg: "size-[55px] text-lg",
       },
     },
     defaultVariants: { size: "md" },
@@ -128,7 +128,7 @@ export function AvatarGroup({ className, ...props }: React.HTMLAttributes<HTMLDi
   return (
     <div
       data-slot="avatar-group"
-      className={cn("flex items-center -space-x-2 [&>[data-slot=avatar]]:ring-2 [&>[data-slot=avatar]]:ring-background", className)}
+      className={cn("flex items-center -space-x-3 [&>[data-slot=avatar]]:ring-2 [&>[data-slot=avatar]]:ring-background", className)}
       {...props}
     />
   );

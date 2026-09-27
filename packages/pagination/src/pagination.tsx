@@ -24,7 +24,7 @@ import { cn } from "@adinkra/core";
 
 function ChevronLeftIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true" {...props}>
       <path d="M10 3.5 5.5 8 10 12.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -32,7 +32,7 @@ function ChevronLeftIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function ChevronRightIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true" {...props}>
       <path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -62,7 +62,7 @@ export function Pagination({ className, ...props }: React.ComponentPropsWithoutR
 
 export function PaginationContent({ className, ...props }: React.ComponentPropsWithoutRef<"ul">) {
   return (
-    <ul data-slot="pagination-content" className={cn("flex flex-row flex-wrap items-center gap-1.5", className)} {...props} />
+    <ul data-slot="pagination-content" className={cn("flex flex-row flex-wrap items-center gap-2", className)} {...props} />
   );
 }
 
@@ -72,13 +72,13 @@ export function PaginationItem(props: React.ComponentPropsWithoutRef<"li">) {
 
 const paginationLinkVariants = cva(
   [
-    "inline-flex items-center justify-center gap-1.5 rounded-control",
+    "inline-flex items-center justify-center gap-3 rounded-control",
     "border-[length:var(--border-width)] border-transparent",
     "font-display text-sm font-medium text-foreground",
     "transition-[transform,box-shadow,background-color,border-color] duration-150",
-    "hover:border-ink hover:bg-surface hover:shadow-brutal hover:-translate-x-px hover:-translate-y-px",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-    "aria-disabled:pointer-events-none aria-disabled:opacity-45",
+    "hover:border-ink hover:bg-surface hover:shadow-brutal-hover hover:-translate-x-[2px] hover:-translate-y-[2px]",
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
+    "aria-disabled:pointer-events-none aria-disabled:opacity-[0.382]",
   ],
   {
     variants: {
@@ -90,8 +90,8 @@ const paginationLinkVariants = cva(
         false: "",
       },
       size: {
-        icon: "h-[36px] w-[36px]",
-        default: "h-[36px] px-3.5",
+        icon: "size-[34px]",
+        default: "h-[34px] px-4",
       },
     },
     defaultVariants: { isActive: false, size: "icon" },
@@ -116,7 +116,7 @@ export function PaginationLink({ className, isActive, size, ...props }: Paginati
 
 export function PaginationPrevious({ className, children, ...props }: PaginationLinkProps) {
   return (
-    <PaginationLink aria-label="Página anterior" size="default" className={cn("pl-2.5", className)} {...props}>
+    <PaginationLink aria-label="Página anterior" size="default" className={cn(className)} {...props}>
       <ChevronLeftIcon />
       <span>{children ?? "Anterior"}</span>
     </PaginationLink>
@@ -125,7 +125,7 @@ export function PaginationPrevious({ className, children, ...props }: Pagination
 
 export function PaginationNext({ className, children, ...props }: PaginationLinkProps) {
   return (
-    <PaginationLink aria-label="Próxima página" size="default" className={cn("pr-2.5", className)} {...props}>
+    <PaginationLink aria-label="Próxima página" size="default" className={cn(className)} {...props}>
       <span>{children ?? "Próxima"}</span>
       <ChevronRightIcon />
     </PaginationLink>
@@ -138,7 +138,7 @@ export function PaginationEllipsis({ className, ...props }: React.ComponentProps
       data-slot="pagination-ellipsis"
       role="presentation"
       aria-hidden="true"
-      className={cn("flex size-[36px] items-center justify-center text-muted-foreground", className)}
+      className={cn("flex size-[34px] items-center justify-center text-muted-foreground", className)}
       {...props}
     >
       <DotsIcon />

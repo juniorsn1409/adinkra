@@ -95,7 +95,7 @@ export function TableHead({ className, ...props }: React.HTMLAttributes<HTMLTabl
     <th
       data-slot="table-head"
       className={cn(
-        "h-11 whitespace-nowrap px-4 text-left align-middle font-display text-xs font-semibold uppercase tracking-wide text-heading",
+        "h-6 whitespace-nowrap px-4 text-left align-middle font-mono text-xs font-semibold uppercase tracking-wide text-heading",
         className,
       )}
       {...props}
@@ -107,7 +107,7 @@ export function TableCell({ className, ...props }: React.HTMLAttributes<HTMLTabl
   return (
     <td
       data-slot="table-cell"
-      className={cn("whitespace-nowrap px-4 py-3 align-middle text-foreground", className)}
+      className={cn("h-[42px] whitespace-nowrap px-4 align-middle text-foreground", className)}
       {...props}
     />
   );

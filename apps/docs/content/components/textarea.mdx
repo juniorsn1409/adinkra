@@ -4,7 +4,7 @@ description: Campo de texto de várias linhas — mesma gramática do Input, com
 ---
 
 <Preview>
-  <div style={{ width: "100%", maxWidth: "24rem" }}>
+  <div style={{ width: "100%", maxWidth: "377px" }}>
     <Field label="Mensagem" description="Até 500 caracteres.">
       <Textarea placeholder="Como podemos ajudar?" />
     </Field>
@@ -33,7 +33,7 @@ O Textarea é só o controle: não traz rótulo, ajuda nem erro próprios (difer
 
 ## Estados
 
-Igual ao Input: borda de tinta + sombra dura sempre, sem o gesto de “pressionar” (digitar não é um clique). O foco usa o mesmo anel de 2px dos botões. A altura mínima é 80px (cerca de 3 linhas) e o campo estica só na vertical, pela alça do canto.
+Igual ao Input: borda de tinta + sombra dura sempre, sem o gesto de “pressionar” (digitar não é um clique). O foco usa o mesmo anel de 2px dos botões. A altura mínima é 89px (cerca de 3 linhas) e o campo estica só na vertical, pela alça do canto.
 
 <StatesGrid>
   <State label="padrão">
@@ -58,7 +58,7 @@ Igual ao Input: borda de tinta + sombra dura sempre, sem o gesto de “pressiona
       prop: "rows",
       type: "number",
       default: "3",
-      description: "Linhas visíveis. A altura mínima de 80px vale de qualquer jeito.",
+      description: "Linhas visíveis. A altura mínima de 89px vale de qualquer jeito.",
     },
     {
       prop: "aria-invalid",

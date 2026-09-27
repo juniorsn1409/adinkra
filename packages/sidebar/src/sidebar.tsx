@@ -24,8 +24,8 @@ import { useIsMobile } from "./use-mobile";
 export const SIDEBAR_COOKIE_NAME = "adinkra_sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 dias
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
-const SIDEBAR_WIDTH = "16rem";
-const SIDEBAR_WIDTH_ICON = "3.25rem";
+const SIDEBAR_WIDTH = "233px"; // φ: Fibonacci 233
+const SIDEBAR_WIDTH_ICON = "55px"; // φ: Fibonacci 55
 
 type SidebarState = "expanded" | "collapsed";
 
@@ -191,7 +191,7 @@ export function Sidebar({ collapsible = "icon", className, children, ...props }:
           tabIndex={openMobile ? 0 : -1}
           onClick={() => setOpenMobile(false)}
           className={cn(
-            "fixed inset-0 z-40 bg-ink/40 transition-opacity duration-200 ease-[var(--ease-out)]",
+            "fixed inset-0 z-40 bg-ink/[0.382] transition-opacity duration-200 ease-[var(--ease-out)]",
             openMobile ? "opacity-100" : "pointer-events-none opacity-0",
           )}
         />
@@ -248,7 +248,16 @@ export function SidebarHeader({ className, ...props }: React.ComponentPropsWitho
   return (
     <div
       data-slot="sidebar-header"
-      className={cn("flex flex-col gap-3 border-b-[length:var(--border-width)] border-ink p-4", className)}
+      className={cn(
+        // min 55 (Fibonacci); py-3 (8) + controle de 34 + borda 2 cabe folgado.
+        // shrink-0: dentro do SidebarContent (coluna flex com rolagem) o header
+        // encolhia em vez de rolar quando o menu passava da altura, e esmagava
+        // o que estivesse nele (o ArcLogo do docs).
+        "flex min-h-[55px] shrink-0 flex-col justify-center gap-3 border-b-[length:var(--border-width)] border-ink px-4 py-3",
+        // Recolhida (55 − borda 2 = 53): padding 8 dos dois lados deixa 37, cabe o gatilho de 34.
+        "group-data-[state=collapsed]/sidebar:items-center group-data-[state=collapsed]/sidebar:px-3",
+        className,
+      )}
       {...props}
     />
   );
@@ -258,14 +267,14 @@ export function SidebarContent({ className, ...props }: React.ComponentPropsWith
   return (
     <div
       data-slot="sidebar-content"
-      className={cn("flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overflow-x-hidden p-4", className)}
+      className={cn("flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overflow-x-hidden p-4 group-data-[state=collapsed]/sidebar:px-3", className)}
       {...props}
     />
   );
 }
 
 export function SidebarFooter({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
-  return <div data-slot="sidebar-footer" className={cn("flex flex-col gap-3 p-4", className)} {...props} />;
+  return <div data-slot="sidebar-footer" className={cn("flex min-h-[55px] shrink-0 flex-col justify-center gap-3 px-4 py-3 group-data-[state=collapsed]/sidebar:items-center group-data-[state=collapsed]/sidebar:px-3", className)} {...props} />;
 }
 
 export function SidebarGroup({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
@@ -273,12 +282,12 @@ export function SidebarGroup({ className, ...props }: React.ComponentPropsWithou
     <div
       data-slot="sidebar-group"
       className={cn(
-        "flex flex-col gap-2",
+        "flex shrink-0 flex-col gap-2",
         // -mx-4/px-4 cancela e repõe o p-4 do SidebarContent — sem isso a
         // borda ficaria inset (só a largura do conteúdo), não de ponta a
         // ponta da sidebar. Aplicado sempre (não só :not(:first-child)) pra
         // o primeiro grupo não ficar desalinhado dos outros.
-        "-mx-4 px-4",
+        "-mx-4 px-4 group-data-[state=collapsed]/sidebar:-mx-3 group-data-[state=collapsed]/sidebar:px-3",
         // Separação mais forte entre um grupo e o seguinte do que só o
         // rótulo pequeno dava: uma linha grossa (mesma espessura/cor do
         // border-b do SidebarHeader) por cima de cada grupo, menos o
@@ -298,7 +307,7 @@ export function SidebarGroupLabel({ className, ...props }: React.ComponentPropsW
     <div
       data-slot="sidebar-group-label"
       className={cn(
-        "select-none whitespace-nowrap px-2 font-display text-xs font-medium text-muted-foreground",
+        "select-none whitespace-nowrap px-3 py-2 font-mono text-xs font-medium text-muted-foreground",
         "transition-opacity duration-150",
         "group-data-[state=collapsed]/sidebar:pointer-events-none group-data-[state=collapsed]/sidebar:opacity-0",
         className,
@@ -309,7 +318,7 @@ export function SidebarGroupLabel({ className, ...props }: React.ComponentPropsW
 }
 
 export function SidebarGroupContent({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
-  return <div data-slot="sidebar-group-content" className={cn("grid gap-0.5", className)} {...props} />;
+  return <div data-slot="sidebar-group-content" className={cn("grid gap-1", className)} {...props} />;
 }
 
 export function SidebarMenu({ className, ...props }: React.ComponentPropsWithoutRef<"ul">) {
@@ -373,7 +382,7 @@ SidebarMenuAction.displayName = "SidebarMenuAction";
 // tem símbolo escolhido. `bg-current` herda a cor do texto ao redor
 // (`text-foreground`/`text-heading`, conforme o estado), sem token novo.
 function DefaultMenuIcon() {
-  return <span aria-hidden className="block size-2.5 rounded-[2px] bg-current" />;
+  return <span aria-hidden className="block size-3 rounded-[2px] bg-current" />;
 }
 
 export interface SidebarMenuButtonProps extends React.ComponentPropsWithoutRef<"button"> {
@@ -396,7 +405,9 @@ export const SidebarMenuButton = React.forwardRef<HTMLButtonElement, SidebarMenu
       <span
         data-active={isActive || undefined}
         className={cn(
-          "flex w-full items-center gap-2.5 overflow-hidden rounded-control px-2 py-1.5",
+          "flex h-[34px] w-full items-center gap-3 overflow-hidden rounded-control px-3",
+          // Recolhida: só o ícone, centrado no alvo de 34.
+          "group-data-[state=collapsed]/sidebar:justify-center group-data-[state=collapsed]/sidebar:gap-0 group-data-[state=collapsed]/sidebar:px-0",
           "font-display text-sm text-foreground",
           "hover:bg-card",
           // O item ativo ganha um contorno de tinta (não borda: outline não
@@ -448,13 +459,13 @@ export function SidebarTrigger({ className, ...props }: React.ComponentPropsWith
       className={cn(
         // Tratamento "ghost" de propósito (seção 4, DECISOES.md) — controle
         // de utilidade, não uma ação: sem borda nem sombra dura.
-        "grid size-7 flex-none place-items-center rounded-control text-muted-foreground",
+        "grid size-[34px] flex-none place-items-center rounded-control text-muted-foreground",
         "hover:bg-card hover:text-foreground",
         className,
       )}
       {...props}
     >
-      <svg viewBox="0 0 16 16" width="15" height="15" fill="none" aria-hidden="true">
+      <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true">
         <rect x="1.5" y="2.5" width="13" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
         <line x1="6" y1="2.5" x2="6" y2="13.5" stroke="currentColor" strokeWidth="1.3" />
       </svg>
@@ -525,7 +536,7 @@ export function SidebarMenuCollapsibleTrigger({
   return (
     <summary
       className={cn(
-        "flex w-full cursor-pointer list-none items-center gap-2.5 overflow-hidden rounded-control px-2 py-1.5",
+        "flex h-[34px] w-full cursor-pointer list-none items-center gap-3 overflow-hidden rounded-control px-3",
         "font-display text-sm text-foreground [&::-webkit-details-marker]:hidden",
         "transition-colors duration-150",
         "hover:bg-card",
@@ -533,7 +544,7 @@ export function SidebarMenuCollapsibleTrigger({
         // do Toggle — trocado junto na mesma leva, pedido do usuário).
         "group-open/collapsible:bg-primary group-open/collapsible:font-medium group-open/collapsible:text-primary-foreground",
         "group-open/collapsible:hover:bg-primary",
-        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
         className,
       )}
       {...props}
@@ -559,7 +570,8 @@ export function SidebarMenuSub({ className, ...props }: React.ComponentPropsWith
     <ul
       data-slot="sidebar-menu-sub"
       className={cn(
-        "ml-3.5 grid gap-0.5 border-l-[length:var(--border-width)] border-hairline py-0.5 pl-3",
+        // Recuo 21 (Fibonacci) e fio de 1px à esquerda.
+        "ml-5 grid gap-1 border-l border-hairline py-1 pl-2",
         "group-data-[state=collapsed]/sidebar:hidden",
         className,
       )}
@@ -583,7 +595,7 @@ export const SidebarMenuSubButton = React.forwardRef<HTMLButtonElement, SidebarM
       <span
         data-active={isActive || undefined}
         className={cn(
-          "flex w-full items-center overflow-hidden rounded-control px-2 py-1",
+          "flex h-[26px] w-full items-center overflow-hidden rounded-control px-3",
           "font-display text-sm text-muted-foreground",
           "hover:bg-card hover:text-foreground",
           "data-[active]:bg-card data-[active]:font-medium data-[active]:text-heading",

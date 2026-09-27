@@ -11,7 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@adinkra/popover";
 // Mesmo traço do resto do sistema — não lucide-react.
 function CalendarIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 16 16" width="15" height="15" fill="none" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true" {...props}>
       <rect x="1.5" y="2.5" width="13" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
       <line x1="1.5" y1="6" x2="14.5" y2="6" stroke="currentColor" strokeWidth="1.3" />
       <line x1="4.5" y1="1" x2="4.5" y2="3.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
@@ -66,7 +66,7 @@ export function DateRangePicker({ value, onChange, placeholder = "Escolher perí
             type="button"
             className={cn(
               buttonVariants({ variant: "outline" }),
-              "w-auto min-w-72 justify-start gap-2 whitespace-nowrap font-normal",
+              "w-auto min-w-[233px] justify-start gap-3 whitespace-nowrap px-4 font-normal",
               !text && "text-muted-foreground",
               className,
             )}
@@ -85,7 +85,7 @@ export function DateRangePicker({ value, onChange, placeholder = "Escolher perí
   if (!label) return trigger;
 
   return (
-    <div className="grid gap-1.5">
+    <div className="grid gap-3">
       <label htmlFor={triggerId} className="font-display text-sm font-medium text-heading">
         {label}
       </label>

@@ -31,7 +31,7 @@ export function ArcLogoDemo() {
   const [replayCount, setReplayCount] = React.useState(0);
 
   return (
-    <div className="flex w-full flex-col items-center gap-8 lg:flex-row lg:items-center lg:justify-center">
+    <div className="flex w-full flex-col items-center gap-6 lg:flex-row lg:items-center lg:justify-center">
       {/* Selo centralizado no espaço à esquerda (pedido do usuário —
           "deixa o arclogo centralizado no meio a esquerda"), não mais
           colado ao lado dos inputs. */}
@@ -55,7 +55,7 @@ export function ArcLogoDemo() {
       {/* 2 colunas (pedido do usuário — "faz duas colunas na direita com
           os inputs"), em vez de uma coluna só descendo — muitos campos
           acumulados nas últimas rodadas deixaram a lista comprida demais. */}
-      <div className="grid w-full max-w-xl grid-cols-2 gap-3">
+      <div className="grid w-full max-w-[610px] grid-cols-2 gap-3">
         <Input label={t("demo.arc.text")} value={text} onChange={(event) => setText(event.target.value)} />
         {/* Separado do "Texto" (pedido do usuário — "na customizacao pode
             ser palavra diferentes") — antes o nome no meio do ano sempre
@@ -129,25 +129,25 @@ export function ArcLogoDemo() {
         {/* Switches agrupados juntos (pedido do usuário), não espalhados
             entre os inputs numéricos — ocupam as 2 colunas (`col-span-2`). */}
         <div className="col-span-2 grid grid-cols-2 gap-2 pt-1">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             <Switch id="arc-logo-auto-arc" checked={autoArc} onCheckedChange={setAutoArc} />
             <label htmlFor="arc-logo-auto-arc" className="font-display text-sm text-heading">
               {t("demo.arc.autoRadius")}
             </label>
           </div>
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             <Switch id="arc-logo-parallax" checked={parallax} onCheckedChange={setParallax} />
             <label htmlFor="arc-logo-parallax" className="font-display text-sm text-heading">
               Parallax
             </label>
           </div>
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             <Switch id="arc-logo-filled" checked={filled} onCheckedChange={setFilled} />
             <label htmlFor="arc-logo-filled" className="font-display text-sm text-heading">
               {t("demo.arc.filled")}
             </label>
           </div>
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             <Switch id="arc-logo-show-rays" checked={showRays} onCheckedChange={setShowRays} />
             <label htmlFor="arc-logo-show-rays" className="font-display text-sm text-heading">
               {t("demo.arc.showRays")}

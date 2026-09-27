@@ -15,6 +15,9 @@ import { cn } from "@adinkra/core";
  * interativa, então a regra "borda+sombra+três estados" (regra 9, DECISOES.md)
  * não se aplica, e uma sombra de tinta sobre fundo de tinta nem apareceria.
  * A inversão é o que separa a dica de um Popover (painel claro, com borda).
+ * Medidas φ (27/09/2026): text-sm (13/21), padding 5/8, raio 5, máx. 233,
+ * seta de 8 de base × 5 de altura e afastamento de 5 — a seta preenche
+ * exatamente o afastamento, encostando a ponta no gatilho.
  *
  * Movimento (frequência: dezenas de vezes por dia, então quase imperceptível):
  * fade + escala 0.97→1 em 125ms, saída em 100ms, `--ease-out`. A regra de
@@ -79,12 +82,26 @@ function TooltipTrigger({ ref, ...props }: React.ComponentProps<typeof TooltipPr
   );
 }
 
+// Seta: triângulo de 8 (base) × 5 (altura) recortado com `clip-path` sobre
+// `bg-ink`, apontando pro gatilho. O Base UI posiciona no eixo cruzado (style
+// inline) e marca o lado em `data-side`; aqui só gruda na aresta certa.
+const arrowClassName = cn(
+  "bg-ink",
+  "data-[side=top]:top-full data-[side=top]:h-[5px] data-[side=top]:w-[8px] data-[side=top]:[clip-path:polygon(0_0,100%_0,50%_100%)]",
+  "data-[side=bottom]:bottom-full data-[side=bottom]:h-[5px] data-[side=bottom]:w-[8px] data-[side=bottom]:[clip-path:polygon(50%_0,100%_100%,0_100%)]",
+  "data-[side=left]:left-full data-[side=left]:h-[8px] data-[side=left]:w-[5px] data-[side=left]:[clip-path:polygon(0_0,100%_50%,0_100%)]",
+  "data-[side=inline-start]:left-full data-[side=inline-start]:h-[8px] data-[side=inline-start]:w-[5px] data-[side=inline-start]:[clip-path:polygon(0_0,100%_50%,0_100%)]",
+  "data-[side=right]:right-full data-[side=right]:h-[8px] data-[side=right]:w-[5px] data-[side=right]:[clip-path:polygon(100%_0,100%_100%,0_50%)]",
+  "data-[side=inline-end]:right-full data-[side=inline-end]:h-[8px] data-[side=inline-end]:w-[5px] data-[side=inline-end]:[clip-path:polygon(100%_0,100%_100%,0_50%)]",
+);
+
 function TooltipContent({
   className,
+  children,
   align = "center",
   alignOffset = 0,
   side = "top",
-  sideOffset = 6,
+  sideOffset = 5,
   container,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Popup> &
@@ -105,7 +122,7 @@ function TooltipContent({
         <TooltipPrimitive.Popup
           data-slot="tooltip-content"
           className={cn(
-            "max-w-xs rounded-control bg-ink px-2.5 py-1.5 font-sans text-xs leading-snug text-background",
+            "max-w-[233px] rounded-control bg-ink px-3 py-2 font-sans text-sm text-background",
             "origin-(--transform-origin) transition-[opacity,scale] duration-[125ms] ease-[var(--ease-out)]",
             "data-starting-style:scale-[0.97] data-starting-style:opacity-0",
             "data-ending-style:scale-[0.97] data-ending-style:opacity-0 data-ending-style:duration-100",
@@ -114,7 +131,10 @@ function TooltipContent({
             className,
           )}
           {...props}
-        />
+        >
+          {children}
+          <TooltipPrimitive.Arrow data-slot="tooltip-arrow" className={arrowClassName} />
+        </TooltipPrimitive.Popup>
       </TooltipPrimitive.Positioner>
     </TooltipPrimitive.Portal>
   );

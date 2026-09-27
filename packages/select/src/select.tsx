@@ -15,7 +15,7 @@ export interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectE
 
 function ChevronDownIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true" {...props}>
       <path d="M4 6.5 8 10.5 12 6.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -32,7 +32,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       [error ? errorId : help ? helpId : null, describedBy].filter(Boolean).join(" ") || undefined;
 
     return (
-      <div className="grid gap-1.5">
+      <div className="grid gap-3">
         {label ? (
           <label htmlFor={selectId} className="font-display text-sm font-medium text-heading">
             {label}
@@ -45,34 +45,35 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             aria-invalid={error ? true : undefined}
             aria-describedby={describedByIds}
             className={cn(
-              "peer h-[36px] w-full cursor-pointer appearance-none rounded-control border-[length:var(--border-width)] bg-card py-0 pl-3 pr-[36px] text-sm text-foreground",
+              // pr-[34px]: espaço pro chevron (16) + folga do gatilho igual ao input (42/13).
+              "peer h-[42px] w-full cursor-pointer appearance-none rounded-control border-[length:var(--border-width)] bg-card py-0 pl-4 pr-[34px] text-base text-foreground",
               "shadow-brutal transition-[border-color,box-shadow] duration-150",
-              // Mesmo anel dos botões (outline --ring com respiro de 2px). Trocar só a cor da
+              // Mesmo anel dos botões (outline --ring com respiro de 3px). Trocar só a cor da
             // borda de tinta pra --ring (marinho, quase igual à tinta) e crescer a sombra
             // não passava de 3:1 entre foco e repouso — ficava quase invisível.
-            "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-              "disabled:pointer-events-none disabled:opacity-45 disabled:shadow-none",
-              error ? "border-destructive shadow-[2px_2px_0_0_var(--destructive)]" : "border-ink",
+            "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
+              "disabled:pointer-events-none disabled:opacity-[0.382] disabled:shadow-none",
+              error ? "border-destructive shadow-[3px_3px_0_0_var(--destructive)]" : "border-ink",
               className,
             )}
             {...props}
           >
             {children}
           </select>
-          <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-foreground peer-disabled:opacity-45" />
+          <ChevronDownIcon className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-foreground peer-disabled:opacity-[0.382]" />
         </div>
         {error ? (
-          <p id={errorId} className="flex items-center gap-1.5 font-display text-xs font-medium text-destructive">
+          <p id={errorId} className="flex items-center gap-2 font-display text-sm font-medium text-destructive">
             <span
               aria-hidden="true"
-              className="grid h-[16px] w-[16px] flex-none place-items-center rounded-full bg-destructive text-xs text-destructive-foreground"
+              className="grid h-[13px] w-[13px] flex-none place-items-center rounded-full bg-destructive text-xs text-destructive-foreground"
             >
               !
             </span>
             {error}
           </p>
         ) : help ? (
-          <p id={helpId} className="font-display text-xs text-muted-foreground">
+          <p id={helpId} className="font-display text-sm text-muted-foreground">
             {help}
           </p>
         ) : null}

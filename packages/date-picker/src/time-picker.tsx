@@ -41,8 +41,10 @@ function TimeColumn({
     selectedRef.current?.scrollIntoView({ block: "center" });
   }, []);
 
+  // Coluna de 55 (`w-7`), itens de 34 (`h-6`) com gap de 5 e altura visível
+  // de 233 — mesma célula/gap do Calendar ao lado.
   return (
-    <div role="listbox" aria-label={label} className={cn("flex max-h-56 w-14 flex-col overflow-y-auto", className)}>
+    <div role="listbox" aria-label={label} className={cn("flex max-h-[233px] w-7 flex-col gap-2 overflow-y-auto p-2", className)}>
       {values.map((value) => {
         const isSelected = value === selected;
         return (
@@ -54,7 +56,7 @@ function TimeColumn({
             aria-selected={isSelected}
             onClick={() => onSelect(value)}
             className={cn(
-              "shrink-0 px-3 py-1.5 text-center font-mono text-sm text-foreground transition-colors",
+              "flex h-6 shrink-0 items-center justify-center rounded-[3px] font-mono text-sm text-foreground transition-colors",
               "hover:bg-card",
               "focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",
               isSelected && "bg-secondary text-secondary-foreground hover:bg-secondary",
@@ -73,7 +75,7 @@ export interface TimePickerProps {
   value?: string;
   onChange?: (time: string) => void;
   className?: string;
-  /** Sobrescreve a altura/rolagem de cada coluna (padrão `max-h-56`) — usado pelo DateTimePicker pra esticar junto da altura do Calendar quando fica ao lado dele. */
+  /** Sobrescreve a altura/rolagem de cada coluna (padrão `max-h-[233px]`) — usado pelo DateTimePicker pra esticar junto da altura do Calendar quando fica ao lado dele. */
   columnClassName?: string;
 }
 

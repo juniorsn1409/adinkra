@@ -169,14 +169,14 @@ function ChartTooltipContent({
   return (
     <div
       className={cn(
-        "grid min-w-36 gap-1.5 rounded-control border-[length:var(--border-width)] border-ink bg-surface px-2.5 py-1.5 text-xs shadow-brutal",
+        "grid min-w-9 gap-2 rounded-control border-[length:var(--border-width)] border-ink bg-surface px-3 py-2 text-xs shadow-brutal",
         className,
       )}
     >
       {!hideLabel && label != null && (
         <p className="font-medium text-heading">{labelFormatter ? labelFormatter(label, payload) : String(label)}</p>
       )}
-      <div className="grid gap-1.5">
+      <div className="grid gap-2">
         {payload.map((item, index) => {
           const key = String(item.dataKey ?? item.name ?? index);
           const cfg = config[key];
@@ -188,9 +188,9 @@ function ChartTooltipContent({
                   aria-hidden="true"
                   className={cn(
                     "shrink-0 border-[length:var(--border-width)] border-ink",
-                    indicator === "dot" && "size-2.5 rounded-full",
-                    indicator === "line" && "h-2.5 w-1",
-                    indicator === "dashed" && "h-0 w-3 border-t-2 border-dashed bg-transparent",
+                    indicator === "dot" && "size-4 rounded-full",
+                    indicator === "line" && "h-4 w-1",
+                    indicator === "dashed" && "h-0 w-4 border-t-2 border-dashed bg-transparent",
                   )}
                   style={{ backgroundColor: indicator === "dashed" ? undefined : color, borderColor: color }}
                 />
@@ -223,19 +223,19 @@ function ChartLegendContent({
   if (!payload?.length) return null;
 
   return (
-    <div className={cn("flex flex-wrap items-center justify-center gap-4", className)}>
+    <div className={cn("flex flex-wrap items-center justify-center gap-5", className)}>
       {payload.map((item, index) => {
         const key = String(item.dataKey ?? item.value ?? index);
         const cfg = config[key];
         return (
-          <div key={key} className="flex items-center gap-1.5">
+          <div key={key} className="flex items-center gap-3">
             {!hideIcon &&
               (cfg?.icon ? (
                 <cfg.icon />
               ) : (
                 <span
                   aria-hidden="true"
-                  className="size-2.5 shrink-0 rounded-[2px] border-[length:var(--border-width)] border-ink"
+                  className="size-4 shrink-0 rounded-[2px] border-[length:var(--border-width)] border-ink"
                   style={{ backgroundColor: item.color ?? getSeriesColor(config, key) }}
                 />
               ))}

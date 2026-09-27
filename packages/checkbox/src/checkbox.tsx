@@ -24,17 +24,20 @@ import { cn } from "@adinkra/core";
 
 const checkboxVariants = cva(
   [
-    "peer m-0 flex-none cursor-pointer appearance-none rounded-control",
+    // rounded-[3px]: raio de caixa de seleção da spec φ (raio 3), não o rounded-control (5).
+    "peer m-0 flex-none cursor-pointer appearance-none rounded-[3px]",
     "border-[length:var(--border-width)] border-ink bg-card shadow-brutal",
     "transition-colors duration-150",
     "checked:bg-primary indeterminate:bg-primary",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
     "disabled:pointer-events-none disabled:shadow-none",
-    "aria-invalid:border-destructive aria-invalid:shadow-[2px_2px_0_0_var(--destructive)]",
+    "aria-invalid:border-destructive aria-invalid:shadow-[3px_3px_0_0_var(--destructive)]",
   ],
   {
     variants: {
       size: {
+        // sm (13×13) não está na spec (que só define 21×21) — um degrau de Fibonacci
+        // abaixo de md, na mesma lógica de "÷ φ" usada pros outros controles.
         sm: "size-4",
         md: "size-5",
       },
@@ -51,8 +54,9 @@ const iconVariants = cva(
   {
     variants: {
       size: {
-        sm: "size-2.5",
-        md: "size-3",
+        // Check 8 no sm (13 ÷ φ ≈ 8) e 13 no md, espelhando o degrau da caixa.
+        sm: "size-3",
+        md: "size-4",
       },
     },
     defaultVariants: { size: "md" },
@@ -107,7 +111,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 
     const box = (
       // Opacidade no invólucro (não no input): o check/traço, irmãos do input, esmaecem junto.
-      <span data-slot="checkbox" className="relative inline-flex flex-none has-[:disabled]:opacity-45">
+      <span data-slot="checkbox" className="relative inline-flex flex-none has-[:disabled]:opacity-[0.382]">
         <input
           ref={setRefs}
           type="checkbox"
@@ -128,7 +132,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             "peer-[:checked:not(:indeterminate)]:scale-100 peer-[:checked:not(:indeterminate)]:opacity-100",
           )}
         >
-          <path d="M2 6.5 4.75 9.25 10 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M2 6.5 4.75 9.25 10 3" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
         <svg
           viewBox="0 0 12 12"
@@ -136,7 +140,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           aria-hidden="true"
           className={cn(iconVariants({ size }), "peer-indeterminate:scale-100 peer-indeterminate:opacity-100")}
         >
-          <path d="M2.5 6h7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          <path d="M2.5 6h7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
         </svg>
       </span>
     );
@@ -146,10 +150,10 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     return (
       <label
         data-slot="checkbox-label"
-        className={cn("group inline-flex items-center gap-2.5", disabled ? "cursor-not-allowed" : "cursor-pointer")}
+        className={cn("group inline-flex items-center gap-3", disabled ? "cursor-not-allowed" : "cursor-pointer")}
       >
         {box}
-        <span className="text-sm leading-5 text-foreground group-has-[:disabled]:opacity-45">{label}</span>
+        <span className="text-sm leading-5 text-foreground group-has-[:disabled]:opacity-[0.382]">{label}</span>
       </label>
     );
   },

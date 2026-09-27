@@ -14,8 +14,11 @@ import { cn } from "@adinkra/core";
  * foi refatorada pra usar esta — fica pra uma rodada futura.
  *
  * Visual: borda de tinta só na aresta voltada pro conteúdo (as outras três
- * encostam na tela), sem sombra dura — uma sombra deslocada pra baixo/direita
- * ficaria cortada pela borda da janela. Fundo `bg-card`.
+ * encostam na tela) e sombra dura de 5 SÓ na direção de onde a gaveta vem
+ * (ex.: `-5px 0 0 0` na direita) — uma sombra deslocada pra baixo/direita
+ * ficaria cortada pela borda da janela. Fundo `bg-card`. Medidas φ
+ * (27/09/2026): largura 377, padding 21, gap 21, fundo tinta a 61.8% (igual
+ * ao @adinkra/dialog).
  *
  * Movimento (frequência: ocasional, propósito: consistência espacial — sai
  * de onde entrou): desliza em `translate` de 100% do próprio tamanho (nunca
@@ -69,19 +72,19 @@ function SheetTrigger({ ref, ...props }: React.ComponentProps<typeof SheetPrimit
  */
 const sheetSides = {
   right: cn(
-    "inset-y-0 right-0 h-full w-3/4 max-w-sm border-l-[length:var(--border-width)]",
+    "inset-y-0 right-0 h-full w-3/4 max-w-[377px] border-l-[length:var(--border-width)] shadow-[-5px_0_0_0_var(--ink)]",
     "data-starting-style:translate-x-full data-ending-style:translate-x-full",
   ),
   left: cn(
-    "inset-y-0 left-0 h-full w-3/4 max-w-sm border-r-[length:var(--border-width)]",
+    "inset-y-0 left-0 h-full w-3/4 max-w-[377px] border-r-[length:var(--border-width)] shadow-[5px_0_0_0_var(--ink)]",
     "data-starting-style:-translate-x-full data-ending-style:-translate-x-full",
   ),
   top: cn(
-    "inset-x-0 top-0 h-auto max-h-[85dvh] border-b-[length:var(--border-width)]",
+    "inset-x-0 top-0 h-auto max-h-[85dvh] border-b-[length:var(--border-width)] shadow-[0_5px_0_0_var(--ink)]",
     "data-starting-style:-translate-y-full data-ending-style:-translate-y-full",
   ),
   bottom: cn(
-    "inset-x-0 bottom-0 h-auto max-h-[85dvh] border-t-[length:var(--border-width)]",
+    "inset-x-0 bottom-0 h-auto max-h-[85dvh] border-t-[length:var(--border-width)] shadow-[0_-5px_0_0_var(--ink)]",
     "data-starting-style:translate-y-full data-ending-style:translate-y-full",
   ),
 } as const;
@@ -91,7 +94,7 @@ type SheetSide = keyof typeof sheetSides;
 // Mesmo traço (viewBox 16x16, strokeWidth 1.3) dos outros ícones de controle.
 function CloseIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true" {...props}>
       <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
     </svg>
   );
@@ -120,7 +123,7 @@ function SheetContent({
       <SheetPrimitive.Backdrop
         data-slot="sheet-backdrop"
         className={cn(
-          "fixed inset-0 z-50 bg-background/80",
+          "fixed inset-0 z-50 bg-ink/[0.618]",
           "transition-opacity duration-300 ease-[var(--ease-out)]",
           "data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:duration-250",
         )}
@@ -129,8 +132,8 @@ function SheetContent({
         data-slot="sheet-content"
         data-side={side}
         className={cn(
-          "fixed z-50 flex flex-col gap-4 overflow-y-auto",
-          "border-ink bg-card p-6 text-foreground outline-none",
+          "fixed z-50 flex flex-col gap-5 overflow-y-auto",
+          "border-ink bg-card p-5 text-foreground outline-none",
           "transition-[translate] duration-300 ease-[var(--ease-drawer)] data-ending-style:duration-250",
           sheetSides[side],
           className,
@@ -143,9 +146,9 @@ function SheetContent({
             data-slot="sheet-close-icon"
             aria-label={closeLabel}
             className={cn(
-              "absolute right-3 top-3 inline-flex size-8 items-center justify-center rounded-control text-foreground",
+              "absolute right-4 top-4 inline-flex size-6 items-center justify-center rounded-control text-foreground",
               "transition-colors hover:bg-surface",
-              "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+              "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
             )}
           >
             <CloseIcon />
@@ -157,15 +160,16 @@ function SheetContent({
 }
 
 function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
-  // `pr-8` reserva o espaço do "X" pro título longo não passar por baixo dele.
-  return <div data-slot="sheet-header" className={cn("grid gap-1.5 pr-8", className)} {...props} />;
+  // `pr-6` (34) reserva o espaço do "X" (34, a 13 da borda: invade 26 além
+  // do padding de 21) pro título longo não passar por baixo dele.
+  return <div data-slot="sheet-header" className={cn("grid gap-3 pr-6", className)} {...props} />;
 }
 
 function SheetTitle({ className, ...props }: React.ComponentProps<typeof SheetPrimitive.Title>) {
   return (
     <SheetPrimitive.Title
       data-slot="sheet-title"
-      className={cn("font-display text-xl font-semibold leading-snug text-heading", className)}
+      className={cn("font-display text-xl font-semibold text-heading", className)}
       {...props}
     />
   );
@@ -175,7 +179,7 @@ function SheetDescription({ className, ...props }: React.ComponentProps<typeof S
   return (
     <SheetPrimitive.Description
       data-slot="sheet-description"
-      className={cn("text-sm leading-relaxed text-muted-foreground", className)}
+      className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />
   );
@@ -186,7 +190,7 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="sheet-footer"
-      className={cn("mt-auto flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className)}
+      className={cn("mt-auto flex flex-col-reverse gap-4 sm:flex-row sm:justify-end", className)}
       {...props}
     />
   );

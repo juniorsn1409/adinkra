@@ -27,15 +27,15 @@ import { cn } from "@adinkra/core";
  * Sem "use client": só JSX.
  */
 const spinnerVariants = cva(
-  "inline-block shrink-0 rounded-full border-hairline border-t-ink motion-safe:animate-spin motion-reduce:animate-pulse!",
+  "inline-block shrink-0 rounded-full border-hairline border-t-ink motion-safe:animate-[spin_987ms_linear_infinite] motion-reduce:animate-pulse!",
   {
     variants: {
       size: {
         // A borda acompanha o tamanho: 2px no menor (= --border-width),
         // um pouco mais grossa nos maiores pra manter o peso do anel.
-        sm: "size-4 border-2",
-        md: "size-6 border-[3px]",
-        lg: "size-10 border-4",
+        sm: "size-[16px] border-2",
+        md: "size-[21px] border-[3px]",
+        lg: "size-[34px] border-[3px]",
       },
     },
     defaultVariants: { size: "md" },

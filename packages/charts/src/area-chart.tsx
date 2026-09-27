@@ -26,7 +26,7 @@ export function AreaSparkline({ data, dataKey, color = "var(--primary)", classNa
   const gradientId = `area-sparkline-${React.useId().replace(/:/g, "")}`;
 
   return (
-    <div className={cn("aspect-auto h-10 w-full", className)}>
+    <div className={cn("aspect-auto h-[42px] w-full", className)}>
       <RechartsPrimitive.ResponsiveContainer>
         <RechartsPrimitive.AreaChart data={data}>
           <defs>

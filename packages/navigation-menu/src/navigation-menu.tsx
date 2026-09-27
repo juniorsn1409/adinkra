@@ -46,7 +46,7 @@ function NavigationMenu({
       ref={rootRef}
       data-slot="navigation-menu"
       className={cn(
-        "group/navigation-menu relative z-10 flex max-w-max flex-1 items-center justify-center rounded-control border-[length:var(--border-width)] border-ink bg-surface p-2 font-display",
+        "group/navigation-menu relative z-10 flex max-w-max flex-1 items-center justify-center rounded-control border-[length:var(--border-width)] border-ink bg-surface h-[55px] px-3 font-display",
         className,
       )}
       {...props}
@@ -79,13 +79,13 @@ function NavigationMenuItem({
 
 function navigationMenuTriggerStyle() {
   return cn(
-    "group inline-flex h-[36px] w-max items-center justify-center gap-2 rounded-control px-3.5 py-2",
+    "group inline-flex h-[34px] w-max items-center justify-center gap-2 rounded-control px-4",
     "font-display text-sm text-foreground transition-colors",
     "hover:bg-card",
     "data-popup-open:bg-primary data-popup-open:text-primary-foreground",
     "data-active:bg-primary data-active:text-primary-foreground",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-    "disabled:pointer-events-none disabled:opacity-45 data-disabled:pointer-events-none data-disabled:opacity-45",
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
+    "disabled:pointer-events-none disabled:opacity-[0.382] data-disabled:pointer-events-none data-disabled:opacity-[0.382]",
   );
 }
 
@@ -141,9 +141,9 @@ function NavigationMenuLink({
     <NavigationMenuPrimitive.Link
       data-slot="navigation-menu-link"
       className={cn(
-        "block select-none space-y-1 rounded-control p-2 leading-none text-foreground no-underline transition-colors",
+        "block select-none space-y-1 rounded-control px-4 py-3 leading-none text-foreground no-underline transition-colors",
         "hover:bg-card",
-        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
         "[&_svg:not([class*='size-'])]:size-[16px]",
         className,
       )}
@@ -156,7 +156,7 @@ function NavigationMenuViewport({
   className,
   container,
   side = "bottom",
-  sideOffset = 6,
+  sideOffset = 5,
   align = "start",
   alignOffset = 0,
   ...props
@@ -173,14 +173,14 @@ function NavigationMenuViewport({
         className="isolate z-50 h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) transition-[top,left,right,bottom] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] data-instant:transition-none"
       >
         {/*
-          shadow-brutal aqui, não no trigger — o painel flutuante é um
+          shadow-brutal-hover (5) aqui, não no trigger — o painel flutuante é um
           "cartão único" (regra do sistema: aside/panel/feature levam
           borda+raio+sombra; grades repetidas não). Sem estados de
           hover/press: não é uma superfície pressionável, só um painel.
         */}
         <NavigationMenuPrimitive.Popup
           data-slot="navigation-menu-popup"
-          className="relative h-(--popup-height) w-(--popup-width) origin-(--transform-origin) overflow-hidden rounded-control border-[length:var(--border-width)] border-ink bg-surface text-foreground shadow-brutal outline-none transition-[opacity,transform,width,height,scale,translate] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] data-starting-style:scale-90 data-starting-style:opacity-0 data-ending-style:scale-90 data-ending-style:opacity-0 data-ending-style:duration-150"
+          className="relative h-(--popup-height) w-(--popup-width) origin-(--transform-origin) overflow-hidden rounded-card border-[length:var(--border-width)] border-ink bg-surface text-foreground shadow-brutal-hover outline-none transition-[opacity,transform,width,height,scale,translate] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] data-starting-style:scale-90 data-starting-style:opacity-0 data-ending-style:scale-90 data-ending-style:opacity-0 data-ending-style:duration-150"
         >
           <NavigationMenuPrimitive.Viewport
             data-slot="navigation-menu-viewport"

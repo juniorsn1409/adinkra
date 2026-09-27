@@ -15,8 +15,8 @@ import { cn } from "@adinkra/core";
  */
 const cardVariants = cva(
   [
-    "flex flex-col gap-5 rounded-card border-[length:var(--border-width)] border-ink",
-    "bg-card py-5 text-foreground shadow-brutal",
+    "flex flex-col gap-[21px] rounded-card border-[length:var(--border-width)] border-ink",
+    "bg-card py-[21px] text-foreground shadow-brutal",
     "transition-[transform,box-shadow] duration-150",
   ],
   {
@@ -24,9 +24,9 @@ const cardVariants = cva(
       interactive: {
         true: [
           "cursor-pointer",
-          "hover:-translate-x-px hover:-translate-y-px hover:shadow-brutal-hover",
-          "active:translate-x-0.5 active:translate-y-0.5 active:shadow-none",
-          "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+          "hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-brutal-hover",
+          "active:translate-x-[3px] active:translate-y-[3px] active:shadow-none",
+          "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
         ],
         false: "",
       },
@@ -52,7 +52,7 @@ export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDiv
   return (
     <div
       data-slot="card-header"
-      className={cn("grid auto-rows-min grid-cols-[1fr_auto] items-start gap-1.5 px-5", className)}
+      className={cn("grid auto-rows-min grid-cols-[1fr_auto] items-start gap-[13px] px-5", className)}
       {...props}
     />
   );
@@ -62,7 +62,7 @@ export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLDivE
   return (
     <div
       data-slot="card-title"
-      className={cn("font-display text-base font-semibold leading-none text-heading", className)}
+      className={cn("font-display text-lg font-semibold leading-none text-heading", className)}
       {...props}
     />
   );

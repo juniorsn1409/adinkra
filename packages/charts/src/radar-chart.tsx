@@ -26,7 +26,7 @@ export function FilledRadarChart({ data, config, angleKey, className }: RadarCha
       <RechartsPrimitive.RadarChart data={data}>
         <ChartTooltip content={<ChartTooltipContent />} />
         <RechartsPrimitive.PolarGrid stroke="var(--hairline)" />
-        <RechartsPrimitive.PolarAngleAxis dataKey={angleKey} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} />
+        <RechartsPrimitive.PolarAngleAxis dataKey={angleKey} tick={{ fill: "var(--muted-foreground)", fontSize: 13 }} />
         {seriesKeys.map((key) => (
           <RechartsPrimitive.Radar
             key={key}

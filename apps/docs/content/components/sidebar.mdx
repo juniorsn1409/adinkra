@@ -3,10 +3,8 @@ title: Sidebar
 description: A navegação lateral colapsável do site — a mesma que você está usando agora.
 ---
 
-<Preview>
-  <div style={{ width: "100%", maxWidth: "26rem", height: "22rem", overflow: "hidden", margin: "0 auto", display: "flex" }}>
-    <SidebarShowcase />
-  </div>
+<Preview flush>
+  <SidebarShowcase />
 </Preview>
 
 Mock — dados fabricados ("Painel", "Equipe"), não a navegação de verdade deste site (isso evita misturar a demonstração com a própria página que a exibe). Mesmo espírito dos exemplos mais abaixo. Arraste o mouse até a borda direita (ou clique nela) pra recolher — é a `SidebarRail`, descrita mais abaixo.
@@ -76,10 +74,12 @@ Revisado contra o [sidebar do neobrutalism.dev](https://www.neobrutalism.dev/doc
     <span
       style={{
         display: "inline-flex",
-        padding: "6px 10px",
+        alignItems: "center",
+        height: "34px",
+        padding: "0 8px",
         borderRadius: "var(--radius-control)",
         fontFamily: "var(--font-display)",
-        fontSize: "0.875rem",
+        fontSize: "0.8125rem",
         color: "var(--foreground)",
       }}
     >
@@ -90,12 +90,14 @@ Revisado contra o [sidebar do neobrutalism.dev](https://www.neobrutalism.dev/doc
     <span
       style={{
         display: "inline-flex",
-        padding: "6px 10px",
+        alignItems: "center",
+        height: "34px",
+        padding: "0 8px",
         borderRadius: "var(--radius-control)",
         background: "var(--card)",
         outline: "var(--border-width) solid var(--ink)",
         fontFamily: "var(--font-display)",
-        fontSize: "0.875rem",
+        fontSize: "0.8125rem",
         fontWeight: 500,
         color: "var(--heading)",
       }}
@@ -114,7 +116,7 @@ Revisado contra o [sidebar do neobrutalism.dev](https://www.neobrutalism.dev/doc
 Um grupo que abre e fecha, com uma lista por baixo — clique em "Componentes" pra ver.
 
 <Preview>
-  <div style={{ width: "100%", maxWidth: "18rem" }}>
+  <div style={{ width: "100%", maxWidth: "233px" }}>
     <SidebarMenu>
       <SidebarMenuItem>
         <SidebarMenuCollapsible defaultOpen>
@@ -160,7 +162,7 @@ Um grupo que abre e fecha, com uma lista por baixo — clique em "Componentes" p
 `SidebarMenuBadge` mostra um contador (ou etiqueta curta) à direita de um item; `SidebarMenuAction` é um botão secundário no mesmo lugar — os dois ficam sobrepostos ao `SidebarMenuButton`, então o item precisa estar dentro de um `SidebarMenuItem` (ele já é `relative` por baixo, de propósito, pra isso funcionar).
 
 <Preview>
-  <div style={{ width: "100%", maxWidth: "18rem" }}>
+  <div style={{ width: "100%", maxWidth: "233px" }}>
     <SidebarMenu>
       <SidebarMenuItem>
         <SidebarMenuButton>{t("sample.notifications")}</SidebarMenuButton>
@@ -208,7 +210,7 @@ Em mobile ele não renderiza nada — lá quem fecha a gaveta é o fundo escurec
 
 ## Mobile
 
-Abaixo de 768px (o mesmo breakpoint de `useIsMobile`, exportado pelo pacote), `Sidebar` vira uma gaveta: fixa na tela, começa **fechada**, desliza com `translate-x` e ganha um fundo escurecido atrás (`bg-ink/40`) que fecha ao ser tocado. `Ctrl`/`Cmd` + `B`, `SidebarTrigger` e `Esc` (só quando a gaveta já está aberta) continuam funcionando do mesmo jeito.
+Abaixo de 768px (o mesmo breakpoint de `useIsMobile`, exportado pelo pacote), `Sidebar` vira uma gaveta: fixa na tela, começa **fechada**, desliza com `translate-x` e ganha um fundo escurecido atrás (`bg-ink/[0.382]`) que fecha ao ser tocado. `Ctrl`/`Cmd` + `B`, `SidebarTrigger` e `Esc` (só quando a gaveta já está aberta) continuam funcionando do mesmo jeito.
 
 Isso é automático — o mesmo `<Sidebar>` que renderiza a faixa fixa no desktop passa a renderizar a gaveta sozinho, sem nenhuma prop nova. Só é preciso garantir que exista algum `SidebarTrigger` visível em telas pequenas pra reabrir a gaveta depois de fechada (neste próprio site, ele mora numa barra que só aparece abaixo de `md`).
 

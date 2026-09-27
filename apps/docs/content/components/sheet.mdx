@@ -57,13 +57,13 @@ import { Button } from "@adinkra/button";
   <SheetSidesDemo />
 </Preview>
 
-Gavetas laterais ocupam 75% da largura (no máximo 24 rem); as de topo e base crescem com o conteúdo, até 85% da altura da tela, e rolam depois disso.
+Gavetas laterais ocupam 75% da largura (no máximo 377 px); as de topo e base crescem com o conteúdo, até 85% da altura da tela, e rolam depois disso.
 
 ## Movimento
 
 A gaveta desliza por `translate` de 100% do próprio tamanho — porcentagem, não pixels, então serve para qualquer largura. Entra em 300 ms e sai em 250 ms com a curva `--ease-drawer`, sempre pela mesma borda. O fundo só faz fade. Só `translate` e `opacity` animam. Com `prefers-reduced-motion`, a troca é instantânea.
 
-Só a aresta voltada para o conteúdo tem borda de tinta, e não há sombra dura: uma sombra deslocada para baixo e para a direita seria cortada pela borda da janela.
+Só a aresta voltada para o conteúdo tem borda de tinta, e a sombra dura de 5 px aponta só para o lado de onde a gaveta vem (na direita, `-5px 0 0 0`): uma sombra deslocada para baixo e para a direita seria cortada pela borda da janela. Padding e gap de 21; o fundo é `--ink` a 61,8%, igual ao Dialog.
 
 ## Props
 

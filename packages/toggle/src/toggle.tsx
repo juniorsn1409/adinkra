@@ -22,14 +22,14 @@ import { cn } from "@adinkra/core";
 
 const toggleVariants = cva(
   [
-    "inline-flex items-center justify-center gap-2 rounded-control",
+    "inline-flex items-center justify-center gap-[10px] rounded-control",
     "border-[length:var(--border-width)]",
     "font-display text-sm font-medium",
     "transition-[transform,box-shadow,background-color,border-color] duration-150",
-    "disabled:pointer-events-none disabled:opacity-45 disabled:shadow-none disabled:translate-x-0 disabled:translate-y-0",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+    "disabled:pointer-events-none disabled:opacity-[0.382] disabled:shadow-none disabled:translate-x-0 disabled:translate-y-0",
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
     "data-[state=on]:border-ink data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
-    "data-[state=on]:translate-x-0.5 data-[state=on]:translate-y-0.5 data-[state=on]:shadow-none",
+    "data-[state=on]:translate-x-[3px] data-[state=on]:translate-y-[3px] data-[state=on]:shadow-none",
   ],
   {
     variants: {
@@ -37,18 +37,18 @@ const toggleVariants = cva(
         default: [
           "border-transparent bg-transparent text-foreground",
           "data-[state=off]:hover:border-ink data-[state=off]:hover:bg-surface data-[state=off]:hover:shadow-brutal",
-          "data-[state=off]:hover:-translate-x-px data-[state=off]:hover:-translate-y-px",
+          "data-[state=off]:hover:-translate-x-[2px] data-[state=off]:hover:-translate-y-[2px]",
         ],
         outline: [
           "border-ink bg-transparent text-foreground shadow-brutal",
           "data-[state=off]:hover:bg-surface data-[state=off]:hover:shadow-brutal-hover",
-          "data-[state=off]:hover:-translate-x-px data-[state=off]:hover:-translate-y-px",
+          "data-[state=off]:hover:-translate-x-[2px] data-[state=off]:hover:-translate-y-[2px]",
         ],
       },
       size: {
-        sm: "h-[32px] px-2.5 text-sm",
-        md: "h-[36px] px-3 text-sm",
-        lg: "h-11 px-4 text-base",
+        sm: "h-[34px] px-[21px] gap-[8px] text-sm",
+        md: "h-[42px] px-[26px] text-base",
+        lg: "h-[55px] px-[34px] gap-[13px] text-lg",
       },
     },
     defaultVariants: { variant: "default", size: "md" },

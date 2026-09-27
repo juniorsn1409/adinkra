@@ -22,8 +22,13 @@ export function DocsShell({ children }: { children: ReactNode }) {
           "Adinkra" + botão de recolher no topo não deviam aparecer em tela
           pequena): quem abre a gaveta é o Toggle do PageTopbar de cada
           página, que já entende mobile (useSidebar → openMobile).
+
+          Sem padding aqui (27/09/2026, layout φ do canvas): a barra de 55
+          do PageTopbar vai de ponta a ponta da coluna, com o fio embaixo, e
+          quem põe as margens (55 / 21 no mobile) e o fim de 89 é o
+          DocsArticle de cada página (components/mdx-components.tsx).
         */}
-        <main className="min-w-0 flex-1 px-4 py-5 sm:px-6 sm:py-10">{children}</main>
+        <main className="min-w-0 flex-1">{children}</main>
       </div>
     </SidebarProvider>
   );

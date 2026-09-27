@@ -47,7 +47,7 @@ export function BigCircleCursorDemo() {
       onPointerMove={handlePointerMove}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
-      className="relative flex h-64 w-full items-center justify-center gap-4 overflow-hidden rounded-card border-[length:var(--border-width)] border-ink bg-surface [&_a]:cursor-none [&_button]:cursor-none"
+      className="relative flex h-[233px] w-full items-center justify-center gap-4 overflow-hidden rounded-card border-[length:var(--border-width)] border-ink bg-surface [&_a]:cursor-none [&_button]:cursor-none"
       style={{ cursor: "none" }}
     >
       <button
@@ -56,7 +56,7 @@ export function BigCircleCursorDemo() {
       >
         {t("demo.cursor.hoverHere")}
       </button>
-      <p className="max-w-40 text-sm text-muted-foreground">{t("demo.cursor.outside")}</p>
+      <p className="max-w-[144px] text-sm text-muted-foreground">{t("demo.cursor.outside")}</p>
       <div
         ref={circleRef}
         style={{
@@ -146,7 +146,7 @@ export function MotionBlurCursorDemo() {
     <div
       ref={containerRef}
       onPointerMove={handlePointerMove}
-      className="relative flex h-64 w-full items-center justify-center gap-4 overflow-hidden rounded-card border-[length:var(--border-width)] border-ink bg-surface [&_a]:cursor-none [&_button]:cursor-none"
+      className="relative flex h-[233px] w-full items-center justify-center gap-4 overflow-hidden rounded-card border-[length:var(--border-width)] border-ink bg-surface [&_a]:cursor-none [&_button]:cursor-none"
       style={{ cursor: "none" }}
     >
       <button
@@ -155,7 +155,7 @@ export function MotionBlurCursorDemo() {
       >
         {t("demo.cursor.moveFast")}
       </button>
-      <p className="max-w-40 text-sm text-muted-foreground">{t("demo.cursor.alsoHere")}</p>
+      <p className="max-w-[144px] text-sm text-muted-foreground">{t("demo.cursor.alsoHere")}</p>
       <svg width="0" height="0" className="absolute">
         <defs>
           <filter id={filterId} x="-100%" y="-100%" width="400%" height="400%" colorInterpolationFilters="sRGB">
@@ -231,10 +231,10 @@ export function ArrowPointerCursorDemo() {
     <div
       ref={containerRef}
       onPointerMove={handlePointerMove}
-      className="relative flex h-64 w-full items-center justify-center gap-4 overflow-hidden rounded-card border-[length:var(--border-width)] border-ink bg-surface"
+      className="relative flex h-[233px] w-full items-center justify-center gap-4 overflow-hidden rounded-card border-[length:var(--border-width)] border-ink bg-surface"
       style={{ cursor: "none" }}
     >
-      <p className="max-w-52 text-center text-sm text-muted-foreground">{t("demo.cursor.arrow")}</p>
+      <p className="max-w-[233px] text-center text-sm text-muted-foreground">{t("demo.cursor.arrow")}</p>
       <div
         ref={cursorRef}
         className="pointer-events-none absolute select-none"
@@ -297,7 +297,7 @@ export function RingDotCursorDemo() {
       onPointerMove={handlePointerMove}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
-      className="relative flex h-64 w-full items-center justify-center gap-4 overflow-hidden rounded-card border-[length:var(--border-width)] border-ink bg-surface [&_a]:cursor-none [&_button]:cursor-none"
+      className="relative flex h-[233px] w-full items-center justify-center gap-4 overflow-hidden rounded-card border-[length:var(--border-width)] border-ink bg-surface [&_a]:cursor-none [&_button]:cursor-none"
       style={{ cursor: "none" }}
     >
       <button
@@ -306,7 +306,7 @@ export function RingDotCursorDemo() {
       >
         Passe o mouse aqui
       </button>
-      <p className="max-w-40 text-sm text-muted-foreground">o anel cresce</p>
+      <p className="max-w-[144px] text-sm text-muted-foreground">o anel cresce</p>
       <div
         ref={ringRef}
         className="pointer-events-none absolute flex select-none items-center justify-center rounded-full"
@@ -392,7 +392,7 @@ export function CircleAndDotCursorDemo() {
       onPointerMove={handlePointerMove}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
-      className="relative flex h-64 w-full items-center justify-center gap-4 overflow-hidden rounded-card border-[length:var(--border-width)] border-ink bg-surface [&_a]:cursor-none [&_button]:cursor-none"
+      className="relative flex h-[233px] w-full items-center justify-center gap-4 overflow-hidden rounded-card border-[length:var(--border-width)] border-ink bg-surface [&_a]:cursor-none [&_button]:cursor-none"
       style={{ cursor: "none" }}
     >
       <button
@@ -401,7 +401,7 @@ export function CircleAndDotCursorDemo() {
       >
         Passe o mouse aqui
       </button>
-      <p className="max-w-40 text-sm text-muted-foreground">e solte um rastro por aqui</p>
+      <p className="max-w-[144px] text-sm text-muted-foreground">e solte um rastro por aqui</p>
       <div
         ref={cursorRef}
         className="pointer-events-none absolute select-none rounded-full"
@@ -478,7 +478,7 @@ export function GlitchCursorDemo() {
       onPointerMove={handlePointerMove}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
-      className="relative flex h-64 w-full items-center justify-center gap-4 overflow-hidden rounded-card border-[length:var(--border-width)] border-ink bg-surface [&_a]:cursor-none [&_button]:cursor-none"
+      className="relative flex h-[233px] w-full items-center justify-center gap-4 overflow-hidden rounded-card border-[length:var(--border-width)] border-ink bg-surface [&_a]:cursor-none [&_button]:cursor-none"
       style={{ cursor: "none" }}
     >
       <button
@@ -487,7 +487,7 @@ export function GlitchCursorDemo() {
       >
         {t("demo.cursor.moveFast")}
       </button>
-      <p className="max-w-40 text-sm text-muted-foreground">{t("demo.cursor.chromatic")}</p>
+      <p className="max-w-[144px] text-sm text-muted-foreground">{t("demo.cursor.chromatic")}</p>
       <div
         ref={cursorRef}
         className="pointer-events-none absolute select-none rounded-full bg-ink"

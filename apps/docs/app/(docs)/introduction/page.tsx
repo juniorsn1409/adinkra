@@ -2,6 +2,7 @@ import Link from "next/link";
 import { buttonVariants } from "@adinkra/button";
 import { GlitchCursor } from "@adinkra/cursor";
 import { T } from "../../../components/language";
+import { DocsArticle, DocsPageHeader, DocsSection } from "../../../components/mdx-components";
 import { PageTopbar } from "../../../components/page-topbar";
 
 export const metadata = { title: "Introduction" };
@@ -33,44 +34,36 @@ export default function IntroductionPage() {
   return (
     <>
       <GlitchCursor />
-      <article className="mx-auto grid w-full max-w-3xl gap-8 pb-24">
-        <PageTopbar title={<T k="common.introduction" />} trail={[]} />
-        <header className="grid gap-2 border-b border-hairline pb-6">
-          <p className="font-display text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-            <T k="common.introduction" />
-          </p>
-          <h1 className="-ml-[0.04em] font-display text-3xl font-medium text-heading">Adinkra</h1>
-          <p className="text-muted-foreground">
-            <T k="introduction.tagline" />
-          </p>
-        </header>
+      <PageTopbar title={<T k="common.introduction" />} trail={[]} />
+      <DocsArticle>
+        <DocsPageHeader
+          eyebrow={<T k="common.introduction" />}
+          title="Adinkra"
+          description={<T k="introduction.tagline" />}
+        />
 
-        <div className="grid gap-4 text-foreground">
-          <p>
-            <T k="introduction.intro" />
-          </p>
-        </div>
+        <p className="max-w-[610px] text-foreground">
+          <T k="introduction.intro" />
+        </p>
 
-        <div className="grid gap-3">
-          <h2 className="font-display text-xl font-medium text-heading"><T k="introduction.principles" /></h2>
-          <ul className="grid gap-4">
+        <DocsSection title={<T k="introduction.principles" />}>
+          <ul className="grid max-w-[610px] gap-4">
             {principles.map((item, index) => (
               <li key={index} className="grid gap-1">
                 <p className="font-display text-sm font-medium text-heading">{item.title}</p>
-                <p className="text-foreground">{item.text}</p>
+                <p className="max-w-[610px] text-foreground">{item.text}</p>
               </li>
             ))}
           </ul>
-        </div>
+        </DocsSection>
 
-        <div className="grid gap-3">
-          <h2 className="font-display text-xl font-medium text-heading"><T k="introduction.start" /></h2>
-          <p className="text-foreground">
+        <DocsSection title={<T k="introduction.start" />}>
+          <p className="max-w-[610px] text-foreground">
             <T k="introduction.startText" />
           </p>
-        </div>
+        </DocsSection>
 
-        <div className="flex flex-wrap gap-3 pt-2">
+        <div className="flex flex-wrap gap-4">
           <Link href="/getting-started" className={buttonVariants({ variant: "primary" })}>
             Getting started
           </Link>
@@ -78,7 +71,7 @@ export default function IntroductionPage() {
             <T k="common.browseComponents" />
           </Link>
         </div>
-      </article>
+      </DocsArticle>
     </>
   );
 }

@@ -19,7 +19,7 @@ import { Button } from "@adinkra/button";
 
 <Popover>
   <PopoverTrigger render={<Button variant="outline" />}>Ver detalhes</PopoverTrigger>
-  <PopoverContent className="grid w-72 gap-3 p-4">
+  <PopoverContent className="grid w-[233px] gap-3 p-4">
     <PopoverTitle>Plano Equipe</PopoverTitle>
     <PopoverDescription>Até 10 pessoas e 50 GB de espaço.</PopoverDescription>
     <PopoverClose render={<Button size="sm" variant="secondary" />}>Entendi</PopoverClose>
@@ -39,7 +39,7 @@ O Popover nasceu dentro do `@adinkra/date-picker` e foi extraído para o própri
 - **`PopoverTitle`** e **`PopoverDescription`** — o Base UI liga os dois ao `aria-labelledby` e ao `aria-describedby` do painel.
 - **`PopoverClose`** — fecha o painel a partir de dentro.
 
-O painel tem borda e raio, sem a sombra dura dos outros cartões únicos: a sombra atrás dele parecia uma linha solta ao lado do calendário. O padding padrão é zero de propósito — o `Calendar` e as listas de opções trazem o próprio espaçamento. Para texto corrido, passe `className="p-4"`.
+O painel tem borda de 2, raio de 8 e a sombra dura de 5, e abre a 5 px do gatilho. O padding padrão é zero e a largura é automática de propósito — o `Calendar` e as listas de opções trazem o próprio espaçamento. Para texto corrido, passe `className="w-[233px] p-4"` (233 de largura, 13 de padding).
 
 ## Posições
 
@@ -88,7 +88,7 @@ O painel nasce do gatilho: a escala de 0,96 para 1, com fade, parte do ponto ond
     {
       prop: "PopoverContent sideOffset",
       type: "number",
-      default: "6",
+      default: "5",
       description: "Distância, em pixels, entre o gatilho e o painel.",
     },
     {

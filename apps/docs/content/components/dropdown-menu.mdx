@@ -76,16 +76,16 @@ O painel é um cartão único (borda + sombra dura). Os itens são linhas de lis
 
 <StatesGrid>
   <State label="padrão">
-    <span className="rounded-control px-2.5 py-1.5 font-display text-sm text-foreground">Perfil</span>
+    <span className="inline-flex h-6 items-center rounded-[3px] px-4 font-display text-sm text-foreground">Perfil</span>
   </State>
   <State label="destacado">
-    <span className="rounded-control bg-accent px-2.5 py-1.5 font-display text-sm text-accent-foreground">Perfil</span>
+    <span className="inline-flex h-6 items-center rounded-[3px] bg-accent px-4 font-display text-sm text-accent-foreground">Perfil</span>
   </State>
   <State label="destrutivo">
-    <span className="rounded-control px-2.5 py-1.5 font-display text-sm text-destructive">Sair</span>
+    <span className="inline-flex h-6 items-center rounded-[3px] px-4 font-display text-sm text-destructive">Sair</span>
   </State>
   <State label="desativado">
-    <span className="rounded-control px-2.5 py-1.5 font-display text-sm text-foreground opacity-45">Assinatura</span>
+    <span className="inline-flex h-6 items-center rounded-[3px] px-4 font-display text-sm text-foreground opacity-[0.382]">Assinatura</span>
   </State>
 </StatesGrid>
 
@@ -117,7 +117,7 @@ O menu abre dezenas de vezes por dia, então a entrada é curta e discreta: 130m
       prop: "DropdownMenuContent side/align",
       type: '"top" | "bottom" | "left" | "right" / "start" | "center" | "end"',
       default: 'side="bottom", align="start"',
-      description: "Onde o painel aparece em relação ao gatilho. sideOffset (6) e alignOffset (0) ajustam a distância.",
+      description: "Onde o painel aparece em relação ao gatilho. sideOffset (5) e alignOffset (0) ajustam a distância.",
     },
     {
       prop: "DropdownMenuItem variant",

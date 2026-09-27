@@ -4,16 +4,16 @@ description: Um interruptor liga/desliga — alternativa a uma checkbox para uma
 ---
 
 <Preview>
-  <div style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "flex-start" }}>
-    <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
+  <div style={{ display: "flex", flexDirection: "column", gap: "13px", alignItems: "flex-start" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
       <Switch id="airplane-mode" defaultChecked />
-      <label htmlFor="airplane-mode" style={{ fontSize: "0.875rem" }}>
+      <label htmlFor="airplane-mode" style={{ fontSize: "0.8125rem" }}>
         {t("sample.airplaneMode")}
       </label>
     </div>
-    <div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
       <Switch id="newsletter" />
-      <label htmlFor="newsletter" style={{ fontSize: "0.875rem" }}>
+      <label htmlFor="newsletter" style={{ fontSize: "0.8125rem" }}>
         {t("sample.getTheNewsletter")}
       </label>
     </div>
@@ -29,7 +29,7 @@ bun add @adinkra/switch
 ```tsx
 import { Switch } from "@adinkra/switch";
 
-<div style={{ display: "flex", alignItems: "center", gap: "0.625rem" }}>
+<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
   <Switch id="airplane-mode" />
   <label htmlFor="airplane-mode">Modo avião</label>
 </div>;

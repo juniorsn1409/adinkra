@@ -77,11 +77,11 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "group flex flex-1 cursor-pointer items-center justify-between gap-4 px-4 py-3 text-left",
-          "font-display text-sm font-medium text-heading transition-colors",
+          "group flex h-7 flex-1 cursor-pointer items-center justify-between gap-4 px-5 text-left",
+          "font-display text-base font-medium text-heading transition-colors",
           "hover:bg-surface",
-          "focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring",
-          "data-[disabled]:pointer-events-none data-[disabled]:opacity-45",
+          "focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-[3px] focus-visible:outline-ring",
+          "data-[disabled]:pointer-events-none data-[disabled]:opacity-[0.382]",
           className,
         )}
         {...props}
@@ -109,7 +109,7 @@ function AccordionContent({
       )}
       {...props}
     >
-      <div className="px-4 pb-4 pt-2">{children}</div>
+      <div className="px-5 pb-5 pt-0">{children}</div>
     </AccordionPrimitive.Panel>
   );
 }

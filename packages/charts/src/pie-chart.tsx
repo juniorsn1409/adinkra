@@ -43,7 +43,7 @@ export function DonutChartWithText({ data, config, dataKey, nameKey, className }
                   <tspan x={viewBox.cx} y={viewBox.cy} className="fill-heading font-display text-xl font-medium">
                     {total.toLocaleString("pt-BR")}
                   </tspan>
-                  <tspan x={viewBox.cx} y={(viewBox.cy ?? 0) + 22} className="fill-muted-foreground text-xs">
+                  <tspan x={viewBox.cx} y={(viewBox.cy ?? 0) + 21} className="fill-muted-foreground text-xs">
                     Total
                   </tspan>
                 </text>
@@ -66,7 +66,7 @@ export function PieChartWithCustomLabel({ data, config, dataKey, nameKey, classN
 
   return (
     <ChartContainer config={config} className={cn("aspect-square", className)}>
-      <RechartsPrimitive.PieChart margin={{ top: 24, right: 24, bottom: 24, left: 24 }}>
+      <RechartsPrimitive.PieChart margin={{ top: 21, right: 21, bottom: 21, left: 21 }}>
         <ChartTooltip content={<ChartTooltipContent hideLabel />} />
         <RechartsPrimitive.Pie
           data={data}

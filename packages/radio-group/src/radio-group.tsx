@@ -28,13 +28,15 @@ const radioGroupItemVariants = cva(
     "border-[length:var(--border-width)] border-ink bg-card shadow-brutal",
     "transition-colors duration-150",
     "checked:bg-primary",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
     "disabled:pointer-events-none disabled:shadow-none",
-    "data-[invalid=true]:border-destructive data-[invalid=true]:shadow-[2px_2px_0_0_var(--destructive)]",
+    "data-[invalid=true]:border-destructive data-[invalid=true]:shadow-[3px_3px_0_0_var(--destructive)]",
   ],
   {
     variants: {
       size: {
+        // sm (13) não está na spec (que só define 21) — mesmo degrau de Fibonacci
+        // ("÷ φ") usado no Checkbox.
         sm: "size-4",
         md: "size-5",
       },
@@ -52,8 +54,9 @@ const dotVariants = cva(
   {
     variants: {
       size: {
-        sm: "size-1.5",
-        md: "size-2",
+        // Ponto 5 no sm (8 ÷ φ ≈ 5) e 8 no md (spec: "Radio: 21, ponto 8").
+        sm: "size-2",
+        md: "size-3",
       },
     },
     defaultVariants: { size: "md" },
@@ -137,7 +140,7 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
           aria-orientation={orientation}
           data-slot="radio-group"
           className={cn(
-            orientation === "horizontal" ? "flex flex-wrap gap-x-5 gap-y-2.5" : "grid gap-2.5",
+            orientation === "horizontal" ? "flex flex-wrap gap-x-5 gap-y-4" : "grid gap-4",
             className,
           )}
           {...props}
@@ -170,7 +173,7 @@ export const RadioGroupItem = React.forwardRef<HTMLInputElement, RadioGroupItemP
 
     const radio = (
       // Opacidade no invólucro (não no input): a bolinha, irmã do input, esmaece junto.
-      <span data-slot="radio-group-item" className="relative inline-flex flex-none has-[:disabled]:opacity-45">
+      <span data-slot="radio-group-item" className="relative inline-flex flex-none has-[:disabled]:opacity-[0.382]">
         <input
           ref={ref}
           type="radio"
@@ -193,10 +196,10 @@ export const RadioGroupItem = React.forwardRef<HTMLInputElement, RadioGroupItemP
     return (
       <label
         data-slot="radio-group-item-label"
-        className={cn("group inline-flex items-center gap-2.5", isDisabled ? "cursor-not-allowed" : "cursor-pointer")}
+        className={cn("group inline-flex items-center gap-3", isDisabled ? "cursor-not-allowed" : "cursor-pointer")}
       >
         {radio}
-        <span className="text-sm leading-5 text-foreground group-has-[:disabled]:opacity-45">{label}</span>
+        <span className="text-sm leading-5 text-foreground group-has-[:disabled]:opacity-[0.382]">{label}</span>
       </label>
     );
   },

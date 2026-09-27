@@ -36,13 +36,13 @@ import { cn } from "@adinkra/core";
  * declara "não sei"). SEMPRE dê um nome (`aria-label` ou `aria-labelledby`).
  */
 const progressVariants = cva(
-  "relative w-full overflow-hidden rounded-control border-[length:var(--border-width)] border-ink bg-card",
+  "relative w-full overflow-hidden rounded-full border-[length:var(--border-width)] border-ink bg-card",
   {
     variants: {
       size: {
         sm: "h-3",
-        md: "h-5",
-        lg: "h-7",
+        md: "h-4",
+        lg: "h-5",
       },
     },
     defaultVariants: { size: "md" },
