@@ -90,8 +90,8 @@ const paginationLinkVariants = cva(
         false: "",
       },
       size: {
-        icon: "h-9 w-9",
-        default: "h-9 px-3.5",
+        icon: "h-[36px] w-[36px]",
+        default: "h-[36px] px-3.5",
       },
     },
     defaultVariants: { isActive: false, size: "icon" },
@@ -138,7 +138,7 @@ export function PaginationEllipsis({ className, ...props }: React.ComponentProps
       data-slot="pagination-ellipsis"
       role="presentation"
       aria-hidden="true"
-      className={cn("flex size-9 items-center justify-center text-muted-foreground", className)}
+      className={cn("flex size-[36px] items-center justify-center text-muted-foreground", className)}
       {...props}
     >
       <DotsIcon />

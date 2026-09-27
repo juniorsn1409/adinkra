@@ -40,8 +40,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           aria-invalid={error ? true : undefined}
           aria-describedby={describedByIds}
           className={cn(
-            // h-9: mesma altura do Button md e do Select (antes o py-2 dava ~40px e desalinhava linhas de formulário).
-            "h-9 w-full rounded-control border-[length:var(--border-width)] bg-card px-3 text-sm text-foreground",
+            // h-[36px]: mesma altura do Button md e do Select — valor fixo porque h-9 agora é Fibonacci (144px).
+            "h-[36px] w-full rounded-control border-[length:var(--border-width)] bg-card px-3 text-sm text-foreground",
             "placeholder:text-muted-foreground",
             "shadow-brutal transition-[border-color,box-shadow] duration-150",
             // Sem "pressionar": digitar não é um clique, não precisa do gesto tátil do botão.
@@ -62,7 +62,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           >
             <span
               aria-hidden="true"
-              className="grid h-4 w-4 flex-none place-items-center rounded-full bg-destructive text-[0.6875rem] text-destructive-foreground"
+              className="grid h-[16px] w-[16px] flex-none place-items-center rounded-full bg-destructive text-xs text-destructive-foreground"
             >
               !
             </span>

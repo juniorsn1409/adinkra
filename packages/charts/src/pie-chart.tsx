@@ -40,7 +40,7 @@ export function DonutChartWithText({ data, config, dataKey, nameKey, className }
               if (!viewBox || !("cx" in viewBox) || viewBox.cx == null || viewBox.cy == null) return null;
               return (
                 <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
-                  <tspan x={viewBox.cx} y={viewBox.cy} className="fill-heading font-display text-2xl font-medium">
+                  <tspan x={viewBox.cx} y={viewBox.cy} className="fill-heading font-display text-xl font-medium">
                     {total.toLocaleString("pt-BR")}
                   </tspan>
                   <tspan x={viewBox.cx} y={(viewBox.cy ?? 0) + 22} className="fill-muted-foreground text-xs">

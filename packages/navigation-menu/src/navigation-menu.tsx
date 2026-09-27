@@ -46,7 +46,7 @@ function NavigationMenu({
       ref={rootRef}
       data-slot="navigation-menu"
       className={cn(
-        "group/navigation-menu relative z-10 flex max-w-max flex-1 items-center justify-center rounded-control border-[length:var(--border-width)] border-ink bg-surface p-1 font-display",
+        "group/navigation-menu relative z-10 flex max-w-max flex-1 items-center justify-center rounded-control border-[length:var(--border-width)] border-ink bg-surface p-2 font-display",
         className,
       )}
       {...props}
@@ -64,7 +64,7 @@ function NavigationMenuList({
   return (
     <NavigationMenuPrimitive.List
       data-slot="navigation-menu-list"
-      className={cn("group flex flex-1 list-none items-center justify-center gap-1 font-display", className)}
+      className={cn("group flex flex-1 list-none items-center justify-center gap-2 font-display", className)}
       {...props}
     />
   );
@@ -79,7 +79,7 @@ function NavigationMenuItem({
 
 function navigationMenuTriggerStyle() {
   return cn(
-    "group inline-flex h-9 w-max items-center justify-center gap-1 rounded-control px-3.5 py-2",
+    "group inline-flex h-[36px] w-max items-center justify-center gap-2 rounded-control px-3.5 py-2",
     "font-display text-sm text-foreground transition-colors",
     "hover:bg-card",
     "data-popup-open:bg-primary data-popup-open:text-primary-foreground",
@@ -122,7 +122,7 @@ function NavigationMenuContent({
     <NavigationMenuPrimitive.Content
       data-slot="navigation-menu-content"
       className={cn(
-        "h-full w-auto p-2 transition-[opacity,transform,translate] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        "h-full w-auto p-3 transition-[opacity,transform,translate] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
         "data-starting-style:opacity-0 data-ending-style:opacity-0",
         "data-starting-style:data-[activation-direction=left]:translate-x-[-50%] data-starting-style:data-[activation-direction=right]:translate-x-[50%]",
         "data-ending-style:data-[activation-direction=left]:translate-x-[50%] data-ending-style:data-[activation-direction=right]:translate-x-[-50%]",
@@ -144,7 +144,7 @@ function NavigationMenuLink({
         "block select-none space-y-1 rounded-control p-2 leading-none text-foreground no-underline transition-colors",
         "hover:bg-card",
         "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-        "[&_svg:not([class*='size-'])]:size-4",
+        "[&_svg:not([class*='size-'])]:size-[16px]",
         className,
       )}
       {...props}

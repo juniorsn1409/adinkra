@@ -110,12 +110,9 @@
    */
   --ink: var(--heading);
   /*
-   * Neobrutalismo suavizado (17/09/2026, pedido do usuário, na mesma sessão
-   * do redesign de cor acima) — 3px→2px. Sombra em --shadow-brutal/
-   * --shadow-brutal-hover (bloco @theme inline abaixo) e o deslocamento de
-   * hover/pressionado em cada componente (ex. button.tsx) reduzidos junto,
-   * na mesma proporção: mantém a linguagem (borda+sombra+afundar), só com
-   * menos peso visual.
+   * Largura de borda: 2px (Fibonacci, valor mínimo que mantém presença
+   * neobrutalista). Sombra em --shadow-brutal/--shadow-brutal-hover (bloco
+   * @theme inline abaixo) usa 3px/5px — também Fibonacci, razão 3:5 ≈ φ.
    */
   --border-width: 2px;
 }
@@ -237,11 +234,14 @@
   --color-tag-navy: var(--tag-navy);
   --color-tag-navy-foreground: var(--tag-navy-foreground);
 
-  /* Sombra dura, sem desfoque, deslocada — a marca do neobrutalismo. A cor
-     vem de --ink, então já reage ao tema sozinha. Suavizada (17/09/2026,
-     era 4px/6px) junto com --border-width, mesma proporção. */
-  --shadow-brutal: 2px 2px 0 0 var(--ink);
-  --shadow-brutal-hover: 3px 3px 0 0 var(--ink);
+  /*
+   * Sombra dura — a marca do neobrutalismo. Cor via --ink, reage ao tema.
+   * Offsets derivados da escala Fibonacci: 3px (padrão) → 5px (hover).
+   * Razão 3:5 = φ dentro de 1% — a proporção está na própria mudança de
+   * estado, não só nos valores estáticos.
+   */
+  --shadow-brutal: 3px 3px 0 0 var(--ink);
+  --shadow-brutal-hover: 5px 5px 0 0 var(--ink);
 }
 
 /* Tipografia e raio: valores fixos, iguais nos dois temas — não precisam da
@@ -261,10 +261,56 @@
      texto normal, só sem o efeito de símbolo. */
   --font-adinkra: "Adinkra Alphabet", "Jost", sans-serif;
 
-  /* Dois níveis, não um raio único: controle (botão, input, badge) e
-     cartão (painel, bloco de destaque) — ver DECISOES.md, seção 4. */
-  --radius-control: 4px;
-  --radius-card: 6px;
+  /*
+   * Dois níveis de raio — controle (botão, input, badge) e cartão (painel,
+   * bloco de destaque). Valores derivados da escala Fibonacci (proxy de φ):
+   * 5 é o inteiro mais próximo de 4 que pertence à série; 8 é o próximo passo.
+   */
+  --radius-control: 5px;
+  --radius-card: 8px;
+
+  /*
+   * Escala de tipo — 7 passos derivados de φ × 16px (base).
+   * Cada passo sobe (ou desce) multiplicando por φ = 1.618, arredondado
+   * para o inteiro mais legível. Sobrescreve a escala padrão do Tailwind v4
+   * para os utilitários text-xs … text-3xl.
+   *
+   * --font-size-* é o namespace que o Tailwind v4 usa pra mapear text-{name}.
+   */
+  --font-size-xs:   0.625rem;   /* 10px  = 16 ÷ φ²       */
+  --font-size-sm:   0.8125rem;  /* 13px  ≈ 16 ÷ φ^1.2    */
+  --font-size-base: 1rem;       /* 16px  = base           */
+  --font-size-lg:   1.25rem;    /* 20px  ≈ 16 × φ^0.5    */
+  --font-size-xl:   1.625rem;   /* 26px  ≈ 16 × φ         */
+  --font-size-2xl:  2.625rem;   /* 42px  ≈ 16 × φ²        */
+  --font-size-3xl:  4.25rem;    /* 68px  ≈ 16 × φ³        */
+
+  /*
+   * Line-height — três passos. O valor do corpo é φ exato (1.618),
+   * que é o único token neste sistema cujo valor *é* a constante em si.
+   * --line-height-* → Tailwind leading-tight / leading-normal / leading-loose.
+   */
+  --line-height-tight:  1.2;
+  --line-height-normal: 1.618;
+  --line-height-loose:  2.0;
+
+  /*
+   * Escala de espaçamento — sequência de Fibonacci como proxy inteiro de φ.
+   * Razão entre termos vizinhos converge para 1.618. Sobrescreve a escala
+   * padrão do Tailwind v4 (que usa múltiplos de 4px) para os índices 1–9,
+   * afetando p-*, m-*, gap-*, inset-*, w-*, h-* etc.
+   *
+   * --spacing-* é o namespace que o Tailwind v4 usa para a escala de espaço.
+   */
+  --spacing-1:  0.125rem;   /*   2px  */
+  --spacing-2:  0.3125rem;  /*   5px  */
+  --spacing-3:  0.5rem;     /*   8px  */
+  --spacing-4:  0.8125rem;  /*  13px  */
+  --spacing-5:  1.3125rem;  /*  21px  */
+  --spacing-6:  2.125rem;   /*  34px  */
+  --spacing-7:  3.4375rem;  /*  55px  */
+  --spacing-8:  5.5625rem;  /*  89px  */
+  --spacing-9:  9rem;       /* 144px  */
 }
 
 /* Curvas de movimento compartilhadas. Ficam como variável comum (não em

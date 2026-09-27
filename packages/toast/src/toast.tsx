@@ -173,7 +173,7 @@ function CloseIcon() {
       strokeWidth={1.6}
       strokeLinecap="round"
       aria-hidden="true"
-      className="size-4"
+      className="size-[16px]"
     >
       <path d="M4 4l8 8M12 4l-8 8" />
     </svg>

@@ -63,7 +63,7 @@ export const FieldError = React.forwardRef<HTMLParagraphElement, FieldErrorProps
     >
       <span
         aria-hidden="true"
-        className="grid h-4 w-4 flex-none place-items-center rounded-full bg-destructive text-[0.6875rem] text-destructive-foreground"
+        className="grid h-[16px] w-[16px] flex-none place-items-center rounded-full bg-destructive text-xs text-destructive-foreground"
       >
         !
       </span>

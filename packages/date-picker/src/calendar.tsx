@@ -85,10 +85,10 @@ function Calendar({ className, classNames, showOutsideDays = false, captionLayou
         ),
         month: cn("flex w-full flex-col gap-4", defaultClassNames.month),
         nav: cn("absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1", defaultClassNames.nav),
-        button_previous: cn(buttonVariants({ variant: "ghost" }), "size-7 p-0 select-none hover:bg-card aria-disabled:opacity-50", defaultClassNames.button_previous),
-        button_next: cn(buttonVariants({ variant: "ghost" }), "size-7 p-0 select-none hover:bg-card aria-disabled:opacity-50", defaultClassNames.button_next),
-        month_caption: cn("flex h-7 w-full items-center justify-center px-8", defaultClassNames.month_caption),
-        dropdowns: cn("flex h-7 w-full items-center justify-center gap-1.5 font-display text-sm", defaultClassNames.dropdowns),
+        button_previous: cn(buttonVariants({ variant: "ghost" }), "size-[28px] p-0 select-none hover:bg-card aria-disabled:opacity-50", defaultClassNames.button_previous),
+        button_next: cn(buttonVariants({ variant: "ghost" }), "size-[28px] p-0 select-none hover:bg-card aria-disabled:opacity-50", defaultClassNames.button_next),
+        month_caption: cn("flex h-[28px] w-full items-center justify-center px-8", defaultClassNames.month_caption),
+        dropdowns: cn("flex h-[28px] w-full items-center justify-center gap-1.5 font-display text-sm", defaultClassNames.dropdowns),
         dropdown_root: cn(
           "relative rounded-control border-[length:var(--border-width)] border-ink bg-card",
           defaultClassNames.dropdown_root,
@@ -96,21 +96,21 @@ function Calendar({ className, classNames, showOutsideDays = false, captionLayou
         dropdown: cn("absolute inset-0 opacity-0", defaultClassNames.dropdown),
         caption_label: cn(
           "select-none font-display",
-          captionLayout === "label" ? "text-sm" : "flex h-7 items-center gap-1 rounded-control px-2 text-sm [&>svg]:size-3.5",
+          captionLayout === "label" ? "text-sm" : "flex h-[28px] items-center gap-1 rounded-control px-2 text-sm [&>svg]:size-3.5",
           defaultClassNames.caption_label,
         ),
         month_grid: cn("w-full border-collapse", defaultClassNames.month_grid),
         weekdays: cn("flex gap-[5px]", defaultClassNames.weekdays),
-        weekday: cn("w-9 select-none rounded-control text-[0.8rem] text-muted-foreground", defaultClassNames.weekday),
+        weekday: cn("w-[36px] select-none rounded-control text-sm text-muted-foreground", defaultClassNames.weekday),
         week: cn("mt-2 flex w-full gap-[5px]", defaultClassNames.week),
-        week_number_header: cn("w-9 select-none", defaultClassNames.week_number_header),
-        week_number: cn("select-none text-[0.8rem] text-muted-foreground", defaultClassNames.week_number),
+        week_number_header: cn("w-[36px] select-none", defaultClassNames.week_number_header),
+        week_number: cn("select-none text-sm text-muted-foreground", defaultClassNames.week_number),
         // range_start/range_middle/range_end saem daqui — a borda/raio deles
         // depende de SABER se o dia conecta com o vizinho (não dá pra fazer
         // só com classe estática por modifier, precisa de lógica condicional
         // em cima de mais de um modifier ao mesmo tempo), então viraram
         // responsabilidade do CalendarDayButton (JS), não deste mapa.
-        day: cn("group/day relative size-9 select-none p-0 text-center text-xs", defaultClassNames.day),
+        day: cn("group/day relative size-[36px] select-none p-0 text-center text-xs", defaultClassNames.day),
         selected: cn(props.mode !== "range" && "rounded-control bg-secondary", defaultClassNames.selected),
         today: cn(defaultClassNames.today),
         outside: cn("opacity-50", defaultClassNames.outside),
@@ -130,7 +130,7 @@ function Calendar({ className, classNames, showOutsideDays = false, captionLayou
         DayButton: CalendarDayButton,
         WeekNumber: ({ children, ...weekNumberProps }) => (
           <td {...weekNumberProps}>
-            <div className="flex size-9 items-center justify-center text-center">{children}</div>
+            <div className="flex size-[36px] items-center justify-center text-center">{children}</div>
           </td>
         ),
         ...components,
@@ -180,7 +180,7 @@ function CalendarDayButton({ className, day, modifiers, ...props }: React.Compon
       data-today={modifiers.today}
       className={cn(
         buttonVariants({ variant: "ghost" }),
-        "size-9 rounded-tl-control rounded-tr-control rounded-bl-control rounded-br-control border-t-[length:var(--border-width)] border-r-[length:var(--border-width)] border-b-[length:var(--border-width)] border-l-[length:var(--border-width)] border-ink p-0 font-display text-xs hover:bg-card",
+        "size-[36px] rounded-tl-control rounded-tr-control rounded-bl-control rounded-br-control border-t-[length:var(--border-width)] border-r-[length:var(--border-width)] border-b-[length:var(--border-width)] border-l-[length:var(--border-width)] border-ink p-0 font-display text-xs hover:bg-card",
         // Hoje: tom clarinho (tinta leve do accent, não o token sólido) —
         // vem ANTES do range/selecionado no cn() de propósito, pra quando
         // hoje TAMBÉM estiver selecionado o tom escuro do selecionado vencer

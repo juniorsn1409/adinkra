@@ -29,7 +29,7 @@ export function Preview({ children }: { children: React.ReactNode }) {
     <div className="grid gap-2">
       <div
         data-theme={theme}
-        className="flex min-h-32 w-full items-start justify-start rounded-card border-[length:var(--border-width)] border-ink bg-background p-8 text-foreground shadow-brutal"
+        className="flex min-h-32 w-full items-start justify-start rounded-card border-[length:var(--border-width)] border-ink bg-background p-6 text-foreground shadow-brutal"
       >
         {children}
       </div>
