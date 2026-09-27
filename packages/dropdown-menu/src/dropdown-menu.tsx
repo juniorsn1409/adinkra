@@ -13,8 +13,8 @@ import { cn } from "@adinkra/core";
  * Visual: o painel é um "cartão único" (borda + sombra dura + `bg-surface`).
  * Os itens não têm borda nem sombra — são linhas de lista, tratamento ghost.
  * O item destacado (mouse OU teclado, `data-highlighted`) inverte pra
- * `bg-accent`/`text-accent-foreground` (marinho no dia, névoa na noite,
- * contraste 12.5:1 nos dois). Não usa `--primary`: aqui não há "estado
+ * `bg-accent`/`text-accent-foreground` (#231F20 no dia, #EAE6E7 na noite,
+ * contraste 16.3:1 e 13.6:1). Não usa `--primary`: aqui não há "estado
  * ligado" de item pra confundir com o destaque — o ligado dos itens de
  * marcar/rádio é o próprio ícone (check/ponto).
  *

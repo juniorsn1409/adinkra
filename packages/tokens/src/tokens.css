@@ -64,7 +64,7 @@
   --link: #924125;
   --secondary: #60C0F0;
   --secondary-foreground: #1E3550;
-  --accent: #1E3550;
+  --accent: #231F20;
   --accent-foreground: #FFFFFF;
 
   /* Estado */
@@ -94,9 +94,9 @@
   /*
    * 4ª etiqueta (16/09/2026, pedido do @adinkra/progress — "tem que ser
    * cores diferentes": 3 cores repetiam cedo demais numa barra de 5+
-   * segmentos). Mesmo hex do --accent claro (marinho), mas fixo nos dois
+   * segmentos). Mesmo hex do antigo --accent claro (marinho, até 27/09/2026), mas fixo nos dois
    * temas igual as outras --tag-* — não o token --accent em si, que
-   * inverte por tema (viraria névoa azul claro no escuro, perdendo a
+   * inverte por tema (viraria um tom claro no escuro, perdendo a
    * identidade "esta é sempre a cor 4" que uma série categórica precisa).
    */
   --tag-navy: #1E3550;
@@ -138,7 +138,7 @@
   --link: #924125;
   --secondary: #60C0F0;
   --secondary-foreground: #1E3550;
-  --accent: #1E3550;
+  --accent: #231F20;
   --accent-foreground: #FFFFFF;
 
   --destructive: #CB1338;
@@ -177,7 +177,9 @@
   --link: #F5906E;
   --secondary: #60C0F0;
   --secondary-foreground: #F0EFF3;
-  --accent: #C9DDF0;
+  /* Destaque (27/09/2026, pedido do usuário): #231F20 no dia; no escuro, a
+     versão clara quente #EAE6E7, com texto escuro (13,6:1). */
+  --accent: #EAE6E7;
   --accent-foreground: #1B1D26;
 
   --destructive: #F35071;
