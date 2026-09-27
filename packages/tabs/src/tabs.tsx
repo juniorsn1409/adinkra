@@ -23,7 +23,7 @@ function Tabs({ className, ...props }: React.ComponentProps<typeof TabsPrimitive
   return (
     <TabsPrimitive.Root
       data-slot="tabs"
-      className={cn("flex flex-col gap-3 data-[orientation=vertical]:flex-row data-[orientation=vertical]:items-start", className)}
+      className={cn("flex flex-col gap-4 data-[orientation=vertical]:flex-row data-[orientation=vertical]:items-start", className)}
       {...props}
     />
   );
@@ -48,14 +48,14 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={cn(
-        "inline-flex h-[32px] flex-none cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-control",
-        "border-[length:var(--border-width)] border-transparent px-3.5 font-display text-sm font-medium text-foreground",
+        "inline-flex h-[34px] flex-none cursor-pointer items-center justify-center gap-3 whitespace-nowrap rounded-[3px]",
+        "border-[length:var(--border-width)] border-transparent px-5 font-display text-sm font-medium text-foreground",
         "transition-[background-color,border-color,color] duration-150 ease-[var(--ease-out)]",
         "hover:bg-card",
         // Ativa = "afundada": tinta na borda, fundo primário, sem hover de convite.
         "data-[active]:border-ink data-[active]:bg-primary data-[active]:text-primary-foreground data-[active]:hover:bg-primary",
-        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-        "data-[disabled]:pointer-events-none data-[disabled]:opacity-45",
+        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
+        "data-[disabled]:pointer-events-none data-[disabled]:opacity-[0.382]",
         className,
       )}
       {...props}
@@ -69,7 +69,7 @@ function TabsContent({ className, ...props }: React.ComponentProps<typeof TabsPr
       data-slot="tabs-content"
       className={cn(
         "rounded-control text-sm text-foreground",
-        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
         className,
       )}
       {...props}

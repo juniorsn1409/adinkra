@@ -8,110 +8,133 @@ import { HomeNav } from "../components/home-nav";
 import { T } from "../components/language";
 import { SymbolField } from "../components/symbol-field";
 
+// Diâmetro do BigCircleCursor (233, da escala φ; era 250). O SymbolField
+// recebe o mesmo valor pra área que reage casar com o círculo visível.
+const CURSOR_SIZE = 233;
+
+const logoIcon = ("sankofa-swirl" in iconPaths ? "sankofa-swirl" : "sankofa") as keyof typeof iconPaths;
+
+// Sem `arc`: o ArcLogo usa `size * 0.3`, a mesma proporção do antigo
+// size 200 / arc 60 — assim o arco acompanha os dois tamanhos (89 e 144).
+function HomeLogo({ size }: { size: number }) {
+  return (
+    <ArcLogo
+      text={"Design System"}
+      brandText={"Adinkra"}
+      year={"2026"}
+      size={size}
+      tailLength={1.5}
+      logoY={0.35}
+      icon={logoIcon}
+      parallax={true}
+      filled={true}
+      rayDistance={1}
+      showRays={true}
+    />
+  );
+}
+
+function ArrowRightIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className={className}>
+      <path d="M2.5 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export default function HomePage() {
   return (
-    <main className="relative isolate flex min-h-screen flex-col overflow-hidden lg:flex-row">
-      <BigCircleCursor size={250} backdropFilter={false} color="transparent" dotColor="var(--ink)" />
+    <main className="relative isolate flex min-h-screen flex-col overflow-hidden lg:grid lg:grid-cols-[minmax(0,1.618fr)_minmax(0,1fr)]">
+      <BigCircleCursor size={CURSOR_SIZE} backdropFilter={false} color="transparent" dotColor="var(--ink)" />
       {/* Empilhado (esquerda em cima, direita embaixo) até lg; lado a lado só de lg
-          pra cima — 58%/42% em telas menores espremia logo, nav e título. */}
-      <div className="flex w-full flex-none flex-col bg-background lg:w-[58%]">
-        {/* Header com ArcLogo e links */}
-        <div className="flex flex-col gap-6 px-4 py-6 sm:px-6 2xl:flex-row 2xl:items-center 2xl:justify-between">
-        <ArcLogo
-          key={0}
-          text={"Design System"}
-          brandText={"Adinkra"}
-          year={"2026"}
-          size={200}
-          arc={60}
-          tailLength={1.5}
-          logoY={0.35}
-          icon={("sankofa-swirl" in iconPaths ? "sankofa-swirl" : "sankofa") as keyof typeof iconPaths}
-          parallax={true}
-          filled={true}
-          rayDistance={1}
-          showRays={true}
-        />
+          pra cima, em divisão áurea (1,618fr : 1fr). */}
+      <div className="flex flex-none flex-col bg-background lg:border-r-[length:var(--border-width)] lg:border-ink">
+        {/* Header com ArcLogo e links. Abaixo de sm: faixa de 144 com logo de 89,
+            botão Menu e idioma na mesma linha (canvas mobile). De sm até xl:
+            logo de 144 com a nav embaixo, porque logo + três links + seletor
+            não cabem lado a lado na coluna. De xl pra cima: tudo numa linha,
+            padding 55 e respiro 34 (canvas desktop). */}
+        <header className="flex h-[144px] items-center justify-between gap-4 border-b-[length:var(--border-width)] border-ink px-5 sm:h-auto sm:flex-col sm:items-start sm:gap-6 sm:p-7 lg:border-b-0 xl:flex-row xl:items-center xl:justify-between">
+          <div className="sm:hidden">
+            <HomeLogo size={89} />
+          </div>
+          <div className="hidden sm:block">
+            <HomeLogo size={144} />
+          </div>
           <HomeNav />
-        </div>
-
-        {/* Conteúdo principal */}
-        <div className="hidden flex-1 flex-col items-start justify-center px-6 py-24 lg:flex">
-        </div>
+        </header>
       </div>
 
-      {/* Div à direita. @container: o título dimensiona pela largura desta coluna (cqw), não da tela. */}
-      <div className="@container relative flex w-full flex-1 flex-col lg:w-[42%]">
+      {/* Coluna da direita: duas faixas em razão φ (1,618fr em cima, 1fr
+          embaixo — 610/377 no canvas). Fundos e conteúdo ocupam as MESMAS
+          células do grid, então a linha entre as cores acompanha a do texto
+          mesmo que uma faixa cresça pelo conteúdo. No mobile a altura mínima
+          é a do canvas (987 = 610 + 377); de lg pra cima ela estica até a
+          altura da tela junto com a coluna da esquerda. */}
+      <section className="relative grid min-h-[987px] flex-1 grid-cols-1 grid-rows-[1.618fr_1fr] lg:min-h-0">
         {/* Divs de cor como background */}
-        <div className="flex flex-col flex-1 absolute inset-0">
-          {/* Parte de cima - 50% com branco */}
-          <div style={{ flex: "1", backgroundColor: "var(--primary)" }} />
-          {/* Parte de baixo - 50% com primary-hover */}
-          <div style={{ flex: "1", backgroundColor: "var(--primary-hover)" }} />
-        </div>
+        <div aria-hidden className="col-start-1 row-start-1 bg-primary" />
+        <div
+          aria-hidden
+          className="col-start-1 row-start-2 border-t-[length:var(--border-width)] border-ink bg-primary-hover"
+        />
 
         {/* SymbolField como background */}
-        <div className="absolute inset-0 flex items-center justify-center" style={{ zIndex: 5 }}>
-          <SymbolField cursorSize={300} />
+        <div className="absolute inset-0" style={{ zIndex: 5 }}>
+          <SymbolField cursorSize={CURSOR_SIZE} />
         </div>
 
-        {/* Conteúdo sobreposto */}
-        {/* O texto herda um degradê duro em 50% (mesma linha das duas cores de
-            fundo, já que este bloco ocupa a coluna inteira): accent-foreground
-            na metade de cima, primary-foreground na de baixo. */}
-        <div
-          className="hero-enter relative z-10 grid flex-1 grid-rows-2 px-4 py-12 sm:px-6 lg:py-16 bg-clip-text text-transparent"
-          style={{
-            backgroundImage:
-              "linear-gradient(to bottom, var(--accent-foreground) 50%, var(--primary-foreground) 50%)",
-          }}
-        >
-          {/* Duas linhas iguais (grid-rows-2): a de cima é a metade da cor
-              --primary, a de baixo a do --primary-hover, e o padding é
-              simétrico pra a divisão do texto cair exatamente na linha das
-              duas cores de fundo. Título e descrição ficam na de cima; o
-              resto (sobre, destaques, botão) na de baixo. Cada metade
-              encosta no centro (justify-end / justify-start, 2rem de
-              respiro da linha) em vez de flutuar no meio da própria metade. */}
-          <div className="pointer-events-none flex flex-col items-center justify-end gap-6 pb-6 text-center">
-            {/* pl-[Nem] = o mesmo N do tracking: o espaçamento também entra depois
-                da última letra e, sem essa compensação, o texto centralizado
-                parece deslocado pra esquerda (alinhamento óptico). */}
-            <p className="pl-[0.26em] font-display text-xs font-medium uppercase tracking-[0.26em]">
-              Design system
-            </p>
-            <h1 className="pl-[0.1em] font-adinkra text-[clamp(2.25rem,11cqw,6rem)] font-medium tracking-[0.1em]">
-              Adinkra
-            </h1>
-            <p className="max-w-[60ch] text-lg sm:text-xl">
-              <T k="home.description" />
-            </p>
-          </div>
-          <div className="pointer-events-none flex flex-col items-center justify-start gap-6 pt-6 text-center">
-            <p className="max-w-[56ch] text-base">
-              <T k="home.about" />
-            </p>
-            <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 pl-[0.14em] font-display text-xs font-medium uppercase tracking-[0.14em]">
-              <li>
-                <T k="home.highlightSymbols" />
-              </li>
-              <li>
-                <T k="common.packagePerComponent" />
-              </li>
-              <li>React 19 + Tailwind v4</li>
-            </ul>
-            <Link
-              href="/getting-started"
-              className={cn(
-                buttonVariants({ variant: "primary", size: "lg" }),
-                "pointer-events-auto",
-              )}
-            >
-              Get Started
-            </Link>
-          </div>
+        {/* Conteúdo sobreposto. Tinta (--primary-foreground, fixa nos dois
+            temas) nas duas faixas: o branco que ia na de cima dava 2,99:1
+            sobre o laranja, reprovado pra texto pequeno — por isso saiu o
+            degradê duro com `bg-clip-text`. Título e descrição ficam na faixa
+            de cima; o resto (sobre, destaques, botão) na de baixo. Cada metade
+            encosta na linha entre as cores (justify-end / justify-start, 55
+            de respiro no desktop, 21 no mobile) em vez de flutuar no meio da
+            própria faixa. */}
+        <div className="hero-enter pointer-events-none relative z-10 col-start-1 row-start-1 flex flex-col items-center justify-end gap-4 px-5 pb-5 text-center text-primary-foreground sm:gap-5 sm:px-7 sm:pb-7">
+          {/* pl-[Nem] = o mesmo N do tracking: o espaçamento também entra depois
+              da última letra e, sem essa compensação, o texto centralizado
+              parece deslocado pra esquerda (alinhamento óptico). */}
+          <p className="pl-[0.26em] font-display text-xs font-medium uppercase tracking-[0.26em]">
+            Design system
+          </p>
+          {/* 42 no mobile e na coluna estreita de lg; 68 com a tela cheia (sm)
+              e a partir de 1330, a largura do canvas desktop. */}
+          <h1 className="pl-[0.1em] font-adinkra text-2xl font-normal tracking-[0.1em] sm:text-3xl lg:text-2xl min-[1330px]:text-3xl">
+            Adinkra
+          </h1>
+          <p className="max-w-[377px] text-pretty text-base sm:text-lg">
+            <T k="home.description" />
+          </p>
         </div>
-      </div>
+        <div className="hero-enter pointer-events-none relative z-10 col-start-1 row-start-2 flex flex-col items-center justify-start gap-4 px-5 pt-5 text-center text-primary-foreground sm:gap-5 sm:px-7 sm:pt-7">
+          <p className="max-w-[377px] text-pretty text-base">
+            <T k="home.about" />
+          </p>
+          <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 pl-[0.13em] font-display text-xs font-medium uppercase tracking-[0.13em]">
+            <li>
+              <T k="home.highlightSymbols" />
+            </li>
+            <li>
+              <T k="common.packagePerComponent" />
+            </li>
+            <li>React 19 + Tailwind v4</li>
+          </ul>
+          {/* md (42) no mobile, lg (55) de sm pra cima — as classes sm: por
+              cima do tamanho md fazem o papel de um "size responsivo". */}
+          <Link
+            href="/getting-started"
+            className={cn(
+              buttonVariants({ variant: "primary", size: "md" }),
+              "pointer-events-auto sm:h-[55px] sm:gap-[13px] sm:px-[34px] sm:text-lg",
+            )}
+          >
+            Get Started
+            <ArrowRightIcon className="size-[16px] sm:size-5" />
+          </Link>
+        </div>
+      </section>
     </main>
   );
 }

@@ -145,11 +145,11 @@ const rootClass = cn(
   "absolute bottom-0 right-0 h-[var(--toast-height)] w-full touch-none select-none",
   // Variáveis locais: `--stack-y` é o quanto este toast sobe pra caber acima dos mais novos;
   // `--enter` é a distância até a borda de baixo (zerada em reduced motion).
-  "[--gap:0.75rem] [--enter:calc(100%_+_1rem)] [--stack-y:calc((var(--toast-offset-y)_+_var(--toast-index)_*_var(--gap))_*_-1)]",
+  "[--gap:0.8125rem] [--enter:calc(100%_+_1rem)] [--stack-y:calc((var(--toast-offset-y)_+_var(--toast-index)_*_var(--gap))_*_-1)]",
   "motion-reduce:[--enter:0px]",
-  // Visual do cartão (neobrutalismo, seção 4): borda de tinta + sombra dura + raio de cartão.
-  "rounded-card border-[length:var(--border-width)] border-ink bg-card text-foreground shadow-brutal",
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+  // Visual do cartão (neobrutalismo, seção 4): borda de tinta + sombra dura (5, "hover" na escala φ) + raio de cartão.
+  "rounded-card border-[length:var(--border-width)] border-ink bg-card text-foreground shadow-brutal-hover",
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
   // Repouso = empilhado + o que o dedo arrastou.
   "[transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)_+_var(--stack-y)))]",
   // Entrada: sobe da borda de baixo. Saída: volta pra ela (mais curta), mesmo eixo.
@@ -184,7 +184,7 @@ function ToastItem({ toast }: { toast: Toast.Root.ToastObject }) {
   const variant = (toast.type as ToastVariant | undefined) ?? "default";
   return (
     <Toast.Root toast={toast} className={rootClass}>
-      <Toast.Content className="flex items-start gap-3 p-4">
+      <Toast.Content className="flex items-start gap-4 p-4">
         <AlertIcon variant={variant} />
         <div className="grid min-w-0 flex-1 gap-1 text-sm">
           <Toast.Title
@@ -198,7 +198,7 @@ function ToastItem({ toast }: { toast: Toast.Root.ToastObject }) {
         </div>
         <Toast.Close
           aria-label="Fechar notificação"
-          className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "-mr-1 -mt-1 w-8 shrink-0 px-0")}
+          className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "-mr-1 -mt-1 w-6 shrink-0 px-0")}
         >
           <CloseIcon />
         </Toast.Close>

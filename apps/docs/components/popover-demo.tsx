@@ -12,7 +12,7 @@ export function PopoverDemo() {
   return (
     <Popover>
       <PopoverTrigger render={<Button variant="outline" />}>Ver detalhes</PopoverTrigger>
-      <PopoverContent className="grid w-72 gap-3 p-4">
+      <PopoverContent className="grid w-[233px] gap-3 p-4">
         <div className="grid gap-1">
           <PopoverTitle>Plano Equipe</PopoverTitle>
           <PopoverDescription>Até 10 pessoas, 50 GB de espaço e suporte por e-mail em horário comercial.</PopoverDescription>
@@ -32,7 +32,7 @@ export function PopoverSidesDemo() {
       {sides.map((side) => (
         <Popover key={side}>
           <PopoverTrigger render={<Button variant="outline" size="sm" />}>{side}</PopoverTrigger>
-          <PopoverContent side={side} align="center" className="p-3 text-sm">
+          <PopoverContent side={side} align="center" className="px-3 py-2 text-sm">
             Abre para {side}.
           </PopoverContent>
         </Popover>

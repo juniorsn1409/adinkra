@@ -19,14 +19,14 @@ export function CheckboxDemo() {
   }
 
   return (
-    <div className="grid gap-3">
+    <div className="grid gap-4">
       <Checkbox
         label="Todas as notificações"
         checked={todas}
         indeterminate={algumas}
         onCheckedChange={(marcar) => setMarcadas(marcar ? OPCOES : [])}
       />
-      <div className="grid gap-2.5 pl-7">
+      <div className="grid gap-4 pl-6">
         {OPCOES.map((opcao) => (
           <Checkbox
             key={opcao}

@@ -39,6 +39,10 @@ export const THEME_STORAGE_KEY = "adinkra-theme";
  * sistema no escuro); só a escolha explícita daqui muda isso, e fica guardada
  * no localStorage. O script em app/layout.tsx aplica o valor salvo antes do
  * primeiro paint, pra não piscar o tema claro.
+ *
+ * Na barra do topo é ghost (variant "default" do Toggle), quadrado de 34 com
+ * ícone de 13, como no canvas (27/09/2026) — o outline com sombra fica para
+ * o botão do Preview, que troca o tema só da caixa.
  */
 export function ThemeToggle() {
   const [dark, setDark] = React.useState(false);
@@ -61,8 +65,9 @@ export function ThemeToggle() {
 
   return (
     <Toggle
-      variant="outline"
+      variant="default"
       size="sm"
+      className="w-[34px] px-0"
       pressed={dark}
       onPressedChange={handleChange}
       aria-label={dark ? t("theme.toLight") : t("theme.toDark")}

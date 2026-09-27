@@ -12,12 +12,15 @@ import { cn } from "@adinkra/core";
  *
  * Mesmo padrão do @adinkra/navigation-menu: Base UI por baixo (posicionamento
  * flutuante/portal), cores e vocabulário adaptados pros nossos tokens. Painel
- * único (não repetido em grade) — leva borda+raio, mas SEM a sombra dura
- * (`shadow-brutal`) que o resto dos "cartões únicos" do sistema tem: pedido
- * do usuário, que via a sombra como uma linha estranha depois da seta de
- * navegação do Calendar. O padding padrão é 0 de propósito (Calendar,
- * listas de opções e afins trazem o próprio espaçamento) — quem quer
- * respiro passa `className="p-4"` (o `cn` resolve o conflito).
+ * único (não repetido em grade) — borda 2, raio 8 (`rounded-card`) e sombra
+ * dura de 5 (`shadow-brutal-hover`, spec φ de 27/09/2026 — a "linha
+ * estranha" que fez a sombra sair antes era, na real, um bug nos seletores
+ * do Calendar, já corrigido; ver date-time-picker.tsx). Afastamento de 5 do
+ * gatilho. O padding padrão continua 0 e a largura `w-auto` de propósito
+ * (Calendar, listas de opções e afins — inclusive no @adinkra/data-table —
+ * trazem o próprio espaçamento); pra texto corrido o padrão φ é
+ * `className="w-[233px] p-4"` (233 de largura, 13 de padding — o `cn`
+ * resolve o conflito).
  *
  * `PopoverPrimitive.Root` não renderiza elemento DOM próprio (só contexto),
  * então o `container` do Portal (mesma armadilha do @adinkra/navigation-menu:
@@ -67,7 +70,7 @@ function PopoverContent({
   align = "start",
   alignOffset = 0,
   side = "bottom",
-  sideOffset = 6,
+  sideOffset = 5,
   container,
   ...props
 }: React.ComponentProps<typeof PopoverPrimitive.Popup> &
@@ -80,7 +83,7 @@ function PopoverContent({
         <PopoverPrimitive.Popup
           data-slot="popover-content"
           className={cn(
-            "w-auto rounded-control border-[length:var(--border-width)] border-ink bg-surface p-0 text-foreground outline-none",
+            "w-auto rounded-card border-[length:var(--border-width)] border-ink bg-surface p-0 text-foreground shadow-brutal-hover outline-none",
             // Nasce do gatilho (origin vem do Base UI) e some mais rápido do
             // que entra — abrir é o gesto do usuário, fechar é só limpeza.
             // Tailwind v4 aplica `scale-*` na propriedade `scale` (não em

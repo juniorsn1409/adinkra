@@ -19,17 +19,17 @@ import { cn } from "@adinkra/core";
  */
 const brutal =
   "border-[length:var(--border-width)] border-ink shadow-brutal " +
-  "hover:-translate-x-px hover:-translate-y-px hover:shadow-brutal-hover " +
-  "active:translate-x-0.5 active:translate-y-0.5 active:shadow-none";
+  "hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-brutal-hover " +
+  "active:translate-x-[3px] active:translate-y-[3px] active:shadow-none";
 
 const buttonVariants = cva(
   [
-    "inline-flex items-center justify-center gap-2",
+    "inline-flex items-center justify-center gap-[10px]",
     "font-display font-medium tracking-[0.05em]",
     "rounded-control",
     "transition-[transform,box-shadow,background-color,filter] duration-150",
-    "disabled:pointer-events-none disabled:opacity-45 disabled:shadow-none disabled:translate-x-0 disabled:translate-y-0",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+    "disabled:pointer-events-none disabled:opacity-[0.382] disabled:shadow-none disabled:translate-x-0 disabled:translate-y-0",
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
   ],
   {
     variants: {
@@ -41,9 +41,9 @@ const buttonVariants = cva(
         ghost: "border-transparent bg-transparent text-foreground hover:bg-surface",
       },
       size: {
-        sm: "h-[32px] px-3 text-sm",
-        md: "h-[36px] px-3.5 text-sm",
-        lg: "h-11 px-5 text-base",
+        sm: "h-[34px] px-[21px] gap-[8px] text-sm",
+        md: "h-[42px] px-[26px] text-base",
+        lg: "h-[55px] px-[34px] gap-[13px] text-lg",
       },
     },
     defaultVariants: {

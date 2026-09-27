@@ -9,7 +9,7 @@ export function ProgressDemo() {
   const [value, setValue] = React.useState(35);
 
   return (
-    <div className="grid w-full max-w-md gap-4">
+    <div className="grid w-full max-w-[377px] gap-4">
       <div className="grid gap-2">
         <div className="flex items-baseline justify-between font-display text-sm text-heading">
           <span id="upload-label">Enviando fotos</span>

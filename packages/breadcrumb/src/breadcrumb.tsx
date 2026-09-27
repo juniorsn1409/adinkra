@@ -14,7 +14,7 @@ import { cn } from "@adinkra/core";
 
 function ChevronIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true" {...props}>
       <path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -39,7 +39,7 @@ export function BreadcrumbList({ className, ...props }: React.ComponentPropsWith
     <ol
       data-slot="breadcrumb-list"
       className={cn(
-        "flex flex-wrap items-center gap-1.5 font-display text-sm text-muted-foreground sm:gap-2",
+        "flex flex-wrap items-center gap-3 font-display text-sm text-muted-foreground",
         className,
       )}
       {...props}
@@ -48,7 +48,7 @@ export function BreadcrumbList({ className, ...props }: React.ComponentPropsWith
 }
 
 export function BreadcrumbItem({ className, ...props }: React.ComponentPropsWithoutRef<"li">) {
-  return <li data-slot="breadcrumb-item" className={cn("inline-flex items-center gap-1.5", className)} {...props} />;
+  return <li data-slot="breadcrumb-item" className={cn("inline-flex items-center gap-2", className)} {...props} />;
 }
 
 export interface BreadcrumbLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {}
@@ -58,8 +58,8 @@ export function BreadcrumbLink({ className, ...props }: BreadcrumbLinkProps) {
     <a
       data-slot="breadcrumb-link"
       className={cn(
-        "rounded-control text-foreground underline-offset-4 transition-colors hover:text-heading hover:underline",
-        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        "rounded-control text-foreground decoration-2 underline-offset-[5px] transition-colors hover:text-heading hover:underline",
+        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
         className,
       )}
       {...props}
@@ -86,7 +86,7 @@ export function BreadcrumbSeparator({ children, className, ...props }: React.Com
       data-slot="breadcrumb-separator"
       role="presentation"
       aria-hidden="true"
-      className={cn("flex items-center text-muted-foreground [&>svg]:size-3.5", className)}
+      className={cn("flex items-center text-muted-foreground [&>svg]:size-4", className)}
       {...props}
     >
       {children ?? <ChevronIcon />}
@@ -100,7 +100,7 @@ export function BreadcrumbEllipsis({ className, ...props }: React.ComponentProps
       data-slot="breadcrumb-ellipsis"
       role="presentation"
       aria-hidden="true"
-      className={cn("flex size-8 items-center justify-center text-muted-foreground", className)}
+      className={cn("flex size-[34px] items-center justify-center text-muted-foreground", className)}
       {...props}
     >
       <DotsIcon />

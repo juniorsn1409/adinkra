@@ -100,7 +100,7 @@ function segmentColor(index: number): { bg: string; fg: string } {
 // o alvo clicável/arrastável é bem maior que isso, senão ninguém acerta o
 // dedo/cursor nela — mesmo raciocínio de "alvo maior que a marca" do skill
 // de dataviz).
-const HANDLE_HIT_WIDTH = 14;
+const HANDLE_HIT_WIDTH = 13;
 
 /**
  * Barra de progresso segmentada — várias proporções lado a lado, cada uma
@@ -128,12 +128,12 @@ const HANDLE_HIT_WIDTH = 14;
  * Puxador de arrastar (pedido do usuário, com print de referência do
  * mockup, inspecionado via DOM/`getComputedStyle` — não só o olho): os
  * segmentos se tocam direto (sem gap nenhum), e o puxador é uma faixa
- * `position: absolute` de 14px (só o alvo de clique, invisível) centrada
+ * `position: absolute` de 13px (só o alvo de clique, invisível) centrada
  * exatamente na fronteira entre dois segmentos (`left: calc(X% - 7px)`,
  * X = soma acumulada dos tamanhos VISUAIS até aquele ponto, não da
  * participação bruta — assim ele bate com a fronteira renderizada de
  * verdade mesmo quando o piso visual distorce algum segmento) — dentro dela, uma
- * pilulazinha de 2×18px (`bg-background`, cantos de 1px, anel de 1px em
+ * pilulazinha de 2×16px (`bg-background`, cantos de 1px, anel de 1px em
  * `--ink` a 25% pra ter contraste em cima de qualquer cor de segmento) é
  * a parte visível de verdade. Arrastar usa `setPointerCapture` no próprio
  * puxador (mesma técnica do `@adinkra/data-table` — `ColumnResizeHandle`/
@@ -205,7 +205,7 @@ export function SegmentedBar({
   return (
     <div
       ref={barRef}
-      className={cn("relative flex h-[2.875rem] overflow-hidden rounded-[10px] bg-surface", className)}
+      className={cn("relative flex h-[42px] overflow-hidden rounded-[10px] bg-surface", className)}
       role="img"
       aria-label={segments.map((segment) => `${segment.name}: ${formatLabel(segment, total > 0 ? segment.value / total : 0, total)}`).join(", ")}
     >
@@ -245,7 +245,7 @@ export function SegmentedBar({
                 style={{ left: `calc(${cumulativeVisualPct}% - ${HANDLE_HIT_WIDTH / 2}px)`, width: HANDLE_HIT_WIDTH }}
                 className="absolute inset-y-0 z-10 flex cursor-col-resize touch-none select-none items-center justify-center"
               >
-                <div className="h-[18px] w-[2px] rounded-[1px] bg-background ring-1 ring-ink/25" />
+                <div className="h-[16px] w-[2px] rounded-[1px] bg-background ring-1 ring-ink/25" />
               </div>
             )}
           </React.Fragment>

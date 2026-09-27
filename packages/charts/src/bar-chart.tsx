@@ -29,7 +29,7 @@ export function SimpleBarChart({ data, config, xAxisKey, className }: BarChartPr
         <RechartsPrimitive.XAxis dataKey={xAxisKey} tickLine={false} axisLine={false} tickMargin={8} />
         <ChartTooltip content={<ChartTooltipContent />} cursor={false} />
         {seriesKeys.map((key) => (
-          <RechartsPrimitive.Bar key={key} dataKey={key} fill={`var(--color-${key})`} radius={4} />
+          <RechartsPrimitive.Bar key={key} dataKey={key} fill={`var(--color-${key})`} radius={5} />
         ))}
       </RechartsPrimitive.BarChart>
     </ChartContainer>
@@ -56,7 +56,7 @@ export function StackedBarChartWithLegend({ data, config, xAxisKey, className }:
             dataKey={key}
             stackId="stack"
             fill={`var(--color-${key})`}
-            radius={index === seriesKeys.length - 1 ? [4, 4, 0, 0] : 0}
+            radius={index === seriesKeys.length - 1 ? [5, 5, 0, 0] : 0}
           />
         ))}
         <ChartLegend content={<ChartLegendContent />} />
@@ -89,7 +89,7 @@ export function NegativeBarChart({ data, config, xAxisKey, dataKey, className }:
         <RechartsPrimitive.XAxis dataKey={xAxisKey} tickLine={false} axisLine={false} tickMargin={8} />
         <RechartsPrimitive.ReferenceLine y={0} stroke="var(--border)" />
         <ChartTooltip content={<ChartTooltipContent />} cursor={false} />
-        <RechartsPrimitive.Bar dataKey={dataKey} radius={4}>
+        <RechartsPrimitive.Bar dataKey={dataKey} radius={5}>
           {data.map((entry, index) => (
             <RechartsPrimitive.Cell
               key={index}

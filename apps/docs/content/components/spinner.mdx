@@ -4,7 +4,7 @@ description: Um indicador pequeno de que algo está carregando, quando não dá 
 ---
 
 <Preview>
-  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "1.5rem" }}>
+  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "21px" }}>
     <Spinner size="sm" />
     <Spinner size="md" />
     <Spinner size="lg" />
@@ -36,10 +36,10 @@ Dentro de um botão que dispara uma ação demorada, troque o texto por um verbo
   <State label="sm · 16px">
     <Spinner size="sm" />
   </State>
-  <State label="md · 24px">
+  <State label="md · 21px">
     <Spinner size="md" />
   </State>
-  <State label="lg · 40px">
+  <State label="lg · 34px">
     <Spinner size="lg" />
   </State>
 </StatesGrid>
@@ -52,7 +52,7 @@ Dentro de um botão que dispara uma ação demorada, troque o texto por um verbo
       prop: "size",
       type: '"sm" | "md" | "lg"',
       default: '"md"',
-      description: "Diâmetro do anel: 16, 24 ou 40px.",
+      description: "Diâmetro do anel: 16, 21 ou 34px.",
     },
     {
       prop: "label",

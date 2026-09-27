@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardTitle } from "@adinkra/card";
 import { iconRegistry } from "@adinkra/icons";
 import { GlitchCursor } from "@adinkra/cursor";
 import { T } from "../../../components/language";
+import { DocsArticle, DocsPageHeader } from "../../../components/mdx-components";
 import { PageTopbar } from "../../../components/page-topbar";
 
 export const metadata = { title: "Símbolos" };
@@ -38,7 +39,7 @@ export const metadata = { title: "Símbolos" };
  */
 function PlaceholderIcon() {
   return (
-    <svg viewBox="0 0 100 100" role="img" aria-label="A definir" className="size-20 text-muted-foreground">
+    <svg viewBox="0 0 100 100" role="img" aria-label="A definir" className="size-[89px] text-muted-foreground">
       <rect x="18" y="18" width="64" height="64" rx="10" fill="none" stroke="currentColor" strokeWidth="7" strokeDasharray="10 8" />
     </svg>
   );
@@ -47,7 +48,7 @@ function PlaceholderIcon() {
 function SymbolIcon({ slug, label }: { slug: string; label: string }) {
   const Icon = iconRegistry[slug];
   if (!Icon) return <PlaceholderIcon />;
-  return <Icon role="img" aria-label={label} className="size-20 text-brand" />;
+  return <Icon role="img" aria-label={label} className="size-[89px] text-brand" />;
 }
 
 interface SymbolEntry {
@@ -164,19 +165,15 @@ const symbols: SymbolEntry[] = [
 export default function SymbolsPage() {
   return (
     <>
-      <article className="grid w-full gap-8 pb-24">
-        <PageTopbar title={<T k="common.symbols" />} trail={[]} />
-        <header className="grid gap-2 border-b border-hairline pb-6">
-          <p className="font-display text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-            <T k="common.resources" />
-          </p>
-          <h1 className="-ml-[0.04em] font-display text-3xl font-medium text-heading"><T k="common.symbols" /></h1>
-          <p className="text-muted-foreground">
-            <T k="symbols.description" />
-          </p>
-        </header>
+      <PageTopbar title={<T k="common.symbols" />} trail={[]} />
+      <DocsArticle>
+        <DocsPageHeader
+          eyebrow={<T k="common.resources" />}
+          title={<T k="common.symbols" />}
+          description={<T k="symbols.description" />}
+        />
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {symbols.map(({ name, description, slug }, index) => (
             <Card key={`${name}-${index}`}>
               <CardContent className="grid justify-items-center gap-2 text-center">
@@ -187,7 +184,7 @@ export default function SymbolsPage() {
             </Card>
           ))}
         </div>
-      </article>
+      </DocsArticle>
     </>
   );
 }

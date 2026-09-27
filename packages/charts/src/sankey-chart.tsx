@@ -32,9 +32,9 @@ function SankeyNode({ x = 0, y = 0, width = 0, height = 0, index = 0, payload }:
     <g>
       <rect x={x} y={y} width={width} height={height} fill={color} rx={2} />
       <text
-        x={x + width + 6}
+        x={x + width + 5}
         y={y + height / 2}
-        dy={4}
+        dy={3}
         className="fill-heading font-display text-xs"
         textAnchor="start"
       >
@@ -111,8 +111,8 @@ export function SankeyChart({ data, className }: SankeyChartProps) {
           data={data}
           node={<SankeyNode />}
           link={<SankeyLink colorByNodeName={colorByNodeName} />}
-          nodePadding={24}
-          margin={{ top: 8, right: 96, bottom: 8, left: 8 }}
+          nodePadding={21}
+          margin={{ top: 8, right: 89, bottom: 8, left: 8 }}
         >
           <RechartsPrimitive.Tooltip
             contentStyle={{

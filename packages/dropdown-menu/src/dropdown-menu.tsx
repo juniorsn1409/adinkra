@@ -11,10 +11,13 @@ import { cn } from "@adinkra/core";
  * esquerda nos submenus) e foco gerido pelo primitivo.
  *
  * Visual: o painel é um "cartão único" (borda + sombra dura + `bg-surface`).
+ * Medidas φ (27/09/2026): painel de 233 (mínimo), padding 5, raio 8, sombra 5
+ * (igual à lista do Select), afastamento 5 do gatilho; itens de 34 com px 13,
+ * text-sm, gap 8, raio 3, ícones 13; separador de 1 com margem 5.
  * Os itens não têm borda nem sombra — são linhas de lista, tratamento ghost.
  * O item destacado (mouse OU teclado, `data-highlighted`) inverte pra
- * `bg-accent`/`text-accent-foreground` (marinho no dia, névoa na noite,
- * contraste 12.5:1 nos dois). Não usa `--primary`: aqui não há "estado
+ * `bg-accent`/`text-accent-foreground` (#231F20 no dia, #EAE6E7 na noite,
+ * contraste 16.3:1 e 13.6:1). Não usa `--primary`: aqui não há "estado
  * ligado" de item pra confundir com o destaque — o ligado dos itens de
  * marcar/rádio é o próprio ícone (check/ponto).
  *
@@ -75,7 +78,7 @@ function DropdownMenuTrigger({ ref, ...props }: React.ComponentProps<typeof Menu
 
 // Classes do painel, compartilhadas entre o menu raiz e os submenus.
 const popupClassName = cn(
-  "min-w-40 max-w-(--available-width) overflow-y-auto rounded-control border-[length:var(--border-width)] border-ink bg-surface p-1 font-display text-foreground shadow-brutal outline-none",
+  "min-w-[233px] max-w-(--available-width) overflow-y-auto rounded-card border-[length:var(--border-width)] border-ink bg-surface p-2 font-display text-foreground shadow-brutal-hover outline-none",
   // Nasce do gatilho e some mais rápido do que entra (abrir é o gesto, fechar é limpeza).
   "origin-(--transform-origin) transition-[opacity,scale] duration-[130ms] ease-[var(--ease-out)]",
   "data-[starting-style]:scale-[0.96] data-[starting-style]:opacity-0",
@@ -92,7 +95,7 @@ function DropdownMenuContent({
   align = "start",
   alignOffset = 0,
   side = "bottom",
-  sideOffset = 6,
+  sideOffset = 5,
   ...props
 }: React.ComponentProps<typeof MenuPrimitive.Popup> & PositionerProps) {
   const ctx = React.useContext(ContainerContext);
@@ -107,9 +110,9 @@ function DropdownMenuContent({
 
 // Base compartilhada por item, item de marcar, item de rádio e gatilho de submenu.
 const itemClassName = cn(
-  "relative flex h-8 cursor-default select-none items-center gap-2 rounded-control px-2.5 text-sm text-foreground outline-none",
+  "relative flex h-6 cursor-default select-none items-center gap-3 rounded-[3px] px-4 text-sm text-foreground outline-none",
   "data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground",
-  "data-[disabled]:pointer-events-none data-[disabled]:opacity-45",
+  "data-[disabled]:pointer-events-none data-[disabled]:opacity-[0.382]",
   "[&_svg]:pointer-events-none [&_svg]:flex-none",
 );
 
@@ -150,7 +153,7 @@ function DropdownMenuGroup({ children, ...props }: React.ComponentProps<typeof M
  */
 function DropdownMenuLabel({ className, ...props }: React.ComponentProps<"div">) {
   const inGroup = React.useContext(GroupContext);
-  const classes = cn("px-2.5 py-1.5 font-display text-xs font-medium text-muted-foreground", className);
+  const classes = cn("px-4 py-2 font-display text-xs font-medium text-muted-foreground", className);
   if (inGroup) {
     return <MenuPrimitive.GroupLabel data-slot="dropdown-menu-label" className={classes} {...props} />;
   }
@@ -161,7 +164,7 @@ function DropdownMenuSeparator({ className, ...props }: React.ComponentProps<typ
   return (
     <MenuPrimitive.Separator
       data-slot="dropdown-menu-separator"
-      className={cn("-mx-1 my-1 h-[var(--border-width)] bg-ink", className)}
+      className={cn("-mx-2 my-2 h-px bg-ink", className)}
       {...props}
     />
   );
@@ -170,7 +173,7 @@ function DropdownMenuSeparator({ className, ...props }: React.ComponentProps<typ
 // Traços no mesmo estilo (viewBox 16x16) dos outros ícones de controle do sistema.
 function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true" {...props}>
       <path d="M3.5 8.5 6.5 11.5 12.5 4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -178,7 +181,7 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function DotIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true" {...props}>
       <circle cx="8" cy="8" r="3" fill="currentColor" />
     </svg>
   );
@@ -186,14 +189,15 @@ function DotIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function ChevronRightIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true" {...props}>
       <path d="M6.5 4 10.5 8 6.5 12" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
-// Espaço reservado à esquerda pro indicador (check/ponto), aparece só quando marcado.
-const indicatorClassName = "absolute left-2 flex size-4 items-center justify-center";
+// Espaço reservado à esquerda pro indicador (check/ponto, 13), aparece só quando
+// marcado: indicador a 13 da borda (`left-4`), texto a 34 (`pl-6` = 13 + 13 + gap 8).
+const indicatorClassName = "absolute left-4 flex size-4 items-center justify-center";
 
 function DropdownMenuCheckboxItem({
   className,
@@ -203,7 +207,7 @@ function DropdownMenuCheckboxItem({
   return (
     <MenuPrimitive.CheckboxItem
       data-slot="dropdown-menu-checkbox-item"
-      className={cn(itemClassName, "pl-8", className)}
+      className={cn(itemClassName, "pl-6", className)}
       {...props}
     >
       <MenuPrimitive.CheckboxItemIndicator className={indicatorClassName}>
@@ -226,7 +230,7 @@ function DropdownMenuRadioItem({
   return (
     <MenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"
-      className={cn(itemClassName, "pl-8", className)}
+      className={cn(itemClassName, "pl-6", className)}
       {...props}
     >
       <MenuPrimitive.RadioItemIndicator className={indicatorClassName}>
@@ -266,7 +270,7 @@ function DropdownMenuSubContent({
   align = "start",
   alignOffset = -5,
   side = "right",
-  sideOffset = 4,
+  sideOffset = 5,
   ...props
 }: React.ComponentProps<typeof MenuPrimitive.Popup> & PositionerProps) {
   const ctx = React.useContext(ContainerContext);

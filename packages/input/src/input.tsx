@@ -28,7 +28,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       [error ? errorId : help ? helpId : null, describedBy].filter(Boolean).join(" ") || undefined;
 
     return (
-      <div className="grid gap-1.5">
+      <div className="grid gap-3">
         {label ? (
           <label htmlFor={inputId} className="font-display text-sm font-medium text-heading">
             {label}
@@ -40,17 +40,17 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           aria-invalid={error ? true : undefined}
           aria-describedby={describedByIds}
           className={cn(
-            // h-[36px]: mesma altura do Button md e do Select — valor fixo porque h-9 agora é Fibonacci (144px).
-            "h-[36px] w-full rounded-control border-[length:var(--border-width)] bg-card px-3 text-sm text-foreground",
+            // h-[42px]: altura md da tabela φ (fonte 16 × φ² ≈ 42) — mesma do Button md e do Select.
+            "h-[42px] w-full rounded-control border-[length:var(--border-width)] bg-card px-4 text-base text-foreground",
             "placeholder:text-muted-foreground",
             "shadow-brutal transition-[border-color,box-shadow] duration-150",
             // Sem "pressionar": digitar não é um clique, não precisa do gesto tátil do botão.
-            // Mesmo anel dos botões (outline --ring com respiro de 2px). Trocar só a cor da
+            // Mesmo anel dos botões (outline --ring com respiro de 3px). Trocar só a cor da
             // borda de tinta pra --ring (marinho, quase igual à tinta) e crescer a sombra
             // não passava de 3:1 entre foco e repouso — ficava quase invisível.
-            "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-            "disabled:pointer-events-none disabled:opacity-45 disabled:shadow-none",
-            error ? "border-destructive shadow-[2px_2px_0_0_var(--destructive)]" : "border-ink",
+            "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
+            "disabled:pointer-events-none disabled:opacity-[0.382] disabled:shadow-none",
+            error ? "border-destructive shadow-[3px_3px_0_0_var(--destructive)]" : "border-ink",
             className,
           )}
           {...props}
@@ -58,18 +58,18 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {error ? (
           <p
             id={errorId}
-            className="flex items-center gap-1.5 font-display text-xs font-medium text-destructive"
+            className="flex items-center gap-2 font-display text-sm font-medium text-destructive"
           >
             <span
               aria-hidden="true"
-              className="grid h-[16px] w-[16px] flex-none place-items-center rounded-full bg-destructive text-xs text-destructive-foreground"
+              className="grid h-[13px] w-[13px] flex-none place-items-center rounded-full bg-destructive text-xs text-destructive-foreground"
             >
               !
             </span>
             {error}
           </p>
         ) : help ? (
-          <p id={helpId} className="font-display text-xs text-muted-foreground">
+          <p id={helpId} className="font-display text-sm text-muted-foreground">
             {help}
           </p>
         ) : null}

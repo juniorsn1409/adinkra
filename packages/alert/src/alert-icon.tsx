@@ -36,7 +36,7 @@ const alertIconVariants = cva(
 
 export type AlertVariant = NonNullable<VariantProps<typeof alertIconVariants>["variant"]>;
 
-const svgProps = {
+const svgBaseProps = {
   viewBox: "0 0 16 16",
   fill: "none",
   stroke: "currentColor",
@@ -44,46 +44,53 @@ const svgProps = {
   strokeLinecap: "round",
   strokeLinejoin: "round",
   "aria-hidden": true,
-  className: "size-[16px]",
 } as const;
 
+// Tamanho do glifo (não da pastilha, que continua 34 pros dois casos):
+// "default" 16 (usado pelo @adinkra/toast, ícone 16 na spec φ) e "lg" 21
+// (usado pelo Alert em bloco, ícone 21 na spec φ) — ambos ∈ S.
+export type AlertIconSize = "default" | "lg";
+
+const iconSizeClass: Record<AlertIconSize, string> = {
+  default: "size-[16px]",
+  lg: "size-[21px]",
+};
+
 // Um formato por variante — nunca só a cor diferencia.
-const glyphs: Record<AlertVariant, React.ReactNode> = {
+const glyphPaths: Record<AlertVariant, React.ReactNode> = {
   // balão de fala
-  default: (
-    <svg {...svgProps}>
-      <path d="M2.5 3.5h11v7h-6l-3 2.5v-2.5h-2z" />
-    </svg>
-  ),
+  default: <path d="M2.5 3.5h11v7h-6l-3 2.5v-2.5h-2z" />,
   // círculo com "i"
   info: (
-    <svg {...svgProps}>
+    <>
       <circle cx="8" cy="8" r="6" />
       <path d="M8 7.5v3.5M8 5v.01" />
-    </svg>
+    </>
   ),
   // triângulo com "!"
   warning: (
-    <svg {...svgProps}>
+    <>
       <path d="M8 2.5 14 13H2z" />
       <path d="M8 6.5v3M8 11.2v.01" />
-    </svg>
+    </>
   ),
   // octógono com "!" (placa de pare)
   destructive: (
-    <svg {...svgProps}>
+    <>
       <path d="M5.2 2h5.6L14 5.2v5.6L10.8 14H5.2L2 10.8V5.2z" />
       <path d="M8 5v3.5M8 10.7v.01" />
-    </svg>
+    </>
   ),
 };
 
 export interface AlertIconProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: AlertVariant | null;
+  /** Tamanho do glifo padrão (ignorado quando `children` substitui o ícone). Padrão "default" (16px). */
+  size?: AlertIconSize;
 }
 
 /** Pastilha com o ícone da variante. Decorativa (`aria-hidden`): o texto do alerta já diz tudo. */
-export function AlertIcon({ variant, className, children, ...props }: AlertIconProps) {
+export function AlertIcon({ variant, size = "default", className, children, ...props }: AlertIconProps) {
   const v = variant ?? "default";
   return (
     <span
@@ -92,7 +99,11 @@ export function AlertIcon({ variant, className, children, ...props }: AlertIconP
       className={cn(alertIconVariants({ variant: v }), className)}
       {...props}
     >
-      {children ?? glyphs[v]}
+      {children ?? (
+        <svg {...svgBaseProps} className={iconSizeClass[size]}>
+          {glyphPaths[v]}
+        </svg>
+      )}
     </span>
   );
 }

@@ -93,16 +93,41 @@ export function Localized({ pt, en }: { pt: React.ReactNode; en?: React.ReactNod
   return <>{lang === "en" && en ? en : pt}</>;
 }
 
+/**
+ * Troca de idioma da barra do topo das páginas de docs (canvas de
+ * 27/09/2026): um botão só, "PT · EN" em mono 10 com 0.13em de tracking,
+ * 34 de altura e 13 de padding lateral, o idioma atual em --heading. Cada
+ * clique alterna entre os dois — com só dois idiomas, um select era peso
+ * demais pra barra de 55. A home continua com o LanguageSelect abaixo.
+ */
+export function LanguageSwitch() {
+  const { lang, setLang, t } = useLang();
+  const current = lang === "en" ? pt["language.en"] : pt["language.pt"];
+
+  return (
+    <button
+      type="button"
+      onClick={() => setLang(lang === "en" ? "pt" : "en")}
+      aria-label={`${t("language.label")}: ${current}`}
+      className="inline-flex h-[34px] flex-none items-center gap-2 rounded-control px-4 font-mono text-xs tracking-[0.13em] text-muted-foreground hover:bg-surface focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring"
+    >
+      <span className={lang === "pt" ? "text-heading" : undefined}>PT</span>
+      <span aria-hidden="true">·</span>
+      <span className={lang === "en" ? "text-heading" : undefined}>EN</span>
+    </button>
+  );
+}
+
 export function LanguageSelect() {
   const { lang, setLang, t } = useLang();
 
   return (
-    <div className="w-32">
+    <div className="w-[144px]">
       <Select
         aria-label={t("language.label")}
         value={lang}
         onChange={(event) => setLang(event.target.value as Lang)}
-        className="h-7.5 text-xs"
+        className="h-[34px] text-sm"
       >
         <SelectOption value="pt">{pt["language.pt"]}</SelectOption>
         <SelectOption value="en">{pt["language.en"]}</SelectOption>

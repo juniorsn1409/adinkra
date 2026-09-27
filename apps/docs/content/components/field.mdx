@@ -4,7 +4,7 @@ description: Rótulo, texto de ajuda e mensagem de erro ligados por id e aria a 
 ---
 
 <Preview>
-  <div style={{ display: "grid", gap: "1.5rem", width: "100%", maxWidth: "24rem" }}>
+  <div style={{ display: "grid", gap: "21px", width: "100%", maxWidth: "377px" }}>
     <Field label="Bio" description="Aparece no seu perfil público.">
       <Textarea placeholder="Conte um pouco sobre você" />
     </Field>
@@ -38,7 +38,7 @@ O `<Label>`, o `<FieldDescription>` e o `<FieldError>` também são exportados i
 Para Checkbox (e Switch), o rótulo vai ao lado do controle com `orientation="horizontal"`:
 
 <Preview>
-  <div style={{ width: "100%", maxWidth: "24rem" }}>
+  <div style={{ width: "100%", maxWidth: "377px" }}>
     <Field orientation="horizontal" label="Receber o resumo semanal" description="Toda segunda, no seu e-mail.">
       <Checkbox defaultChecked />
     </Field>
@@ -54,7 +54,7 @@ Para Checkbox (e Switch), o rótulo vai ao lado do controle com `orientation="ho
 Quando o controle é um grupo (RadioGroup), não existe um único `<input>` para o `<label htmlFor>` apontar. Use `group`: o título vira `aria-labelledby` do grupo.
 
 <Preview>
-  <div style={{ width: "100%", maxWidth: "24rem" }}>
+  <div style={{ width: "100%", maxWidth: "377px" }}>
     <Field group label="Plano" description="Você pode trocar quando quiser.">
       <RadioGroup defaultValue="mensal">
         <RadioGroupItem value="mensal" label="Mensal" />
@@ -69,7 +69,7 @@ Para uma lista de Checkbox, passe uma função em `children`. Ela recebe as prop
 ```tsx
 <Field group label="Notificações">
   {(control) => (
-    <div role="group" {...control} className="grid gap-2.5">
+    <div role="group" {...control} className="grid gap-3">
       <Checkbox label="Novidades" />
       <Checkbox label="Resumo semanal" />
     </div>

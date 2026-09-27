@@ -17,9 +17,9 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       <a
         ref={ref}
         className={cn(
-          "inline-flex items-center gap-1.5 font-display text-xs font-medium tracking-[0.14em]",
-          "text-primary transition-colors duration-150 hover:text-secondary",
-          "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+          "inline-flex items-center gap-[5px] font-display text-xs font-medium tracking-[0.14em]",
+          "text-primary underline decoration-2 underline-offset-[5px] transition-colors duration-150 hover:text-secondary",
+          "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
           uppercase && "uppercase",
           className,
         )}

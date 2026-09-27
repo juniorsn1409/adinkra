@@ -54,14 +54,14 @@ export function Alert({
       data-variant={variant}
       role={role ?? liveRole[variant]}
       className={cn(
-        "grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 gap-y-3 rounded-card border-[length:var(--border-width)] border-ink bg-card p-4 text-sm text-foreground shadow-brutal",
+        "grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-4 gap-y-4 rounded-card border-[length:var(--border-width)] border-ink bg-card p-5 text-sm text-foreground shadow-brutal",
         // Só abre a 3ª coluna quando há ação — vazia, ela ainda cobraria um gap.
         action ? "sm:grid-cols-[auto_minmax(0,1fr)_auto]" : null,
         className,
       )}
       {...props}
     >
-      <AlertIcon variant={variant}>{icon}</AlertIcon>
+      <AlertIcon variant={variant} size="lg">{icon}</AlertIcon>
       <div className="grid min-w-0 gap-1">{children}</div>
       {action ? (
         <div
@@ -82,7 +82,7 @@ export function AlertTitle({ className, ...props }: AlertTitleProps) {
   return (
     <div
       data-slot="alert-title"
-      className={cn("font-display text-base font-medium leading-snug tracking-[0.02em] text-heading", className)}
+      className={cn("font-display text-base font-semibold leading-snug tracking-[0.02em] text-heading", className)}
       {...props}
     />
   );

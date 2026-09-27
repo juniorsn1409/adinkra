@@ -23,7 +23,7 @@ export function LinkDemo() {
           <T k="demo.link.seeAll" />
         </Link>
       </div>
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-3">
         <Switch id="link-uppercase" checked={uppercase} onCheckedChange={setUppercase} />
         <label htmlFor="link-uppercase" className="font-display text-sm text-heading">
           <T k="demo.link.uppercase" />

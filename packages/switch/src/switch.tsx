@@ -13,27 +13,29 @@ import { cn } from "@adinkra/core";
  * WAI-ARIA APG. A trilha nunca perde a borda/sombra dura (mesmo tratamento
  * quieto do Input — sem o gesto de "subir no hover", pequeno demais pra
  * isso), só troca de cor; o polegar desliza via `translate-x`, calculado
- * pra bater exatamente na escala de espaçamento do Tailwind (sem valor
- * arbitrário): a trilha tem `px-[3px]` de respiro interno, e o percurso do
- * polegar é (largura útil − seu próprio tamanho), que dá 12px no `sm` e
- * 16px no `md` — por isso `translate-x-3`/`translate-x-4`, não números
- * soltos.
+ * pra bater exatamente na escala φ (Fibonacci ∪ 16·φⁿ): a trilha md é
+ * 42×26 com respiro interno `px-[3px]` e polegar 16 — percurso = largura
+ * útil (42 − 2×2 borda − 2×3 padding = 32) − o próprio polegar (16) = 16
+ * (`translate-x-[16px]`), o polegar encosta exatamente na borda oposta.
+ * No `sm` (34×21, um degrau de Fibonacci abaixo, sem equivalente direto
+ * na spec): interno 34 − 2×2 = 30; padding 2 (`px-1`); percurso
+ * 30 − 2×2 − 13 = 13 (`translate-x-4`), polegar 13 (`size-4`).
  */
 
 const switchVariants = cva(
   [
-    "peer inline-flex shrink-0 cursor-pointer items-center rounded-full px-[3px]",
+    "peer inline-flex shrink-0 cursor-pointer items-center rounded-full",
     "border-[length:var(--border-width)] border-ink shadow-brutal",
     "transition-colors duration-150",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-    "disabled:pointer-events-none disabled:opacity-45 disabled:shadow-none",
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
+    "disabled:pointer-events-none disabled:opacity-[0.382] disabled:shadow-none",
     "data-[state=unchecked]:bg-card data-[state=checked]:bg-primary",
   ],
   {
     variants: {
       size: {
-        sm: "h-5 w-[36px]",
-        md: "h-[24px] w-11",
+        sm: "h-5 w-6 px-1",
+        md: "h-[26px] w-[42px] px-[3px]",
       },
     },
     defaultVariants: { size: "md" },
@@ -49,7 +51,7 @@ const switchThumbVariants = cva(
   {
     variants: {
       size: {
-        sm: "size-[12px] data-[state=checked]:translate-x-[12px]",
+        sm: "size-4 data-[state=checked]:translate-x-4",
         md: "size-[16px] data-[state=checked]:translate-x-[16px]",
       },
     },

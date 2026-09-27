@@ -74,7 +74,7 @@ O botão diz o que vai acontecer ("Excluir projeto"), não "OK". O foco inicial 
 
 Modal não nasce do gatilho: fica no centro da tela, então a escala parte do centro. O painel entra com fade e escala de 0,96 para 1 em 200 ms, e sai em 150 ms, com a curva `--ease-out`. O fundo só faz fade. Só `opacity` e `scale` animam. Com `prefers-reduced-motion`, a troca é instantânea.
 
-O fundo usa `--background` translúcido: no tema claro vira um véu claro, no escuro um véu escuro. Quem separa o painel do resto é a borda de tinta.
+O fundo é `--ink` a 61,8% (1/φ), que inverte com o tema. O painel tem 610 px de largura, padding de 34, borda de tinta e sombra dura de 5.
 
 ## Props
 

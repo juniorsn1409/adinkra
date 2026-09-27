@@ -8,7 +8,7 @@ import { cn } from "@adinkra/core";
  * variantes, mas com a borda de tinta que todo componente do sistema leva
  * (regra 9, DECISOES.md — mesmo os não-clicáveis, aqui, para ficar
  * consistente com a referência). Tamanho e formato vêm inteiramente de
- * className (`<Skeleton className="h-4 w-40 rounded-full" />`).
+ * className (`<Skeleton className="h-[13px] w-[144px] rounded-full" />`).
  *
  * A cor reaproveita --hairline: a paleta não tem um tom "neutro de
  * preenchimento" dedicado, e --hairline já é decorativo por definição

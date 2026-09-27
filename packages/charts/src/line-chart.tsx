@@ -23,7 +23,7 @@ export interface SparklineProps {
  */
 export function LineSparkline({ data, dataKey, color = "var(--primary)", className }: SparklineProps) {
   return (
-    <div className={cn("aspect-auto h-10 w-full", className)}>
+    <div className={cn("aspect-auto h-[42px] w-full", className)}>
       <RechartsPrimitive.ResponsiveContainer>
         <RechartsPrimitive.LineChart data={data}>
           <RechartsPrimitive.Line type="monotone" dataKey={dataKey} stroke={color} strokeWidth={2} dot={false} isAnimationActive={false} />
@@ -72,7 +72,7 @@ export function LineChartWithEndDot({ data, dataKey, xAxisKey, color = "var(--pr
             tickLine={false}
             axisLine={false}
             tickMargin={8}
-            tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+            tick={{ fill: "var(--muted-foreground)", fontSize: 13 }}
           />
           <RechartsPrimitive.Tooltip
             cursor={{ stroke: "var(--border)" }}

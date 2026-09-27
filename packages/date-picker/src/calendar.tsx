@@ -13,7 +13,7 @@ export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 // controle do sistema — não lucide-react (removido do projeto antes).
 function ChevronLeftIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true" {...props}>
       <path d="M10 3.5 5.5 8l4.5 4.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -21,7 +21,7 @@ function ChevronLeftIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function ChevronRightIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true" {...props}>
       <path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -29,7 +29,7 @@ function ChevronRightIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function ChevronDownIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true" {...props}>
       <path d="M4 6.5 8 10.5 12 6.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -58,7 +58,7 @@ function Calendar({ className, classNames, showOutsideDays = false, captionLayou
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("group/calendar p-3 font-display text-foreground", className)}
+      className={cn("group/calendar p-4 font-display text-foreground", className)}
       captionLayout={captionLayout}
       locale={locale}
       formatters={{
@@ -85,10 +85,10 @@ function Calendar({ className, classNames, showOutsideDays = false, captionLayou
         ),
         month: cn("flex w-full flex-col gap-4", defaultClassNames.month),
         nav: cn("absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1", defaultClassNames.nav),
-        button_previous: cn(buttonVariants({ variant: "ghost" }), "size-[28px] p-0 select-none hover:bg-card aria-disabled:opacity-50", defaultClassNames.button_previous),
-        button_next: cn(buttonVariants({ variant: "ghost" }), "size-[28px] p-0 select-none hover:bg-card aria-disabled:opacity-50", defaultClassNames.button_next),
-        month_caption: cn("flex h-[28px] w-full items-center justify-center px-8", defaultClassNames.month_caption),
-        dropdowns: cn("flex h-[28px] w-full items-center justify-center gap-1.5 font-display text-sm", defaultClassNames.dropdowns),
+        button_previous: cn(buttonVariants({ variant: "ghost" }), "size-6 p-0 select-none hover:bg-card aria-disabled:opacity-[0.382]", defaultClassNames.button_previous),
+        button_next: cn(buttonVariants({ variant: "ghost" }), "size-6 p-0 select-none hover:bg-card aria-disabled:opacity-[0.382]", defaultClassNames.button_next),
+        month_caption: cn("flex h-6 w-full items-center justify-center px-6", defaultClassNames.month_caption),
+        dropdowns: cn("flex h-6 w-full items-center justify-center gap-2 font-display text-sm", defaultClassNames.dropdowns),
         dropdown_root: cn(
           "relative rounded-control border-[length:var(--border-width)] border-ink bg-card",
           defaultClassNames.dropdown_root,
@@ -96,25 +96,29 @@ function Calendar({ className, classNames, showOutsideDays = false, captionLayou
         dropdown: cn("absolute inset-0 opacity-0", defaultClassNames.dropdown),
         caption_label: cn(
           "select-none font-display",
-          captionLayout === "label" ? "text-sm" : "flex h-[28px] items-center gap-1 rounded-control px-2 text-sm [&>svg]:size-3.5",
+          captionLayout === "label" ? "text-sm" : "flex h-6 items-center gap-2 rounded-control px-3 text-sm [&>svg]:size-4",
           defaultClassNames.caption_label,
         ),
         month_grid: cn("w-full border-collapse", defaultClassNames.month_grid),
+        // Grade φ: célula 34 (`size-6`) com gap de 5px nas duas direções —
+        // `gap-[5px]` entre colunas e `mt-2` (5px na escala φ) entre semanas.
+        // A faixa do intervalo contínuo (CalendarDayButton) preenche
+        // exatamente esses 5px — mudar um exige mudar o outro.
         weekdays: cn("flex gap-[5px]", defaultClassNames.weekdays),
-        weekday: cn("w-[36px] select-none rounded-control text-sm text-muted-foreground", defaultClassNames.weekday),
+        weekday: cn("w-6 select-none rounded-control font-mono text-xs text-muted-foreground", defaultClassNames.weekday),
         week: cn("mt-2 flex w-full gap-[5px]", defaultClassNames.week),
-        week_number_header: cn("w-[36px] select-none", defaultClassNames.week_number_header),
-        week_number: cn("select-none text-sm text-muted-foreground", defaultClassNames.week_number),
+        week_number_header: cn("w-6 select-none", defaultClassNames.week_number_header),
+        week_number: cn("select-none font-mono text-xs text-muted-foreground", defaultClassNames.week_number),
         // range_start/range_middle/range_end saem daqui — a borda/raio deles
         // depende de SABER se o dia conecta com o vizinho (não dá pra fazer
         // só com classe estática por modifier, precisa de lógica condicional
         // em cima de mais de um modifier ao mesmo tempo), então viraram
         // responsabilidade do CalendarDayButton (JS), não deste mapa.
-        day: cn("group/day relative size-[36px] select-none p-0 text-center text-xs", defaultClassNames.day),
+        day: cn("group/day relative size-6 select-none p-0 text-center text-sm", defaultClassNames.day),
         selected: cn(props.mode !== "range" && "rounded-control bg-secondary", defaultClassNames.selected),
         today: cn(defaultClassNames.today),
-        outside: cn("opacity-50", defaultClassNames.outside),
-        disabled: cn("opacity-40", defaultClassNames.disabled),
+        outside: cn("opacity-[0.618]", defaultClassNames.outside),
+        disabled: cn("opacity-[0.382]", defaultClassNames.disabled),
         hidden: cn("invisible", defaultClassNames.hidden),
         ...classNames,
       }}
@@ -123,14 +127,14 @@ function Calendar({ className, classNames, showOutsideDays = false, captionLayou
           <div data-slot="calendar" ref={rootRef} className={cn(rootClassName)} {...rootProps} />
         ),
         Chevron: ({ className: chevronClassName, orientation, ...chevronProps }) => {
-          if (orientation === "left") return <ChevronLeftIcon className={cn("size-3.5", chevronClassName)} {...chevronProps} />;
-          if (orientation === "right") return <ChevronRightIcon className={cn("size-3.5", chevronClassName)} {...chevronProps} />;
-          return <ChevronDownIcon className={cn("size-3.5", chevronClassName)} {...chevronProps} />;
+          if (orientation === "left") return <ChevronLeftIcon className={cn("size-4", chevronClassName)} {...chevronProps} />;
+          if (orientation === "right") return <ChevronRightIcon className={cn("size-4", chevronClassName)} {...chevronProps} />;
+          return <ChevronDownIcon className={cn("size-4", chevronClassName)} {...chevronProps} />;
         },
         DayButton: CalendarDayButton,
         WeekNumber: ({ children, ...weekNumberProps }) => (
           <td {...weekNumberProps}>
-            <div className="flex size-[36px] items-center justify-center text-center">{children}</div>
+            <div className="flex size-6 items-center justify-center text-center">{children}</div>
           </td>
         ),
         ...components,
@@ -180,7 +184,7 @@ function CalendarDayButton({ className, day, modifiers, ...props }: React.Compon
       data-today={modifiers.today}
       className={cn(
         buttonVariants({ variant: "ghost" }),
-        "size-[36px] rounded-tl-control rounded-tr-control rounded-bl-control rounded-br-control border-t-[length:var(--border-width)] border-r-[length:var(--border-width)] border-b-[length:var(--border-width)] border-l-[length:var(--border-width)] border-ink p-0 font-display text-xs hover:bg-card",
+        "size-6 rounded-tl-control rounded-tr-control rounded-bl-control rounded-br-control border-t-[length:var(--border-width)] border-r-[length:var(--border-width)] border-b-[length:var(--border-width)] border-l-[length:var(--border-width)] border-ink p-0 font-display text-sm hover:bg-card",
         // Hoje: tom clarinho (tinta leve do accent, não o token sólido) —
         // vem ANTES do range/selecionado no cn() de propósito, pra quando
         // hoje TAMBÉM estiver selecionado o tom escuro do selecionado vencer

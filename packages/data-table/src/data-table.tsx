@@ -75,7 +75,7 @@ function TagGlyphIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function HashGlyph() {
   return (
-    <span aria-hidden="true" className="flex size-3.5 items-center justify-center font-mono text-xs font-bold leading-none">
+    <span aria-hidden="true" className="flex size-4 items-center justify-center font-mono text-xs font-bold leading-none">
       #
     </span>
   );
@@ -93,10 +93,10 @@ function CalendarGlyphIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 function ColumnTypeIcon({ type }: { type: DataTableColumn["type"] }) {
-  if (type === "select") return <TagGlyphIcon className="size-3.5" />;
+  if (type === "select") return <TagGlyphIcon className="size-4" />;
   if (type === "number") return <HashGlyph />;
-  if (type === "date") return <CalendarGlyphIcon className="size-3.5" />;
-  return <TextLinesIcon className="size-3.5" />;
+  if (type === "date") return <CalendarGlyphIcon className="size-4" />;
+  return <TextLinesIcon className="size-4" />;
 }
 
 // O estado indeterminate é resolvido pelo próprio @adinkra/checkbox. A opacidade
@@ -187,7 +187,7 @@ function SelectCell({
 
   return (
     <Popover open={isEditing} onOpenChange={(open) => (open ? onRequestEdit() : onClose())}>
-      <PopoverTrigger className="flex min-h-8 w-full flex-wrap items-center gap-1 rounded-control px-2 py-1 text-left hover:bg-card">
+      <PopoverTrigger className="flex min-h-6 w-full flex-wrap items-center gap-1 rounded-control px-2 py-1 text-left hover:bg-card">
         {selectedOptions.length === 0
           ? null
           : selectedOptions.map((option) => (
@@ -196,7 +196,7 @@ function SelectCell({
               </Badge>
             ))}
       </PopoverTrigger>
-      <PopoverContent className="grid min-w-40 gap-1 p-1.5">
+      <PopoverContent className="grid min-w-9 gap-1 p-2">
         {options.map((option) => {
           const isSelected = selected.includes(option.value);
           return (
@@ -238,7 +238,7 @@ function TextCell({
         if (event.key === "Enter") event.currentTarget.blur();
         if (event.key === "Escape") onCancel();
       }}
-      className="w-full rounded-control bg-transparent px-2 py-1 text-sm text-foreground outline-none focus-visible:bg-card"
+      className="min-h-6 w-full rounded-control bg-transparent px-2 py-1 text-sm text-foreground outline-none focus-visible:bg-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring"
     />
   );
 }
@@ -265,7 +265,7 @@ function NumberCell({
         if (event.key === "Escape") onCancel();
       }}
       className={cn(
-        "w-full rounded-control bg-transparent px-2 py-1 text-right text-sm font-mono text-foreground outline-none focus-visible:bg-card",
+        "min-h-6 w-full rounded-control bg-transparent px-2 py-1 text-right text-sm font-mono text-foreground outline-none focus-visible:bg-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
         "[appearance:textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none",
       )}
     />
@@ -296,7 +296,7 @@ function DateCell({
 
   return (
     <Popover open={isEditing} onOpenChange={(open) => (open ? onRequestEdit() : onClose())}>
-      <PopoverTrigger className="flex min-h-8 w-full items-center rounded-control px-2 py-1 text-left hover:bg-card">
+      <PopoverTrigger className="flex min-h-6 w-full items-center rounded-control px-2 py-1 text-left hover:bg-card">
         {selected ? <span className="text-sm text-foreground">{formatLongDate(selected)}</span> : null}
       </PopoverTrigger>
       <PopoverContent align="start">
@@ -332,7 +332,7 @@ function BulkEditButton({ column, onApply }: { column: DataTableColumn; onApply:
       {column.header}
     </>
   );
-  const triggerClassName = "flex items-center gap-1.5 whitespace-nowrap rounded-control px-2 py-1 text-sm hover:bg-card";
+  const triggerClassName = "flex items-center gap-2 whitespace-nowrap rounded-control px-2 py-1 text-sm hover:bg-card";
 
   if (column.type === "select") {
     return <BulkSelectButton column={column} open={open} setOpen={setOpen} onApply={onApply} trigger={trigger} triggerClassName={triggerClassName} />;
@@ -365,7 +365,7 @@ function BulkEditButton({ column, onApply }: { column: DataTableColumn; onApply:
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger className={triggerClassName}>{trigger}</PopoverTrigger>
-      <PopoverContent align="start" className="flex items-center gap-1.5 p-1.5">
+      <PopoverContent align="start" className="flex items-center gap-2 p-2">
         <input
           ref={inputRef}
           type={column.type === "number" ? "number" : "text"}
@@ -374,9 +374,9 @@ function BulkEditButton({ column, onApply }: { column: DataTableColumn; onApply:
           onKeyDown={(event) => {
             if (event.key === "Enter") apply();
           }}
-          className="w-32 rounded-control border-[length:var(--border-width)] border-ink bg-transparent px-2 py-1 text-sm text-foreground outline-none [appearance:textfield] focus-visible:border-ring [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+          className="w-9 rounded-control border-[length:var(--border-width)] border-ink bg-transparent px-2 py-1 text-sm text-foreground outline-none [appearance:textfield] focus-visible:border-ring [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
         />
-        <button type="button" onClick={apply} className="rounded-control border-[length:var(--border-width)] border-ink px-2.5 py-1 text-sm font-medium text-foreground hover:bg-card">
+        <button type="button" onClick={apply} className="rounded-control border-[length:var(--border-width)] border-ink px-3 py-1 text-sm font-medium text-foreground hover:bg-card">
           Aplicar
         </button>
       </PopoverContent>
@@ -426,7 +426,7 @@ function BulkSelectButton({
       }}
     >
       <PopoverTrigger className={triggerClassName}>{trigger}</PopoverTrigger>
-      <PopoverContent className="grid min-w-40 gap-1 p-1.5">
+      <PopoverContent className="grid min-w-9 gap-1 p-2">
         {options.map((option) => {
           const isChecked = checked.includes(option.value);
           return (
@@ -496,16 +496,16 @@ function DraggableBulkToolbar({ children }: { children: React.ReactNode }) {
 
   // Dois elementos de propósito: o de fora só posiciona (left/top e a
   // centralização, sem transição nenhuma — senão a barra ficaria atrás do
-  // ponteiro ao arrastar); o de dentro cuida da entrada (sobe 12px + fade,
+  // ponteiro ao arrastar); o de dentro cuida da entrada (sobe 8px + fade,
   // 200ms) via `starting:`. A saída continua instantânea: a barra desmonta
   // quando a seleção zera.
   return (
     <div
       ref={barRef}
       className="fixed z-50"
-      style={position ? { left: position.x, top: position.y } : { left: "50%", bottom: 24, transform: "translateX(-50%)" }}
+      style={position ? { left: position.x, top: position.y } : { left: "50%", bottom: 21, transform: "translateX(-50%)" }}
     >
-      <div className="flex items-center gap-1 rounded-control border-[length:var(--border-width)] border-ink bg-surface px-3 py-2 text-foreground shadow-brutal transition-[opacity,translate] duration-200 ease-[var(--ease-out)] starting:translate-y-3 starting:opacity-0">
+      <div className="flex h-[42px] items-center gap-4 rounded-control border-[length:var(--border-width)] border-ink bg-surface px-3 text-foreground shadow-brutal transition-[opacity,translate] duration-200 ease-[var(--ease-out)] starting:translate-y-3 starting:opacity-0">
         <button
           type="button"
           aria-label="Mover barra"
@@ -522,8 +522,8 @@ function DraggableBulkToolbar({ children }: { children: React.ReactNode }) {
   );
 }
 
-const DEFAULT_COLUMN_WIDTH = 160;
-const MIN_COLUMN_WIDTH = 72;
+const DEFAULT_COLUMN_WIDTH = 144;
+const MIN_COLUMN_WIDTH = 68;
 
 /**
  * Alça de redimensionar coluna (pedido do usuário — "vamos fazer todos os
@@ -566,7 +566,7 @@ function ColumnResizeHandle({ onResize }: { onResize: (width: number) => void })
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
-      className="absolute inset-y-0 -right-1.5 z-10 w-3 cursor-col-resize touch-none select-none hover:bg-secondary/40 active:bg-secondary/60"
+      className="absolute inset-y-0 -right-2 z-10 w-3 cursor-col-resize touch-none select-none hover:bg-secondary/40 active:bg-secondary/60"
     />
   );
 }
@@ -728,7 +728,7 @@ export function DataTable({ columns, rows, onRowsChange, columnLines = true, cla
           <span className="mr-1 whitespace-nowrap font-display text-xs font-medium text-muted-foreground">
             {selectedIds.size} {selectedIds.size === 1 ? "selecionado" : "selecionados"}
           </span>
-          <div className="h-4 w-px bg-hairline" aria-hidden="true" />
+          <div className="h-6 w-px bg-hairline" aria-hidden="true" />
           {columns.map((column) => (
             <BulkEditButton key={column.id} column={column} onApply={(value) => bulkUpdateColumn(column.id, value)} />
           ))}
@@ -736,7 +736,7 @@ export function DataTable({ columns, rows, onRowsChange, columnLines = true, cla
             type="button"
             aria-label="Excluir linhas selecionadas"
             onClick={bulkDeleteSelected}
-            className="ml-auto flex size-7 flex-none items-center justify-center rounded-control text-foreground transition-transform duration-100 ease-[var(--ease-out)] active:scale-95 hover:bg-card hover:text-destructive focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            className="ml-auto flex size-6 flex-none items-center justify-center rounded-control text-foreground transition-transform duration-100 ease-[var(--ease-out)] active:scale-95 hover:bg-card hover:text-destructive focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring"
           >
             <TrashIcon className="size-4" />
           </button>
@@ -771,7 +771,7 @@ export function DataTable({ columns, rows, onRowsChange, columnLines = true, cla
             repartir o espaço sobrando sozinho — só vira largura fixa em px
             depois que alguém arrasta a alça. */}
         <colgroup>
-          <col className="w-16" />
+          <col className="w-7" />
           {columns.map((column) => (
             <col key={column.id} style={columnWidths[column.id] !== undefined ? { width: columnWidths[column.id] } : undefined} />
           ))}
@@ -809,13 +809,13 @@ export function DataTable({ columns, rows, onRowsChange, columnLines = true, cla
                 draggingRowId === row.id && "opacity-50",
               )}
             >
-              <td className="bg-background px-2 py-0.5 group-hover/row:bg-transparent">
+              <td className="bg-background px-2 py-1 group-hover/row:bg-transparent">
                 {/*
                   "+" (insere linha abaixo) e alça de arrastar (reordenar),
                   igual o print de referência do Notion — ambos só aparecem
                   no hover da linha, mesmo tratamento do checkbox.
                 */}
-                <div className="flex items-center justify-end gap-0.5">
+                <div className="flex items-center justify-end gap-1">
                   <button
                     type="button"
                     aria-label="Inserir linha abaixo"
@@ -853,7 +853,7 @@ export function DataTable({ columns, rows, onRowsChange, columnLines = true, cla
                 const value = row[column.id];
 
                 return (
-                  <td key={column.id} className="p-0.5 align-top">
+                  <td key={column.id} className="p-1 align-top">
                     {column.type === "select" ? (
                       <SelectCell
                         column={column}
@@ -896,7 +896,7 @@ export function DataTable({ columns, rows, onRowsChange, columnLines = true, cla
                         type="button"
                         onClick={() => setEditingCell(cellId)}
                         className={cn(
-                          "flex min-h-8 w-full items-center rounded-control px-2 py-1 hover:bg-card",
+                          "flex min-h-6 w-full items-center rounded-control px-2 py-1 hover:bg-card",
                           column.type === "number" && "justify-end",
                         )}
                       >
@@ -910,14 +910,18 @@ export function DataTable({ columns, rows, onRowsChange, columnLines = true, cla
           ))}
         </tbody>
       </table>
-      {/* `pl-[4.5rem]` alinha o "+"/texto com a primeira coluna de dados —
-          64px do gutter do checkbox (`col w-16`) + 8px do `px-2` que toda
-          célula de coluna usa, pedido do usuário ("move a nova linha pra
-          fica alinhado com a coluna adiante"). */}
+      {/* `pl-[60px]` alinha o "+"/texto com a primeira coluna de dados —
+          55px do gutter do checkbox (`col w-7`, spec φ: "coluna de seleção
+          55") + 5px do `px-2` que toda célula de coluna usa, pedido do
+          usuário ("move a nova linha pra fica alinhado com a coluna
+          adiante"). Soma (60) fica fora de S de propósito: é um alinhamento
+          calculado a partir de duas medidas já em S/índice válido, não uma
+          medida de design isolada — arredondar pro S mais próximo (55 ou 68)
+          desalinharia visivelmente o texto da coluna seguinte. */}
       <button
         type="button"
         onClick={addRow}
-        className="flex w-full items-center gap-2 py-2 pr-3 pl-[4.5rem] text-sm text-muted-foreground hover:bg-card hover:text-foreground"
+        className="flex w-full items-center gap-2 py-2 pr-3 pl-[60px] text-sm text-muted-foreground hover:bg-card hover:text-foreground"
       >
         <PlusIcon />
         Nova linha

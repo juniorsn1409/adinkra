@@ -7,11 +7,11 @@ import { useCursorActive } from "@adinkra/cursor";
 const slugs = Object.keys(iconPaths).sort();
 
 // Ladrilhos suficientes pra cobrir telas grandes comuns (~1920×1080 em
-// ladrilhos de 64px é só uns 510); o overflow-hidden do container corta o
+// ladrilhos de 55px é uns 700); o overflow-hidden do container corta o
 // excesso em telas menores, e o excesso de tela é raro o bastante pra não
 // valer o HTML extra de ir até o pior caso (4K).
 const TILE_COUNT = 800;
-const TILE_SIZE = 64;
+const TILE_SIZE = 55;
 
 const tiles = Array.from({ length: TILE_COUNT }, (_, i) => slugs[i % slugs.length]!);
 
@@ -27,7 +27,7 @@ export interface SymbolFieldProps {
 
 /**
  * Fundo de ladrilhos com os símbolos Adinkra, usado na home. Os ladrilhos
- * dentro do raio do `BigCircleCursor` mudam de `text-ink/10` pra terracota
+ * dentro do raio do `BigCircleCursor` mudam de `text-ink/[0.146]` (φ⁻⁴) pra terracota
  * (`var(--brand)`) enquanto o círculo passa por cima (17/09/2026, pedido do
  * usuário — "os simbolos [...] mudando de cor pra terracota ao big circle
  * passar por eles"). Reintroduz interação depois da remoção do hover antigo
@@ -43,7 +43,7 @@ export interface SymbolFieldProps {
  *
  * Performance do `pointermove`: nada de `useState`/re-render por movimento
  * nem loop nos 800 ladrilhos. A grade é regular (colunas de `auto-fill`
- * largura igual, linhas fixas de 64px), então dá pra calcular direto quais
+ * largura igual, linhas fixas de 55px), então dá pra calcular direto quais
  * índices caem dentro do raio (só a vizinhança do cursor, não a grade
  * inteira) e tocar só nesses via `ref` (mesmo raciocínio do
  * `BigCircleCursor`: `style.color` direto no DOM, refs num array indexado
@@ -55,7 +55,7 @@ export interface SymbolFieldProps {
  * com `prefers-reduced-motion`, o `BigCircleCursor` nem existe, então não
  * faz sentido a área reagir a um círculo que não está lá.
  */
-export function SymbolField({ cursorSize = 250 }: SymbolFieldProps) {
+export function SymbolField({ cursorSize = 233 }: SymbolFieldProps) {
   const active = useCursorActive();
   const containerRef = React.useRef<HTMLDivElement>(null);
   const tileRefs = React.useRef<(SVGSVGElement | null)[]>([]);
@@ -154,7 +154,7 @@ export function SymbolField({ cursorSize = 250 }: SymbolFieldProps) {
       <div
         ref={containerRef}
         className="grid size-full"
-        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(64px, 1fr))", gridAutoRows: "64px" }}
+        style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${TILE_SIZE}px, 1fr))`, gridAutoRows: `${TILE_SIZE}px` }}
       >
         {tiles.map((slug, i) => (
           <div key={i} className="flex items-center justify-center">
@@ -162,7 +162,7 @@ export function SymbolField({ cursorSize = 250 }: SymbolFieldProps) {
               ref={(el) => {
                 tileRefs.current[i] = el;
               }}
-              className="size-6 text-ink/10 transition-colors duration-150"
+              className="size-5 text-ink/[0.146] transition-colors duration-150"
             >
               <use href={`#tile-${slug}`} />
             </svg>

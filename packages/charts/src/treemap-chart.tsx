@@ -59,15 +59,15 @@ function TreemapContent({ x = 0, y = 0, width = 0, height = 0, name, value, inde
         width={Math.max(width - TREEMAP_GAP, 0)}
         height={Math.max(height - TREEMAP_GAP, 0)}
         fill={DEFAULT_SERIES_COLORS[index % DEFAULT_SERIES_COLORS.length]}
-        rx={4}
+        rx={5}
       />
       {fits && (
-        <text x={x + inset + 8} y={y + inset + 20} fill={foreground} className="font-display text-xs font-medium">
+        <text x={x + inset + 8} y={y + inset + 21} fill={foreground} className="font-display text-xs font-medium">
           {name}
         </text>
       )}
       {fits && (
-        <text x={x + inset + 8} y={y + inset + 38} fill={foreground} fillOpacity={0.75} className="font-mono text-xs">
+        <text x={x + inset + 8} y={y + inset + 34} fill={foreground} fillOpacity={0.75} className="font-mono text-xs">
           {value?.toLocaleString("pt-BR")}
         </text>
       )}

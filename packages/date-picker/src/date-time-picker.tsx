@@ -11,7 +11,7 @@ import { TimePicker } from "./time-picker";
 // Mesmo traço do resto do sistema — não lucide-react.
 function ClockIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 16 16" width="15" height="15" fill="none" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true" {...props}>
       <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.3" />
       <path d="M8 4.5V8l2.5 1.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
@@ -100,7 +100,7 @@ export function DateTimePicker({
             type="button"
             className={cn(
               buttonVariants({ variant: "outline" }),
-              "w-auto min-w-72 justify-start gap-2 whitespace-nowrap font-normal",
+              "w-auto min-w-[233px] justify-start gap-3 whitespace-nowrap px-4 font-normal",
               !value && "text-muted-foreground",
               className,
             )}
@@ -113,13 +113,21 @@ export function DateTimePicker({
       <PopoverContent align="start" className="flex gap-0 p-0">
         <Calendar mode="single" selected={value} onSelect={selectDate} autoFocus />
         <div className="flex flex-col border-l-[length:var(--border-width)] border-ink">
-          <p className="border-b-[length:var(--border-width)] border-ink px-3 pt-2 pb-2 text-center font-display text-xs font-medium tracking-wide text-muted-foreground">
+          <p className="border-b-[length:var(--border-width)] border-ink px-4 py-2 text-center font-display text-xs font-medium tracking-wide text-muted-foreground">
             Hora
           </p>
-          {/* Altura fixa (não esticada pro tamanho do Calendar — flexbox não
-              tem como fazer isso sem JS medindo o outro lado): perto da
-              altura natural de 1 mês, e as colunas já rolam por dentro. */}
-          <TimePicker value={toTimeInputValue(value)} onChange={selectTime} columnClassName="h-72 max-h-none" />
+          {/* Casa com a altura do Calendar (que varia: 4, 5 ou 6 semanas) sem
+              JS: `h-0 min-h-0` tira a contribuição das colunas (24/60 itens)
+              da altura da linha do popover, então quem define a altura é o
+              Calendar; esta coluna estica (`items-stretch` padrão do flex) e
+              o TimePicker ocupa o resto (`flex-1`). As colunas, esticadas na
+              linha, rolam por dentro (`max-h-none` tira o teto de 233). */}
+          <TimePicker
+            value={toTimeInputValue(value)}
+            onChange={selectTime}
+            className="h-0 min-h-0 flex-1"
+            columnClassName="max-h-none"
+          />
         </div>
       </PopoverContent>
     </Popover>
@@ -128,7 +136,7 @@ export function DateTimePicker({
   if (!label) return trigger;
 
   return (
-    <div className="grid gap-1.5">
+    <div className="grid gap-3">
       <label htmlFor={triggerId} className="font-display text-sm font-medium text-heading">
         {label}
       </label>

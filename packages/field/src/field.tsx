@@ -25,7 +25,7 @@ export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
     <label ref={ref} data-slot="label" className={cn(labelClass, className)} {...props}>
       {children}
       {required ? (
-        <span aria-hidden="true" className="ml-0.5">
+        <span aria-hidden="true" className="ml-1">
           *
         </span>
       ) : null}
@@ -42,7 +42,7 @@ export const FieldDescription = React.forwardRef<HTMLParagraphElement, FieldDesc
     <p
       ref={ref}
       data-slot="field-description"
-      className={cn("font-display text-xs text-muted-foreground", className)}
+      className={cn("font-display text-sm text-muted-foreground", className)}
       {...props}
     />
   ),
@@ -58,12 +58,12 @@ export const FieldError = React.forwardRef<HTMLParagraphElement, FieldErrorProps
     <p
       ref={ref}
       data-slot="field-error"
-      className={cn("flex items-center gap-1.5 font-display text-xs font-medium text-destructive", className)}
+      className={cn("flex items-center gap-2 font-display text-sm font-medium text-destructive", className)}
       {...props}
     >
       <span
         aria-hidden="true"
-        className="grid h-[16px] w-[16px] flex-none place-items-center rounded-full bg-destructive text-xs text-destructive-foreground"
+        className="grid h-[13px] w-[13px] flex-none place-items-center rounded-full bg-destructive text-xs text-destructive-foreground"
       >
         !
       </span>
@@ -151,7 +151,7 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
         <span id={labelId} className={labelClass}>
           {label}
           {required ? (
-            <span aria-hidden="true" className="ml-0.5">
+            <span aria-hidden="true" className="ml-1">
               *
             </span>
           ) : null}
@@ -177,7 +177,7 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
           data-slot="field"
           data-orientation="horizontal"
           data-invalid={error ? "" : undefined}
-          className={cn("flex items-start gap-2.5", className)}
+          className={cn("flex items-start gap-3", className)}
           {...props}
         >
           {/* h-5 = altura da 1ª linha do rótulo: o controle centra nela, não no bloco todo. */}
@@ -196,7 +196,7 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
         data-slot="field"
         data-orientation="vertical"
         data-invalid={error ? "" : undefined}
-        className={cn("grid gap-1.5", className)}
+        className={cn("grid gap-3", className)}
         {...props}
       >
         {labelNode}

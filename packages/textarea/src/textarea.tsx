@@ -19,15 +19,15 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       rows={rows}
       data-slot="textarea"
       className={cn(
-        // min-h-20 (80px): cabe ~3 linhas de text-sm; `rows` só cresce a partir daí.
-        "block min-h-20 w-full resize-y rounded-control border-[length:var(--border-width)] border-ink bg-card px-3 py-2 text-sm text-foreground",
+        // min-h-8 (89px, Fibonacci): cabe ~3 linhas de text-base; `rows` só cresce a partir daí.
+        "block min-h-8 w-full resize-y rounded-control border-[length:var(--border-width)] border-ink bg-card px-4 py-3 text-base text-foreground",
         "placeholder:text-muted-foreground",
         "shadow-brutal transition-[border-color,box-shadow] duration-150",
-        // Mesmo anel de Button/Input/Select (outline --ring com respiro de 2px).
-        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-        "disabled:pointer-events-none disabled:resize-none disabled:opacity-45 disabled:shadow-none",
-        // Erro: mesma proporção do Input (sombra de 2px em tomate).
-        "aria-invalid:border-destructive aria-invalid:shadow-[2px_2px_0_0_var(--destructive)]",
+        // Mesmo anel de Button/Input/Select (outline --ring com respiro de 3px).
+        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
+        "disabled:pointer-events-none disabled:resize-none disabled:opacity-[0.382] disabled:shadow-none",
+        // Erro: mesma proporção do Input (sombra de 3px em tomate).
+        "aria-invalid:border-destructive aria-invalid:shadow-[3px_3px_0_0_var(--destructive)]",
         className,
       )}
       {...props}

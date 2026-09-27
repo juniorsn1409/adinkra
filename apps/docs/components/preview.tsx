@@ -20,16 +20,32 @@ import { MoonIcon, SunIcon } from "./theme-toggle";
  * É o único bloco de documentação que precisa de "use client" de verdade
  * (useState). Fica no próprio arquivo, exportado sozinho — nunca dentro de
  * um objeto (ver comentário em mdx-components.tsx sobre por quê).
+ *
+ * Medidas do canvas (27/09/2026): a caixa ocupa a coluna inteira (987 no
+ * desktop) com 377 de altura mínima (233 no mobile), padding 34 (21 no
+ * mobile) e o componente centrado nos dois eixos. Altura mínima, não fixa:
+ * as demos maiores (Data Table, Charts, Date Picker) crescem em vez de
+ * serem cortadas. O botão dia/noite fica 8 abaixo, à direita: quadrado de
+ * 34, outline com a sombra de 3, lua/sol de 13.
+ *
+ * `flush` tira o padding e estica o filho até as bordas, com altura fixa de
+ * 377 (233 no mobile) — para demos que são uma "tela" inteira, como a
+ * SidebarShowcase.
  */
-export function Preview({ children }: { children: React.ReactNode }) {
+export function Preview({ children, flush = false }: { children: React.ReactNode; flush?: boolean }) {
   const [theme, setTheme] = React.useState<"light" | "dark">("light");
   const { t } = useLang();
 
   return (
-    <div className="grid gap-2">
+    <div className="grid gap-3">
       <div
         data-theme={theme}
-        className="flex min-h-32 w-full items-start justify-start rounded-card border-[length:var(--border-width)] border-ink bg-background p-6 text-foreground shadow-brutal"
+        className={
+          "flex w-full rounded-card border-[length:var(--border-width)] border-ink bg-background text-foreground shadow-brutal " +
+          (flush
+            ? "h-[233px] items-stretch justify-start overflow-hidden md:h-[377px]"
+            : "min-h-[233px] items-center justify-center p-5 md:min-h-[377px] md:p-6")
+        }
       >
         {children}
       </div>
@@ -37,6 +53,7 @@ export function Preview({ children }: { children: React.ReactNode }) {
         <Toggle
           variant="outline"
           size="sm"
+          className="w-[34px] px-0"
           pressed={theme === "dark"}
           onPressedChange={(pressed) => setTheme(pressed ? "dark" : "light")}
           aria-label={theme === "light" ? t("docs.previewToDark") : t("docs.previewToLight")}

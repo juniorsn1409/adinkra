@@ -5,7 +5,7 @@ import { cn } from "@adinkra/core";
 /**
  * Alinhamento óptico: o `tracking` também deixa um vão depois da última
  * letra, então o texto parece deslocado pra esquerda dentro do selo. O
- * padding esquerdo ganha o mesmo 0.14em pra compensar.
+ * padding esquerdo ganha o mesmo 0.13em pra compensar.
  *
  * Toda variante leva a borda de tinta do neobrutalismo (seção 4,
  * DECISOES.md) — mas nunca a sombra dura nem os estados de hover/pressionado
@@ -22,7 +22,7 @@ import { cn } from "@adinkra/core";
  * do Toggle e o submenu aberto da Sidebar. `accent` continua disponível.
  */
 const badgeVariants = cva(
-  "inline-flex items-center rounded-control border-[length:var(--border-width)] border-ink py-0.5 pl-[calc(0.5rem+0.14em)] pr-2 font-display text-xs font-medium uppercase tracking-[0.14em]",
+  "inline-flex h-[26px] items-center gap-[5px] rounded-control border-[length:var(--border-width)] border-ink pl-[calc(10px+0.13em)] pr-[10px] font-display text-xs font-medium uppercase tracking-[0.13em]",
   {
     variants: {
       variant: {

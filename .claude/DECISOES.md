@@ -164,8 +164,8 @@ Componentes usam sempre tokens, nunca hex direto.
 | `--link` | `#924125` (17/09, era `#2B6395`) | `#F5906E` (era `#7DB3E3`) | 6.74 |
 | `--secondary` | `#60C0F0` (17/09, era `#C9DDF0`) | `#2C3A52` | — |
 | `--secondary-foreground` | `#1E3550` | `#F0EFF3` | 6.13 |
-| `--accent` | `#1E3550` | `#C9DDF0` | — |
-| `--accent-foreground` | `#FFFFFF` | `#1B1D26` | 12.5 |
+| `--accent` | `#231F20` (27/09, era `#1E3550`) | `#EAE6E7` (27/09, era `#C9DDF0`) | — |
+| `--accent-foreground` | `#FFFFFF` | `#1B1D26` | 16.3 / 13.6 |
 | `--destructive` | `#CB1338` (17/09, era `#C8322A`) | `#F35071` (era `#EE6B5A`) | 5.69 |
 | `--destructive-foreground` | `#FFFFFF` | `#1B1D26` | 5.69 |
 | `--ring` | `#1E3550` | `#F0EFF3` | 12.1 |
@@ -610,3 +610,15 @@ Decisões:
 5. ~~Redesenhar os SVGs dos símbolos Adinkra~~ — feito 15/09 (vetorizados a partir de adinkrasymbols.org, viraram `@adinkra/icons`); 93 dos 101 ainda usam `PlaceholderIcon`.
 6. Rodar o primeiro teste de usabilidade com três pessoas (H2) — H3 (seção 8) merece reteste depois do neobrutalismo, já que mede "elegante, culto, com memória" e a nova direção é mais crua de propósito.
 7. Considerar `next/font` no lugar do `<link>` do Google Fonts em `apps/docs/app/layout.tsx`, para self-hosting sem flash de fonte.
+
+**27/09/2026: destaque trocado para `#231F20`** (pedido do usuário, branch `phi-rigor-total`). No escuro, `#EAE6E7` com texto `#1B1D26` (13,6:1). No claro, branco sobre `#231F20` dá 16,3:1. `--ring` e `--tag-navy` continuam marinho `#1E3550`: foco neutro e a 4ª cor de categoria não mudam. Efeito colateral: o novo destaque fica quase igual à tinta (`#1B1D26`, 1,03:1 entre os dois), então `bg-accent` (badge "accent", item destacado do DropdownMenu, dia de hoje do Calendar em `bg-accent/15`) passa a ler como bloco de tinta.
+
+**27/09/2026: proporção áurea "rigor total"** (pedido do usuário, branch `phi-rigor-total`). Especificação desenhada antes em canvas: componentes em https://claude.ai/artifact/2N8pirztYrF656k9Bqz8e7, docs e home em https://claude.ai/artifact/13pNXsJXc3pmdDNZnLmyrq. Regra: toda medida em px pertence a Fibonacci (1…987) ou à série 16·φⁿ (10, 16, 26, 42, 68). Cores não mudaram.
+- **Bug corrigido nos tokens:** a escala de tipo do commit φ anterior estava em `--font-size-*`/`--line-height-*`, que o Tailwind v4 ignora (`text-sm` continuava 14px). Agora `--text-*` + `--text-*--line-height` e `--leading-*`: 10/16, 13/21, 16/26, 21/34, 26/34, 42/55, 68/89; `--text-lg` passou de 20 para 21.
+- **Armadilha da escala de espaço:** só os índices 1–9 foram sobrescritos (2, 5, 8, 13, 21, 34, 55, 89, 144). Frações (`px-3.5`) e índices >9 (`h-11`, `h-64`) caem no padrão de 4px do Tailwind. Usar índice 1–9 ou valor arbitrário da escala.
+- **Controles:** altura = fonte × φ², padding lateral = fonte × φ, gap = fonte ÷ φ → sm 34/13, md 42/16, lg 55/21. Hover sobe 2 com sombra 5; pressionado desce 3 sem sombra; foco com recuo 3; desabilitado em opacidade 0,382.
+- **Tamanhos por componente:** input/select 42, textarea mín. 89, checkbox/radio 21, switch 42×26, avatar 34/42/55, aba 34 (lista 42), sidebar 233/55, dialog 610, sheet 377, painéis flutuantes 233 com afastamento 5, raio 8 e sombra 5, tabela 34/42, accordion 55.
+- **Sidebar:** recolhida usa padding 8 e ícone centrado (55 − borda não cabia o gatilho de 34 com padding 13). Cabeçalho, grupos e rodapé ganharam `shrink-0`: dentro do `SidebarContent` com rolagem eles encolhiam e espremiam o ArcLogo do docs.
+- **Docs:** coluna de 987, seções a 55, fim de página a 89, previews com mínimo 233/377, props viram cartões no mobile. As demos do sidebar saíram de `h-64` (256, cortava o conteúdo) para 377/233, e deixaram de ler o cookie do sidebar do site.
+- **Home:** colunas 1,618fr : 1fr, faixas do hero em razão φ, logo 144/89, ladrilhos do SymbolField 55, cursor 233. O texto do hero passou a tinta nas duas faixas (branco sobre o laranja dava 2,99:1).
+- **Pendências conhecidas:** o Select usa o `<select>` nativo, então a lista desenhada no canvas não se aplica; Ctrl/Cmd+B e o cookie do sidebar afetam todas as instâncias da página; abaixo de 768 as demos do sidebar viram gaveta e ficam vazias; o ArcLogo do sidebar (144) precisa de ajuste a olho.

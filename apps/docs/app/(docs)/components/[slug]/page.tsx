@@ -139,15 +139,36 @@ import { DataTableDemo } from "../../../../components/data-table-demo";
 import { DatePickerBasicDemo, DatePickerDemo, DateRangePickerDemo, DateTimePickerDemo } from "../../../../components/date-picker-demo";
 import { LinkDemo } from "../../../../components/link-demo";
 import { SegmentedBarCurrencyDemo, SegmentedBarDraggableDemo } from "../../../../components/segmented-bar-demo";
-import { PropsTable, State, StatesGrid, mdxHtmlOverrides } from "../../../../components/mdx-components";
+import {
+  DocsArticle,
+  DocsPageHeader,
+  DocsPager,
+  PropsTable,
+  State,
+  StatesGrid,
+  mdxHtmlOverrides,
+} from "../../../../components/mdx-components";
 import { Localized, T } from "../../../../components/language";
 import { en as enMessages } from "../../../../i18n/en";
-import { pt as ptMessages } from "../../../../i18n/pt";
+import { pt as ptMessages, type MessageKey } from "../../../../i18n/pt";
 import { Preview } from "../../../../components/preview";
 import { PageTopbar } from "../../../../components/page-topbar";
 import { AppSidebar, SidebarShowcase, SidebarUsageExamples } from "../../../../components/sidebar";
-import { allSlugs, findNavItem, getAdjacentNavItems } from "../../../../config/nav";
+import { allSlugs, findNavItem, getAdjacentNavItems, nav } from "../../../../config/nav";
 import { readComponentDoc } from "../../../../lib/content";
+
+// Título do grupo em config/nav.ts (português) → chave de i18n. Mesmo mapa do
+// AppSidebar (components/sidebar.tsx); repetido aqui porque um objeto
+// exportado de módulo "use client" chega vazio no servidor.
+const groupTitleKey: Record<string, MessageKey> = {
+  Primitivos: "sidebar.group.primitives",
+  Navegação: "sidebar.group.navigation",
+  Formulário: "sidebar.group.form",
+  Feedback: "sidebar.group.feedback",
+  Camadas: "sidebar.group.layers",
+  Conteúdo: "sidebar.group.content",
+  Sistema: "sidebar.group.system",
+};
 
 interface ComponentDocFrontmatter {
   title: string;
@@ -376,31 +397,29 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
   const { content, frontmatter } = await compile(source, "pt");
   const { content: enContent } = await compile(source, "en");
 
+  // Sobretítulo = categoria da sidebar (Primitivos, Navegação...), como no
+  // canvas; "Componente" só se o slug não estiver em nenhum grupo.
+  const group = nav.find((g) => g.items.some((navItem) => navItem.slug === slug));
+  const groupKey = group ? groupTitleKey[group.title] : undefined;
+
   return (
-    <article className="grid w-full gap-10 pb-24">
+    <>
       <PageTopbar title={frontmatter.title} />
-      <header className="grid gap-2 border-b border-hairline pb-6">
-        <p className="font-display text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-          <T k="docs.component" />
-        </p>
-        <h1 className="-ml-[0.04em] font-display text-3xl font-medium text-heading">{frontmatter.title}</h1>
-        <p className="text-muted-foreground">{frontmatter.description}</p>
-      </header>
-      <div className="grid gap-6">
-        <Localized pt={content} en={enContent} />
-      </div>
-      {prev || next ? (
-        <Pagination className="border-t border-hairline pt-6">
-          <PaginationContent className="w-full justify-between">
-            <PaginationItem>
-              {prev ? <PaginationPrevious href={`/components/${prev.slug}`}>{prev.title}</PaginationPrevious> : null}
-            </PaginationItem>
-            <PaginationItem>
-              {next ? <PaginationNext href={`/components/${next.slug}`}>{next.title}</PaginationNext> : null}
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      ) : null}
-    </article>
+      <DocsArticle>
+        <DocsPageHeader
+          eyebrow={<T k={groupKey ?? "docs.component"} />}
+          title={frontmatter.title}
+          description={frontmatter.description}
+        />
+        {/* 13 entre blocos; o respiro de 55 entre seções vem do MdxH2. */}
+        <div className="grid gap-4">
+          <Localized pt={content} en={enContent} />
+        </div>
+        <DocsPager
+          prev={prev ? { title: prev.title, href: `/components/${prev.slug}` } : undefined}
+          next={next ? { title: next.title, href: `/components/${next.slug}` } : undefined}
+        />
+      </DocsArticle>
+    </>
   );
 }

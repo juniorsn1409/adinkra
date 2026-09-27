@@ -10,11 +10,12 @@ import { cn } from "@adinkra/core";
  * volta pro gatilho ao fechar. Nada disso é reimplementado aqui.
  *
  * Visual: "cartão único" do sistema — borda `--border-width` de tinta, raio
- * `rounded-card` e `shadow-brutal`, sobre `bg-card`. Sem estados de hover/
- * pressionado no painel (não é uma superfície clicável). O fundo (backdrop)
- * usa `bg-background` translúcido: no dia vira um véu claro, na noite um véu
- * escuro — sempre "a página recuando", sem inventar cor fora dos tokens, e a
- * borda de tinta do painel é quem separa o modal do resto.
+ * `rounded-card` e sombra dura de 5 (`shadow-brutal-hover`), sobre `bg-card`.
+ * Medidas φ (27/09/2026): largura 610, padding 34, título 26/34, descrição
+ * 16/26, ações com gap 13, "X" = botão ghost só-ícone de 34. Sem estados de
+ * hover/pressionado no painel (não é uma superfície clicável). O fundo
+ * (backdrop) é tinta a 61.8% (`bg-ink/[0.618]`, 1/φ) — sem inventar cor fora
+ * dos tokens; `--ink` inverte com o tema.
  *
  * Movimento (frequência: ocasional, propósito: evitar a troca brusca):
  * fade + escala 0.96→1 em 200ms com `--ease-out`; saída em 150ms (fechar é só
@@ -68,7 +69,7 @@ function DialogTrigger({ ref, ...props }: React.ComponentProps<typeof DialogPrim
 // Mesmo traço (viewBox 16x16, strokeWidth 1.3) dos outros ícones de controle.
 function CloseIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true" {...props}>
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" aria-hidden="true" {...props}>
       <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
     </svg>
   );
@@ -94,7 +95,7 @@ function DialogContent({
       <DialogPrimitive.Backdrop
         data-slot="dialog-backdrop"
         className={cn(
-          "fixed inset-0 z-50 bg-background/80",
+          "fixed inset-0 z-50 bg-ink/[0.618]",
           "transition-opacity duration-200 ease-[var(--ease-out)]",
           "data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:duration-150",
         )}
@@ -105,8 +106,8 @@ function DialogContent({
           // Centralizado com `translate` (propriedade própria no Tailwind v4) —
           // não briga com o `scale` da animação abaixo.
           "fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2",
-          "grid w-[calc(100%-2rem)] max-w-lg gap-4 max-h-[calc(100dvh-2rem)] overflow-y-auto",
-          "rounded-card border-[length:var(--border-width)] border-ink bg-card p-6 text-foreground shadow-brutal outline-none",
+          "grid w-[calc(100%-42px)] max-w-[610px] gap-5 max-h-[calc(100dvh-42px)] overflow-y-auto",
+          "rounded-card border-[length:var(--border-width)] border-ink bg-card p-6 text-foreground shadow-brutal-hover outline-none",
           // Só `opacity` e `scale` animam (nunca layout). Tailwind v4 aplica
           // `scale-*` na propriedade `scale`, por isso ela está na lista.
           "transition-[opacity,scale] duration-200 ease-[var(--ease-out)]",
@@ -122,9 +123,9 @@ function DialogContent({
             data-slot="dialog-close-icon"
             aria-label={closeLabel}
             className={cn(
-              "absolute right-3 top-3 inline-flex size-8 items-center justify-center rounded-control text-foreground",
+              "absolute right-4 top-4 inline-flex size-6 items-center justify-center rounded-control text-foreground",
               "transition-colors hover:bg-surface",
-              "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+              "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-ring",
             )}
           >
             <CloseIcon />
@@ -136,15 +137,16 @@ function DialogContent({
 }
 
 function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
-  // `pr-8` reserva o espaço do "X" pro título longo não passar por baixo dele.
-  return <div data-slot="dialog-header" className={cn("grid gap-1.5 pr-8", className)} {...props} />;
+  // `pr-5` (21) reserva o espaço do "X" (34, a 13 da borda: invade 13 além
+  // do padding de 34) pro título longo não passar por baixo dele.
+  return <div data-slot="dialog-header" className={cn("grid gap-3 pr-5", className)} {...props} />;
 }
 
 function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn("font-display text-xl font-semibold leading-snug text-heading", className)}
+      className={cn("font-display text-xl font-semibold text-heading", className)}
       {...props}
     />
   );
@@ -154,7 +156,7 @@ function DialogDescription({ className, ...props }: React.ComponentProps<typeof 
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn("text-sm leading-relaxed text-muted-foreground", className)}
+      className={cn("text-base text-muted-foreground", className)}
       {...props}
     />
   );
@@ -167,7 +169,7 @@ function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-footer"
-      className={cn("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className)}
+      className={cn("flex flex-col-reverse gap-4 sm:flex-row sm:justify-end", className)}
       {...props}
     />
   );
