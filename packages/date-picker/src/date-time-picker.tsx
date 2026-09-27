@@ -117,15 +117,18 @@ export function DateTimePicker({
             Hora
           </p>
           {/* Casa com a altura do Calendar (que varia: 4, 5 ou 6 semanas) sem
-              JS: `h-0 min-h-0` tira a contribuição das colunas (24/60 itens)
-              da altura da linha do popover, então quem define a altura é o
-              Calendar; esta coluna estica (`items-stretch` padrão do flex) e
-              o TimePicker ocupa o resto (`flex-1`). As colunas, esticadas na
-              linha, rolam por dentro (`max-h-none` tira o teto de 233). */}
+              JS. Esta coluna estica até a altura do Calendar (`items-stretch`
+              padrão do flex) e o TimePicker ocupa o resto com base 0px. Não
+              usar `flex-1`: ele é `flex: 1 1 0%`, e numa coluna sem altura
+              definida a base em % vira "tamanho do conteúdo" — a lista inteira
+              (24/60 itens) empurrava o popover pra baixo (bug corrigido em
+              27/09/2026). `min-h-0` + `overflow-hidden` deixam encolher; as
+              colunas, esticadas na linha, rolam por dentro (`max-h-none` tira
+              o teto de 233 do uso avulso). */}
           <TimePicker
             value={toTimeInputValue(value)}
             onChange={selectTime}
-            className="h-0 min-h-0 flex-1"
+            className="h-0 min-h-0 flex-[1_1_0px] overflow-hidden"
             columnClassName="max-h-none"
           />
         </div>

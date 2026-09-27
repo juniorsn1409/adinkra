@@ -42,9 +42,11 @@ function TimeColumn({
   }, []);
 
   // Coluna de 55 (`w-7`), itens de 34 (`h-6`) com gap de 5 e altura visível
-  // de 233 — mesma célula/gap do Calendar ao lado.
+  // de 233 — mesma célula/gap do Calendar ao lado. A barra de rolagem fica
+  // escondida (pedido do usuário, 27/09/2026): a coluna de 55 é estreita demais
+  // pra ela; a rolagem continua pela roda, toque e teclado.
   return (
-    <div role="listbox" aria-label={label} className={cn("flex max-h-[233px] w-7 flex-col gap-2 overflow-y-auto p-2", className)}>
+    <div role="listbox" aria-label={label} className={cn("flex max-h-[233px] w-7 flex-col gap-2 overflow-y-auto p-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden", className)}>
       {values.map((value) => {
         const isSelected = value === selected;
         return (
