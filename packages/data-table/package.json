@@ -1,7 +1,7 @@
 {
   "name": "@adinkra/data-table",
   "version": "0.1.0",
-  "description": "Tabela de dados editável (estilo Notion) do design system Adinkra — células por tipo, adicionar linha.",
+  "description": "Tabela de dados editável (estilo Notion) do design system Adinkra — células por tipo, filtros, ordenação, agregação e cartões no mobile.",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
@@ -30,10 +30,18 @@
     "react": "^19.0.0"
   },
   "dependencies": {
+    "@adinkra/alert": "workspace:*",
     "@adinkra/badge": "workspace:*",
+    "@adinkra/button": "workspace:*",
     "@adinkra/checkbox": "workspace:*",
     "@adinkra/core": "workspace:*",
-    "@adinkra/date-picker": "workspace:*"
+    "@adinkra/date-picker": "workspace:*",
+    "@adinkra/dropdown-menu": "workspace:*",
+    "@adinkra/input": "workspace:*",
+    "@adinkra/popover": "workspace:*",
+    "@adinkra/select": "workspace:*",
+    "@adinkra/skeleton": "workspace:*",
+    "@adinkra/tabs": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",

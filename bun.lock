@@ -271,10 +271,18 @@
       "name": "@adinkra/data-table",
       "version": "0.1.0",
       "dependencies": {
+        "@adinkra/alert": "workspace:*",
         "@adinkra/badge": "workspace:*",
+        "@adinkra/button": "workspace:*",
         "@adinkra/checkbox": "workspace:*",
         "@adinkra/core": "workspace:*",
         "@adinkra/date-picker": "workspace:*",
+        "@adinkra/dropdown-menu": "workspace:*",
+        "@adinkra/input": "workspace:*",
+        "@adinkra/popover": "workspace:*",
+        "@adinkra/select": "workspace:*",
+        "@adinkra/skeleton": "workspace:*",
+        "@adinkra/tabs": "workspace:*",
       },
       "devDependencies": {
         "@types/react": "^19.3.0",

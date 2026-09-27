@@ -6,5 +6,6 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   clean: true,
-  external: ["react", "@adinkra/core", "@adinkra/badge", "@adinkra/icons", "@adinkra/toggle"],
+  // Todo irmão @adinkra/* fica de fora do bundle (são dependências próprias).
+  external: ["react", /^@adinkra\//, "@base-ui-components/react"],
 });
