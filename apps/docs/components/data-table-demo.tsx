@@ -73,7 +73,7 @@ const makeColumns = (t: T, onOpenGoal: (row: DataTableRow) => void): DataTableCo
     type: "select",
     multi: true,
     selectStyle: "dot",
-    width: 144,
+    width: 233,
     options: [
       { value: "comunicacao", label: t("demo.table.tagCommunication"), color: "tag-mustard" },
       { value: "cuidados", label: t("demo.table.tagPersonalCare"), color: "tag-mustard" },
@@ -93,13 +93,13 @@ const makeColumns = (t: T, onOpenGoal: (row: DataTableRow) => void): DataTableCo
       { value: "carteira", label: t("demo.table.accountWallet"), color: "tag-mustard" },
     ],
   },
-  { id: "conferida", header: "", type: "checkbox", width: 55 },
+  { id: "conferida", header: t("demo.table.checked"), type: "checkbox", width: 89, aggregate: "checked" },
 ];
 
 const makeRows = (t: T): DataTableRow[] => {
   const base = { mes: t("demo.table.september"), data: "2026-09-21" };
   return [
-    { id: "1", ...base, descricao: t("demo.table.row1"), status: "sincronizado", tipo: "saida", valor: 20, meta: t("demo.table.fixedCosts"), tags: ["comunicacao"], conta: "corrente", conferida: false },
+    { id: "1", ...base, descricao: t("demo.table.row1"), status: "sincronizado", tipo: "saida", valor: 20, meta: t("demo.table.fixedCosts"), tags: ["comunicacao"], conta: "corrente", conferida: false, notas: t("demo.table.note1") },
     { id: "2", ...base, descricao: t("demo.table.row2"), status: "sincronizado", tipo: "saida", valor: 45, meta: t("demo.table.fixedCosts"), tags: ["cuidados"], conta: "corrente", conferida: false },
     { id: "3", ...base, descricao: t("demo.table.row3"), status: "sincronizado", tipo: "entrada", valor: 95.47, meta: "", tags: ["restituicao"], conta: "corrente", conferida: false },
     { id: "4", ...base, descricao: t("demo.table.row4"), status: "pendente", tipo: "saida", valor: 300, data: "2026-09-27", meta: t("demo.table.fixedCosts"), tags: ["outros"], conta: "carteira", conferida: true },
@@ -271,6 +271,14 @@ const earningRows = (t: T): DataTableRow[] => [
 
 // ─── Demo ────────────────────────────────────────────────────────────
 
+function CheckGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M5 12l5 5 9-10" />
+    </svg>
+  );
+}
+
 function TransactionsChart({ rows, loading, t }: { rows?: DataTableRow[]; loading: boolean; t: T }) {
   if (!rows) {
     return loading ? <Skeleton className="h-[233px] w-full" /> : <p className="text-sm text-muted-foreground">{t("demo.table.chartEmpty")}</p>;
@@ -334,7 +342,21 @@ function DemoViews() {
         searchable: true,
         defaultFilters: makeFilters(t),
         defaultSorts,
-        onOpenRow: (row) => setOpened(String(row.descricao ?? row.id)),
+        // "Abrir" abre o painel lateral próprio, com as notas da linha.
+        peek: { notes: "notas" },
+        bulkActions: [
+          {
+            id: "conferir",
+            label: t("demo.table.bulkCheck"),
+            icon: <CheckGlyph />,
+            onSelect: (_rows, { patch }) => patch({ conferida: true }),
+          },
+          {
+            id: "sincronizar",
+            label: t("demo.table.bulkSync"),
+            onSelect: (_rows, { patch }) => patch({ status: "sincronizado" }),
+          },
+        ],
       },
       {
         id: "faturas",

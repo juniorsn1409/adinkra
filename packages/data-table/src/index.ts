@@ -4,8 +4,10 @@ export { createEmptyRow } from "./logic";
 export type {
   Aggregate,
   ColumnType,
+  DataTableBulkAction,
   DataTableColumn,
   DataTableFilter,
+  DataTablePeekConfig,
   DataTableProps,
   DataTableRow,
   DataTableSort,

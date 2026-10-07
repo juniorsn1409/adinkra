@@ -1,13 +1,13 @@
 ---
 title: Data Table
-description: Tabela de dados editável, estilo Notion — colunas tipadas, visões, filtros e ordenação em chips, agregação no rodapé e cartões no mobile.
+description: Tabela de dados editável, estilo Notion — colunas tipadas, visões, filtros e ordenação em chips, agrupamento, painel da linha, agregação no rodapé e cartões no mobile.
 ---
 
 <Preview>
   <DataTableDemo />
 </Preview>
 
-O preview é um `DataTableViews`: cada aba (Transações, Faturas, Transferências, Rendimentos, Gráfico) é uma tabela própria, com colunas e uma "API" de mentira própria (atraso curto, AbortSignal). A primeira abertura de cada aba mostra o carregamento. Todo campo é editável: clique numa célula pra editar. Nas de texto/número, `Enter` confirma e `Escape` desiste; nas de select e status, clique numa opção da lista (ou fora, pra fechar sem mudar o valor único); na de data, o calendário abre e fecha sozinho ao escolher um dia; a caixa marca com um clique. No Tipo e na Meta (relações), o texto edita e o glifo à esquerda abre. No Saldo (fórmula), digitar grava um valor manual e apagar volta ao calculado. Passe o mouse na Descrição pra ver o botão **Abrir**. O cabeçalho de cada coluna abre o menu (ordenar, filtrar, congelar, esconder) e cada célula do rodapé troca a agregação. Estreite a página: abaixo de 610 de largura do container, a grade vira lista de cartões.
+O preview é um `DataTableViews`: cada aba (Transações, Faturas, Transferências, Rendimentos, Gráfico) é uma tabela própria, com colunas e uma "API" de mentira própria (atraso curto, AbortSignal). A primeira abertura de cada aba mostra o carregamento. Todo campo é editável: clique numa célula pra editar. Nas de texto/número, `Enter` confirma e `Escape` desiste; nas de select e status, clique numa opção da lista (ou fora, pra fechar sem mudar o valor único); na de data, o calendário abre e fecha sozinho ao escolher um dia; a caixa marca com um clique. No Tipo e na Meta (relações), o texto edita e o glifo à esquerda abre. No Saldo (fórmula), digitar grava um valor manual e apagar volta ao calculado. Passe o mouse na Descrição pra ver o botão **Abrir**, que abre o painel lateral da linha (propriedades, anterior/próxima, notas). O cabeçalho de cada coluna abre o menu (renomear, ordenar, filtrar, agrupar, congelar, mover, ocultar), arrastar o cabeçalho reordena e o **+** no fim cria uma propriedade. No seletor de Tags, digite um nome que não existe pra criar a opção. Marque linhas pra ver a barra de seleção (Marcar conferidas, Status: Sincronizado, Duplicar, Excluir). O botão de propriedades (controles deslizantes) agrupa as linhas e liga/desliga a quebra de texto, e cada célula do rodapé escolhe o cálculo. Estreite a página: abaixo de 610 de largura do container, a grade vira lista de cartões.
 
 ## Como usar
 
@@ -107,13 +107,17 @@ function Transacoes() {
 }
 ```
 
+## Visual
+
+A tabela é plana (desenho de 07/10): sem cartão em volta, linhas e colunas de 1px `--hairline`, abas só em texto, ferramentas de 26 sem borda (ligadas ficam em `--link`), chips de raio 13 (completos em céu a 21%, incompletos só com contorno), menus no `--card` sem borda e com sombra suave, caixa de seleção nativa. Só a célula sob o ponteiro ganha o véu de hover; menu aberto e edição usam um anel interno de 2px `--ring`. Linha de 42, cabeçalho de 34, texto 13/21 (escala φ).
+
 ## Tipos de coluna
 
 Todo cabeçalho mostra o ícone do tipo (13px): Aa, #, Σ, calendário, etiqueta, relação ↗, status, caixa.
 
 - **`text`** — texto livre. A primeira coluna de texto (ou a marcada com `primary`) é a **principal**: ícone de página, texto em seminegrito, botão Abrir no hover (com `onOpenRow`) e título do cartão no mobile.
-- **`select`** — etiqueta colorida de uma lista fixa (`options`), cores só das que já existem: `primary`, `accent`, `secondary`, `tag-coral`, `tag-sky`, `tag-mustard`, `tag-navy`. Com `multi: true` vira várias etiquetas por célula. `selectStyle: "badge"` (padrão, o `@adinkra/badge` de sempre) ou `"dot"` (ponto de 13 com borda + texto, o visual das etiquetas do redesenho). O badge continua padrão pra não mudar tabelas que já existem.
-- **`status`** — valor único de `options`, mostrado como pílula (26 de altura, raio 13, borda 2, ponto na cor do texto). Além das cores de etiqueta aceita `mist` (névoa azul) e `destructive`.
+- **`select`** — etiqueta colorida de uma lista (`options`), cores só das que já existem: `primary`, `accent`, `secondary`, `tag-coral`, `tag-sky`, `tag-mustard`, `tag-navy`, `mist` (névoa azul) e `gray` (superfície). Com `multi: true` vira várias etiquetas por célula. `selectStyle: "pill"` (padrão: etiqueta plana, raio 3, sem borda), `"dot"` (ponto de 8 + texto sublinhado, como Conta e Tags no preview) ou `"badge"` (o `@adinkra/badge`, opt-in). O seletor tem busca; com `onColumnsChange`, digitar um nome que não existe oferece **Criar …** (a cor gira pelo ciclo das etiquetas).
+- **`status`** — valor único de `options`, com bolinha de 8 na cor do texto (21 de altura, raio cheio, sem borda). Aceita as cores de etiqueta e `destructive`.
 - **`number`** — número em mono à direita; com `currency: true` formata como R$ (`Intl.NumberFormat`, pt-BR). Fica sempre na cor neutra: a cor por sinal foi testada e revertida.
 - **`formula`** — calculada por `formula: (row) => number | string`, com `format: "currency" | "number"` opcional. Negativo sai em `--destructive`. Só entra em soma/média/mínimo/máximo quando tem `format`. **Editável como sobrescrita manual**: o valor digitado é gravado em `row[column.id]` e, enquanto existir, aparece no lugar do calculado com um anel pequeno na frente (e "valor manual" pro leitor de tela). Apagar o campo grava `undefined` e a fórmula volta a valer. Abrir e sair sem mudar nada não grava. Filtro, ordenação, busca e agregação usam sempre o valor efetivo: o manual quando há, senão o calculado.
 - **`date`** — data guardada como `"yyyy-mm-dd"`; o clique abre o `Calendar` do `@adinkra/date-picker`. `dateStyle: "long"` (padrão, "21 de Setembro, 2026") ou `"short"` ("21 set 2026").
@@ -122,7 +126,29 @@ Todo cabeçalho mostra o ícone do tipo (13px): Aa, #, Σ, calendário, etiqueta
 
 ## Visões, busca e ações
 
-A barra superior aparece quando há `views`, `toolbar` ou `searchable`. A prop `views` do `DataTable` são abas sobre **esta** tabela (`@adinkra/tabs`): a tabela só mostra qual está ativa e avisa a troca (`onViewChange`), e quem usa decide o que cada aba muda. Pra abas com dados, colunas ou API diferentes, use o `DataTableViews` (abaixo). À direita ficam as ferramentas de 34 (filtros, ordenação, busca, colunas visíveis) e o slot `toolbar`. A busca filtra as linhas por qualquer coluna, sem diferenciar maiúscula nem acento.
+A barra superior sempre aparece. A prop `views` do `DataTable` são abas sobre **esta** tabela (`@adinkra/tabs`): a tabela só mostra qual está ativa e avisa a troca (`onViewChange`), e quem usa decide o que cada aba muda. Pra abas com dados, colunas ou API diferentes, use o `DataTableViews` (abaixo). À direita ficam as ferramentas de 34 — filtros (mostra/esconde a barra de filtros), ordenação, busca (com `searchable`) e propriedades —, o slot `toolbar` e, com `onAddRow`, o botão **Novo**. A busca filtra as linhas por qualquer coluna, sem diferenciar maiúscula nem acento.
+
+O painel de **propriedades** mostra/oculta colunas (a principal fica sempre), tem "Mostrar todas"/"Ocultar todas", **Agrupar por** e **Quebrar conteúdo das células** (desligado, o texto fica numa linha e corta com reticências).
+
+## Agrupamento
+
+`groupBy` (controlado, com `onGroupByChange`) ou `defaultGroupBy` agrupa as linhas por uma coluna de seleção, status, relação, caixa ou texto — também dá pra escolher no painel de propriedades ou no menu da coluna. Cada grupo tem um cabeçalho com recolher, a pílula do valor, a contagem e o Σ da primeira fórmula numérica (ou do primeiro número). Grupos seguem a ordem das opções; "Sem …" fica por último. Em select `multi`, a linha aparece em cada grupo das suas etiquetas. **Nova página** dentro de um grupo já cria a linha com aquele valor.
+
+## Seleção e painel da linha
+
+Marcar linhas troca a barra de filtros pela **barra de seleção**: a contagem, as ações de `bulkActions`, **Duplicar** (cópia com "(cópia)" no título) e **Excluir**. Cada ação recebe as linhas marcadas e um `patch(values)` que grava os mesmos valores em todas:
+
+```tsx
+bulkActions={[
+  { id: "conferir", label: "Marcar conferidas", onSelect: (_rows, { patch }) => patch({ conferida: true }) },
+]}
+```
+
+Sem `onOpenRow`, `peek` (ou `peek={{ notes: "notas" }}`) faz o **Abrir** abrir um painel lateral (`@adinkra/sheet`): título grande, cada propriedade com o mesmo editor da célula, anterior/próxima pelas linhas visíveis, excluir e, com `notes`, um campo de notas gravado em `row[notes]`. Com `onOpenRow`, abrir continua sendo de quem usa.
+
+## Mexer nas colunas
+
+Com `onColumnsChange`, o menu da coluna ganha o campo de nome, o seletor ganha **Criar …** e o cabeçalho ganha um **+** no fim (texto, número, seleção, seleção múltipla, status, data, caixa). A coluna nova já abre o menu dela pra trocar o nome. No `DataTableViews`, sem `onColumnsChange` na visão, essas mudanças ficam numa cópia local das colunas da aba.
 
 ## Abas com dados próprios: `DataTableViews`
 
@@ -135,7 +161,7 @@ Quando cada aba é uma tabela diferente (colunas, dados e API próprios), use `D
 - **Estados**:
   - carregando: linhas de `@adinkra/skeleton` na altura real de 42 (cartões no mobile);
   - erro de carga: `@adinkra/alert` destructive com **Tentar de novo**;
-  - vazio: mensagem simples ("Nenhuma linha ainda." ou "Nenhuma linha com esses filtros.", troque com `emptyMessage`).
+  - vazio: "Nenhuma linha ainda." ou, quando filtros/busca esconderam tudo, "Nenhuma linha corresponde a esta visão" com **Limpar filtros e busca** (troque com `emptyMessage`).
 - **Edição otimista**: a tela muda na hora e cada diferença vai pra API (`onRowChange` com só as chaves alteradas, `onAddRow` com o rascunho, `onDeleteRows` com os ids). Se a API rejeitar, só aquela mudança volta e um alerta explica. Reordenar por arraste é só local.
 - **Recarregar**: `ref` com `reload(viewId?)` (padrão: a aba ativa). Escolhido em vez de uma `reloadKey` porque recarregar é um comando, não um estado.
 - **Aba ativa**: controlada (`activeView` + `onViewChange`) ou não (`defaultView`).
@@ -242,26 +268,28 @@ function Financas() {
 
 Rodam no cliente, sobre `rows`: busca → filtros → ordenação. Editar continua mexendo no array original pelo `id`, então a ordenação nunca reordena `rows`. Com ordenação ativa, a alça de arrastar some.
 
-- **Chips** de 26 abaixo da barra: em céu quando ativos. O chip de ordenação troca a direção ou remove; os de filtro abrem o construtor. A linha de chips aparece quando há filtro ou ordenação (ou sempre, com `filterable`).
-- **Construtor** (popover de 610): regras "coluna / operador / valor", todas juntas ("e"). Operadores por tipo: texto e relação sem opções — contém, não contém, é, está vazio; número e fórmula — =, &gt;, &lt;; select, status e relação com opções — é, não é (em select `multi`, lê "contém/não contém"); data — é, antes de, depois de; caixa — marcado, desmarcado. Regra sem valor ainda não filtra.
+- **Barra de filtros** abaixo da barra superior: o chip-resumo da ordenação ("↑ Data" ou "N ordenações"), um chip por regra ("Tags: não contém Transferência"), **+ Filtro** e a contagem "N de M". Aparece quando há filtro ou ordenação (ou sempre, com `filterable`); o botão de filtro da barra superior mostra e esconde.
+- **Cada regra** abre o próprio popover: os operadores em chips, o valor (campo, ou a lista de opções) e **Excluir filtro**. **+ Filtro** escolhe a coluna e já abre a regra nova. Regra sem valor fica só com contorno e ainda não filtra. Todas as regras valem juntas ("e"). Operadores por tipo (todos com "está vazio/não está vazio", menos a caixa): texto e relação sem opções — contém, não contém, é, não é; número e fórmula — =, ≠, &gt;, &lt;, ≥, ≤; select, status e relação com opções — é, não é (em select `multi`, lê "contém/não contém"); data — é, é antes de, é depois de; caixa — marcado, desmarcado.
+- **Ordenação**: o popover "Ordenar por" alterna cada coluna entre crescente, decrescente e sem; a ordem dos cliques é a prioridade, e o cabeçalho mostra ↑/↓ (com o número quando há mais de uma).
+- **Linha nova visível**: `onAddRow(preset)` recebe os valores que a linha precisa pra passar nos filtros ("Mês é Setembro" → `{ mes: "Setembro" }`) e o do grupo. Mesmo assim, se ela não passar, continua na tela até você mexer em filtro, ordenação ou busca.
 - **Controlado ou não**: `filters` + `onFiltersChange` (ou só `defaultFilters`), `sorts` + `onSortsChange` (ou só `defaultSorts`).
 
 ## Menu da coluna
 
-Clicar no cabeçalho abre o `@adinkra/dropdown-menu`: ordenar crescente/decrescente, filtrar (cria uma regra da coluna e abre o construtor), congelar/descongelar e esconder. Coluna escondida volta pela lista de "Colunas visíveis" (olho na barra superior, ou chip "N colunas ocultas" quando não há barra). Excluir coluna e mudar tipo não existem: as colunas vêm de quem usa.
+Clicar no cabeçalho abre o menu da coluna (233): o nome (com `onColumnsChange`), o tipo, ordenar crescente/decrescente (substitui a ordenação), filtrar (cria uma regra da coluna e abre ela), agrupar por esta propriedade, congelar/descongelar, mover pra esquerda/direita e ocultar na visão. Arrastar o cabeçalho também reordena. A coluna principal não move nem some. Coluna oculta volta pelo painel de propriedades. Excluir coluna e mudar tipo não existem: as colunas vêm de quem usa.
 
 ## Coluna congelada
 
-`frozen: true` gruda a coluna à esquerda ao rolar na horizontal, com borda de tinta à direita da última congelada. O gutter de seleção congela junto. Coluna congelada sempre tem largura explícita (`width`, a arrastada ou 144), porque o deslocamento de cada uma é a soma das anteriores.
+A coluna principal congela por padrão (`frozen: false` desliga). `frozen: true` gruda outras colunas à esquerda ao rolar na horizontal, com borda de tinta à direita da última congelada. O gutter de seleção congela junto. Coluna congelada sempre tem largura explícita (`width`, a arrastada ou 144), porque o deslocamento de cada uma é a soma das anteriores.
 
 ## Rodapé
 
-- **Nova linha**: só aparece com `onAddRow`. Antes a linha aparecia sempre e a própria tabela criava a linha vazia. Pra manter aquele comportamento, use o helper exportado: `onAddRow={() => onRowsChange([...rows, createEmptyRow(columns)])}`.
-- **Agregação**: a linha de 34 aparece quando alguma coluna tem `aggregate` (`"none" | "sum" | "avg" | "min" | "max" | "count"`). Cada célula abre o menu pra trocar. Valores em mono, em R$ quando a coluna é moeda, e em cima só das linhas visíveis (depois de busca e filtro). A coluna principal mostra a contagem de linhas.
+- **Nova página**: só aparece com `onAddRow` (no fim da tabela e de cada grupo). Pra a tabela criar a linha sozinha, use o helper exportado: `onAddRow={(preset) => onRowsChange([...rows, { ...createEmptyRow(columns), ...preset }])}`.
+- **Cálculo** (sempre visível, 34): cada célula do rodapé escolhe o que calcular, por tipo — todas: contagem (linhas), não vazios, vazios, % não vazios; número e fórmula com `format`: soma, média, mediana, mín., máx., amplitude; data: mais antiga, mais recente; caixa: contagem, marcadas, desmarcadas, % marcadas. `aggregate` na coluna define o inicial. Sem cálculo, "Calcular" aparece no hover. Valores em mono, em R$ quando a coluna é moeda, sobre as linhas visíveis. A coluna principal mostra a contagem de linhas. **Mudou:** `"count"` agora conta linhas; o antigo "contar valores" é `"filled"`.
 
 ## Mobile
 
-Abaixo de 610 de largura **do container** (container query do Tailwind v4, `@container` + `@[610px]:`, não da janela), a grade vira lista de cartões. Heurística: título = coluna principal; valor à direita = primeira fórmula com `format`, senão o primeiro número; etiquetas = primeiro status + primeiro select; rodapé = primeira data + segundo select (ou primeira relação). `mobileCard: { title, value, badges, meta }` troca qualquer um por `column.id`. Cada campo do cartão edita ali mesmo, com os mesmos editores da célula (seletor, calendário, campo de texto/número, caixa). Tocar no título edita o título; abrir a linha é só pelo botão **Abrir**, sempre visível no cartão quando há `onOpenRow`.
+Abaixo de 610 de largura **do container** (container query do Tailwind v4, `@container` + `@[610px]:`, não da janela), a grade vira lista: cada linha separada por 1px, título (com ícone de página) e valor em cima, propriedades embaixo. Os chips de filtro ficam numa linha só, rolando, e um botão redondo de 55 flutua no canto pra criar. Heurística: título = coluna principal; valor à direita = primeira fórmula com `format`, senão o primeiro número; etiquetas = primeiro status + primeiro select; rodapé = primeira data + segundo select (ou primeira relação). `mobileCard: { title, value, badges, meta }` troca qualquer um por `column.id`. Cada campo do cartão edita ali mesmo, com os mesmos editores da célula (seletor, calendário, campo de texto/número, caixa). Tocar no título edita o título; abrir a linha é só pelo botão **Abrir**, sempre visível no cartão quando há `onOpenRow`.
 
 ## Controlado, sem estado próprio de dados
 
@@ -293,14 +321,34 @@ Abaixo de 610 de largura **do container** (container query do Tailwind v4, `@con
       description: "Linhas verticais finas entre colunas.",
     },
     {
+      prop: "onColumnsChange",
+      type: "(columns: DataTableColumn[]) => void",
+      description: "Liga renomear (menu da coluna), \"Criar …\" no seletor e o \"+\" de propriedade nova. Sem ela, os três somem.",
+    },
+    {
       prop: "onAddRow",
-      type: "() => void",
-      description: "Mostra a linha \"Nova linha\" (e o botão tracejado no mobile). Sem ela, a linha não aparece.",
+      type: "(preset?: Partial<DataTableRow>) => void",
+      description: "Mostra \"Nova página\" (fim da tabela e de cada grupo), o botão \"Novo\" da barra superior e o botão tracejado no mobile. preset traz os valores do grupo e dos filtros ativos.",
     },
     {
       prop: "onOpenRow",
       type: "(row: DataTableRow) => void",
-      description: "Mostra o botão \"Abrir\" na coluna principal: no hover na grade, sempre visível no cartão do mobile. É o único jeito de abrir a linha; clicar no texto edita.",
+      description: "Mostra o botão \"Abrir\" na coluna principal: no hover na grade, sempre visível no cartão do mobile. Vence peek.",
+    },
+    {
+      prop: "peek",
+      type: "boolean | { notes?: string }",
+      description: "Sem onOpenRow: \"Abrir\" abre o painel lateral da linha (propriedades editáveis, anterior/próxima, excluir; notes = chave do row com as notas).",
+    },
+    {
+      prop: "bulkActions",
+      type: "{ id, label, icon?, destructive?, onSelect(rows, { patch }) }[]",
+      description: "Ações da barra de seleção, antes de Duplicar e Excluir. patch(values) grava os mesmos valores em todas as linhas marcadas.",
+    },
+    {
+      prop: "groupBy / defaultGroupBy / onGroupByChange",
+      type: "string | null / string | null / (id: string | null) => void",
+      description: "Coluna que agrupa as linhas (seleção, status, relação, caixa ou texto). Controlado ou não.",
     },
     {
       prop: "views / activeView / onViewChange",
@@ -326,7 +374,7 @@ Abaixo de 610 de largura **do container** (container query do Tailwind v4, `@con
     {
       prop: "toolbar",
       type: "ReactNode",
-      description: "Ações à direita da barra superior (ex.: botão \"Nova transação\").",
+      description: "Ações à direita da barra superior, antes do \"Novo\".",
     },
     {
       prop: "searchable",
@@ -370,10 +418,11 @@ Também exportado: `createEmptyRow(columns)`, que monta uma linha vazia com o va
 - Célula de texto/número/fórmula (e relação sem opções) é um `<button>` que vira um `<input>` de verdade ao editar — funciona com Tab/Enter/Escape como qualquer campo de formulário nativo.
 - O glifo da relação é um alvo separado do texto (`<a>` ou `<button>` com `aria-label="Abrir …"`), então editar e abrir são dois passos de Tab. A sobrescrita de fórmula é anunciada como "valor manual".
 - O dropdown de select/status/relação fecha com `Escape` ou clicando fora, e cada opção marcada leva um `✓` (não só a cor, pra quem não distingue cor).
-- Menus de coluna, ordenação, colunas visíveis e agregação são o `@adinkra/dropdown-menu` (setas, Home/End, Esc). Filtros usam `<select>` nativo (`@adinkra/select`), com `aria-label` em coluna, operador e valor.
-- Visões são abas de verdade (`@adinkra/tabs`, `role="tab"`). Ferramentas ligadas anunciam `aria-pressed`.
-- Coluna de caixa e seleção de linha usam `@adinkra/checkbox` com `aria-label`. A lixeira da barra de seleção tem `aria-label="Excluir linhas selecionadas"`.
+- Menu da coluna, ordenação, propriedades, filtros, seletor e cálculo do rodapé são `Popover` (Base UI: foco dentro, Esc fecha, foco volta pro gatilho), com itens que são `<button>` de verdade. Operadores de filtro e "Agrupar por" anunciam `aria-pressed`.
+- Visões são `role="tablist"`/`role="tab"` com `aria-selected` e setas ←/→. Ferramentas ligadas anunciam `aria-pressed`. A barra de seleção é `role="toolbar"`.
+- Coluna de caixa e seleção de linha usam a caixa nativa com `aria-label` (o da linha diz qual: "Selecionar Recarga de celular"). O cabeçalho de grupo anuncia `aria-expanded`.
+- O painel da linha é o `@adinkra/sheet` (diálogo: foco preso, Esc fecha).
 
 ## Tokens usados
 
-`--ink` · `--card` · `--surface` · `--hairline` · `--secondary` · `--primary` · `--destructive` · `--muted-foreground` · `--tag-*` · `--shadow-brutal` · cores do `@adinkra/badge`
+`--background` · `--card` · `--surface` · `--hairline` · `--heading` · `--secondary` · `--primary` · `--link` · `--ring` · `--destructive` · `--muted-foreground` · `--tag-*`

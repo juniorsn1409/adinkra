@@ -281,6 +281,7 @@
         "@adinkra/input": "workspace:*",
         "@adinkra/popover": "workspace:*",
         "@adinkra/select": "workspace:*",
+        "@adinkra/sheet": "workspace:*",
         "@adinkra/skeleton": "workspace:*",
         "@adinkra/tabs": "workspace:*",
       },

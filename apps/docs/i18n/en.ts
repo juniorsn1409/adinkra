@@ -219,6 +219,10 @@ export const en: Record<MessageKey, string> = {
   "demo.table.assetFundA": "Real estate fund A",
   "demo.table.assetStockB": "Stock B",
   "demo.table.assetBondC": "Bank bond C",
+  "demo.table.checked": "Checked",
+  "demo.table.bulkCheck": "Mark as checked",
+  "demo.table.bulkSync": "Status: Synced",
+  "demo.table.note1": "Prepaid plan, renews every month.",
 
   // Demos: Segmented Bar
   "demo.bar.fixed": "Fixed costs",

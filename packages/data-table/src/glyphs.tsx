@@ -63,9 +63,30 @@ const paths = {
   filter: "M3 5h18l-7 8v6l-4 2v-8z",
   sort: "M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4",
   minus: "M6 12h12",
+  // Redesenho da tabela (07/10), mesmos traços do desenho.
+  chevRight: "M9 6l6 6-6 6",
+  chevLeft: "M15 6l-6 6 6 6",
+  arrowLeft: "M19 12H5M11 6l-6 6 6 6",
+  arrowRight: "M5 12h14M13 6l6 6-6 6",
+  check: "M5 12l5 5 9-10",
+  trash: "M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3",
+  wrap: "M4 6h16M4 12h13a3 3 0 0 1 0 6h-4M15 16l-2 2 2 2M4 18h6",
+  group: "M4 5h16M4 10h10M4 15h16M4 20h10",
 } as const;
 
-export type GlyphName = keyof typeof paths | "tag" | "calendar" | "box" | "file" | "eye" | "pie" | "search" | "pin";
+export type GlyphName =
+  | keyof typeof paths
+  | "tag"
+  | "calendar"
+  | "box"
+  | "file"
+  | "eye"
+  | "pie"
+  | "search"
+  | "pin"
+  | "sliders"
+  | "copy"
+  | "list";
 
 export function Glyph({ name, size = 13, strokeWidth = 2, className }: { name: GlyphName; size?: number; strokeWidth?: number; className?: string }) {
   let body: React.ReactNode;
@@ -124,6 +145,34 @@ export function Glyph({ name, size = 13, strokeWidth = 2, className }: { name: G
     case "pin":
       body = <path d="M9 3h6l-1 6 4 4H6l4-4zM12 13v8" />;
       break;
+    case "sliders":
+      body = (
+        <>
+          <path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0" />
+          <circle cx="16" cy="6" r="2" />
+          <circle cx="10" cy="12" r="2" />
+          <circle cx="18" cy="18" r="2" />
+        </>
+      );
+      break;
+    case "copy":
+      body = (
+        <>
+          <rect x="8" y="8" width="12" height="12" rx="2" />
+          <path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3" />
+        </>
+      );
+      break;
+    case "list":
+      body = (
+        <>
+          <path d="M9 6h12M9 12h12M9 18h12" />
+          <circle cx="4" cy="6" r="1.5" />
+          <circle cx="4" cy="12" r="1.5" />
+          <circle cx="4" cy="18" r="1.5" />
+        </>
+      );
+      break;
     default:
       body = <path d={paths[name]} />;
   }
@@ -154,7 +203,7 @@ function TextGlyph({ children, size }: { children: string; size: "xs" | "sm" }) 
   return (
     <span
       aria-hidden="true"
-      className={`inline-flex w-4 flex-none items-center justify-center font-mono font-semibold leading-none ${size === "xs" ? "text-xs" : "text-sm"}`}
+      className={`inline-flex w-4 flex-none items-center justify-center font-medium leading-none tabular-nums ${size === "xs" ? "text-xs" : "text-sm"}`}
     >
       {children}
     </span>
@@ -162,10 +211,11 @@ function TextGlyph({ children, size }: { children: string; size: "xs" | "sm" }) 
 }
 
 /**
- * Ícone do tipo de coluna (13px), no cabeçalho e na barra de edição em
- * massa: Aa, #, Σ, calendário, etiqueta, relação ↗, status, caixa.
+ * Ícone do tipo de coluna (13px), no cabeçalho, nos menus e no painel:
+ * Aa, #, Σ, calendário, etiqueta (lista com pontos no multi), relação ↗,
+ * status, caixa.
  */
-export function ColumnTypeIcon({ type }: { type: ColumnType }) {
+export function ColumnTypeIcon({ type, multi }: { type: ColumnType; multi?: boolean }) {
   switch (type) {
     case "text":
       return <TextGlyph size="xs">Aa</TextGlyph>;
@@ -176,7 +226,7 @@ export function ColumnTypeIcon({ type }: { type: ColumnType }) {
     case "date":
       return <Glyph name="calendar" />;
     case "select":
-      return <Glyph name="tag" />;
+      return multi ? <Glyph name="list" /> : <Glyph name="tag" />;
     case "relation":
       return <Glyph name="out" />;
     case "status":
