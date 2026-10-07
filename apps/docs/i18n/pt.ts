@@ -224,6 +224,10 @@ export const pt = {
   "demo.table.assetFundA": "Fundo imobiliário A",
   "demo.table.assetStockB": "Ação B",
   "demo.table.assetBondC": "CDB C",
+  "demo.table.checked": "Conferida",
+  "demo.table.bulkCheck": "Marcar conferidas",
+  "demo.table.bulkSync": "Status: Sincronizado",
+  "demo.table.note1": "Plano pré-pago, renova todo mês.",
 
   // Demos: Segmented Bar
   "demo.bar.fixed": "Custos fixos",

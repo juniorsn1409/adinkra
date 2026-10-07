@@ -11,16 +11,16 @@ import type { BadgeProps } from "@adinkra/badge";
  * do Badge. O desenho usa ele na etiqueta "Restituição", então a tabela
  * aceita a cor e resolve a classe sozinha (ver `optionColorClass`) — sem
  * mexer no pacote do Badge.
- */
-export type SelectColor = Exclude<NonNullable<BadgeProps["variant"]>, "outline"> | "tag-navy";
-
-/**
- * Cor de opção de status. Além das cores de etiqueta, dois tons do desenho:
+ *
  * `mist` (a névoa azul do "Sincronizado" — não existe como token, então sai
  * fixa como `#C9DDF0`/`#1E3550`, par que lê igual no claro e no escuro por
- * ser pílula com borda própria) e `destructive` (o "Erro").
+ * ser pílula com borda própria) e `gray` (superfície neutra): eram só do
+ * status; o redesenho da tabela (07/10) usa os dois em etiquetas também.
  */
-export type StatusColor = SelectColor | "mist" | "destructive";
+export type SelectColor = Exclude<NonNullable<BadgeProps["variant"]>, "outline"> | "tag-navy" | "mist" | "gray";
+
+/** Cor de opção de status: as de etiqueta + `destructive` (o "Erro"). */
+export type StatusColor = SelectColor | "destructive";
 
 export interface SelectOption {
   value: string;
@@ -36,8 +36,37 @@ export interface StatusOption {
 
 export type ColumnType = "text" | "select" | "number" | "date" | "status" | "relation" | "formula" | "checkbox";
 
-/** Agregação do rodapé. "none" deixa a célula do rodapé vazia (mas ainda trocável pelo menu). */
-export type Aggregate = "none" | "sum" | "avg" | "min" | "max" | "count";
+/**
+ * Agregação do rodapé. "none" deixa a célula do rodapé vazia (mas ainda
+ * trocável pelo menu). Quais valem em cada coluna: ver `aggregatesFor`.
+ *
+ * - todas: "count" (linhas), "filled"/"empty" (não vazios/vazios),
+ *   "percentFilled";
+ * - número e fórmula com `format`: "sum", "avg", "median", "min", "max",
+ *   "range";
+ * - caixa: "count", "checked", "unchecked", "percentChecked";
+ * - data: "earliest", "latest".
+ *
+ * Mudou em 07/10: "count" conta LINHAS (antes contava valores não vazios —
+ * isso agora é "filled").
+ */
+export type Aggregate =
+  | "none"
+  | "count"
+  | "filled"
+  | "empty"
+  | "percentFilled"
+  | "sum"
+  | "avg"
+  | "median"
+  | "min"
+  | "max"
+  | "range"
+  | "checked"
+  | "unchecked"
+  | "percentChecked"
+  | "earliest"
+  | "latest";
 
 /**
  * Glifo da relação. `in`/`out` seguem a regra do sistema pra direção de
@@ -63,11 +92,11 @@ export interface DataTableColumn {
   /** Só pra type "select" — várias etiquetas por célula (tags) em vez de uma só (status). */
   multi?: boolean;
   /**
-   * Só pra type "select" — "badge" (padrão, o visual de antes: `@adinkra/badge`
-   * caixa-alta) ou "dot" (ponto colorido de 13 + texto, o visual de
-   * etiqueta do redesenho φ).
+   * Só pra type "select" — "pill" (padrão: etiqueta plana de raio 3, sem
+   * borda), "dot" (ponto de 8 + texto sublinhado, como conta e tags no
+   * desenho) ou "badge" (o `@adinkra/badge` de antes, opt-in desde 07/10).
    */
-  selectStyle?: "badge" | "dot";
+  selectStyle?: "badge" | "dot" | "pill";
   /** Só pra type "number" — formata como R$ (Intl, pt-BR) em vez de número cru. */
   currency?: boolean;
   /** Só pra type "formula" — calcula o valor a partir da linha. Editar grava uma sobrescrita manual em `row[id]`; apagar volta ao calculado. */
@@ -80,11 +109,11 @@ export interface DataTableColumn {
   dateStyle?: "long" | "short";
   /** Largura inicial em px (arrastar a alça continua sobrescrevendo). Sem ela, a coluna divide o espaço livre. */
   width?: number;
-  /** Fica grudada à esquerda ao rolar na horizontal (valor inicial — o menu da coluna troca). */
+  /** Fica grudada à esquerda ao rolar na horizontal (valor inicial — o menu da coluna troca). Padrão: só a principal. */
   frozen?: boolean;
   /** Coluna principal (ícone de página, botão "Abrir", título do cartão no mobile). Padrão: a primeira de texto. */
   primary?: boolean;
-  /** Começa escondida (o menu da coluna esconde; a lista de colunas mostra de novo). */
+  /** Começa escondida (o menu da coluna esconde; o painel de propriedades mostra de novo). */
   hidden?: boolean;
   /** Agregação inicial no rodapé (o menu do rodapé troca). */
   aggregate?: Aggregate;
@@ -101,9 +130,13 @@ export type FilterOperator =
   | "is"
   | "isNot"
   | "isEmpty"
+  | "isNotEmpty"
   | "eq"
+  | "neq"
   | "gt"
   | "lt"
+  | "gte"
+  | "lte"
   | "before"
   | "after"
   | "checked"
@@ -136,18 +169,59 @@ export interface MobileCardConfig {
   meta?: string[];
 }
 
+/** Ação da barra de seleção (aparece quando há linha marcada). */
+export interface DataTableBulkAction {
+  id: string;
+  label: string;
+  icon?: React.ReactNode;
+  /** Pinta a ação de `--destructive`. */
+  destructive?: boolean;
+  /**
+   * Recebe as linhas marcadas e `patch`, que grava os mesmos valores em todas
+   * elas pelo caminho normal de edição (`onRowsChange` — no `DataTableViews`
+   * com `source`, vira `onRowChange` por linha). A seleção continua marcada.
+   */
+  onSelect: (rows: DataTableRow[], helpers: { patch: (values: Partial<DataTableRow>) => void }) => void;
+}
+
+/** Painel lateral do "Abrir" (quando não há `onOpenRow`). */
+export interface DataTablePeekConfig {
+  /** Chave do row com as notas livres da página (vira um campo de texto longo no fim do painel). */
+  notes?: string;
+}
+
 export interface DataTableProps {
   columns: DataTableColumn[];
   rows: DataTableRow[];
   onRowsChange: (rows: DataTableRow[]) => void;
+  /**
+   * Liga o que mexe nas colunas: renomear pelo menu do cabeçalho, criar
+   * opção nova no seletor e o "+" de propriedade nova no fim do cabeçalho.
+   * Sem ela esses três somem (as colunas são de quem usa). No
+   * `DataTableViews`, sem ela, mexem numa cópia local das colunas da aba.
+   */
+  onColumnsChange?: (columns: DataTableColumn[]) => void;
   /** Linhas verticais entre colunas (mesmo padrão do @adinkra/table). Ligado por padrão. */
   columnLines?: boolean;
   className?: string;
 
-  /** Linha "Nova linha" no fim da tabela. Só aparece se existir. */
-  onAddRow?: () => void;
-  /** Botão "Abrir" no hover da coluna principal. Só aparece se existir. */
+  /**
+   * "Nova página" no fim da tabela (e de cada grupo) e o botão "Novo" da barra
+   * superior. Só aparecem se existir. `preset` traz os valores que a linha
+   * nova precisa pra continuar visível: o do grupo onde foi criada e os dos
+   * filtros ativos ("Mês é Setembro" → `{ mes: "Setembro" }`). Quem ignora o
+   * argumento continua funcionando.
+   */
+  onAddRow?: (preset?: Partial<DataTableRow>) => void;
+  /** Botão "Abrir" no hover da coluna principal. Com ela, abrir é de quem usa (vence `peek`). */
   onOpenRow?: (row: DataTableRow) => void;
+  /**
+   * Painel lateral próprio do "Abrir": título, todas as propriedades
+   * editáveis, anterior/próxima, excluir e (com `notes`) notas livres.
+   */
+  peek?: boolean | DataTablePeekConfig;
+  /** Ações extras da barra de seleção, antes de "Duplicar" e "Excluir". */
+  bulkActions?: DataTableBulkAction[];
 
   /**
    * Visões (abas) na barra superior, todas sobre ESTA tabela (mesmas colunas
@@ -157,7 +231,7 @@ export interface DataTableProps {
   views?: DataTableView[];
   activeView?: string;
   onViewChange?: (viewId: string) => void;
-  /** Ações à direita da barra superior (ex.: botão "Nova transação"). */
+  /** Ações à direita da barra superior (ex.: botão "Simular erro"). */
   toolbar?: React.ReactNode;
   /** Botão de busca na barra superior — filtra as linhas pelo texto. */
   searchable?: boolean;
@@ -170,6 +244,10 @@ export interface DataTableProps {
   sorts?: DataTableSort[];
   defaultSorts?: DataTableSort[];
   onSortsChange?: (sorts: DataTableSort[]) => void;
+  /** Agrupa as linhas por uma coluna (select, status, relação, caixa ou texto). `null` = sem grupo. */
+  groupBy?: string | null;
+  defaultGroupBy?: string | null;
+  onGroupByChange?: (columnId: string | null) => void;
 
   /** Mapeamento do cartão do mobile (abaixo de 610 de largura do container). */
   mobileCard?: MobileCardConfig;
@@ -194,12 +272,12 @@ export interface DataTableSource {
   /** Uma linha mudou (`patch` = só as chaves alteradas). Rejeitar desfaz a edição e mostra o erro. */
   onRowChange?(row: DataTableRow, patch: Record<string, unknown>): Promise<void> | void;
   /**
-   * Linha nova ("Nova linha" ou o "+" do gutter). Recebe o rascunho já
-   * inserido na tela; devolver uma linha (ex.: com o id do servidor) troca o
-   * rascunho por ela. Rejeitar remove o rascunho.
+   * Linha nova ("Nova página", "Novo", o "+" do gutter ou "Duplicar").
+   * Recebe o rascunho já inserido na tela; devolver uma linha (ex.: com o id
+   * do servidor) troca o rascunho por ela. Rejeitar remove o rascunho.
    */
   onAddRow?(draft: DataTableRow): Promise<DataTableRow | void> | DataTableRow | void;
-  /** Linhas excluídas pela barra de seleção. Rejeitar devolve as linhas. */
+  /** Linhas excluídas pela barra de seleção ou pelo painel. Rejeitar devolve as linhas. */
   onDeleteRows?(ids: string[]): Promise<void> | void;
 }
 

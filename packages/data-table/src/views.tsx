@@ -59,7 +59,8 @@ function shallowPatch(prev: DataTableRow, next: DataTableRow): Record<string, un
  *   deu certo no meio do caminho não é desfeita junto. O erro aparece num
  *   `Alert` destructive acima da grade, com "Fechar".
  * - Reordenar (arrastar) muda só a ordem local: `DataTableSource` não tem
- *   operação de ordem.
+ *   operação de ordem. Mexer nas colunas (renomear, criar opção, nova
+ *   propriedade) também é local, a não ser que a visão traga `onColumnsChange`.
  * - **Recarregar**: `ref` com `reload(viewId?)` (React 19: `ref` é prop
  *   comum). Escolhido em vez de `reloadKey` na visão porque recarregar é um
  *   comando (botão "atualizar", depois de salvar em outra tela), não estado
@@ -285,18 +286,26 @@ function TableView({
     render: _render,
     dependsOn: _dependsOn,
     onAddRow,
+    onColumnsChange,
     notice,
     emptyMessage,
     ...tableProps
   } = view;
 
+  // Sem `onColumnsChange` na visão, renomear, criar opção e "+ propriedade"
+  // mexem numa cópia local das colunas desta aba (somem ao recarregar a página).
+  const [localColumns, setLocalColumns] = React.useState(columns);
+  const tableColumns = onColumnsChange ? columns : localColumns;
+
   // Três modos de dado: `source` (API, cache aqui), `rows` controlado por quem
   // usa, ou nenhum dos dois (estado local da visão, começa vazio).
   const rows = source ? state.rows : (controlledRows ?? state.rows);
   const setRows = source ? onCommit : (onRowsChange ?? onLocalRows);
-  // "Nova linha": a da visão, se veio; senão, com `source.onAddRow`, um
-  // rascunho vazio que passa pelo mesmo caminho otimista das edições.
-  const addRow = onAddRow ?? (source?.onAddRow ? () => setRows([...rows, createEmptyRow(columns)]) : undefined);
+  // "Nova página": a da visão, se veio; senão, com `source.onAddRow`, um
+  // rascunho (com os valores do grupo/filtros) que passa pelo mesmo caminho
+  // otimista das edições.
+  const addRow =
+    onAddRow ?? (source?.onAddRow ? (preset?: Partial<DataTableRow>) => setRows([...rows, { ...createEmptyRow(tableColumns), ...preset }]) : undefined);
   const loading = !!source && (state.status === "loading" || state.status === "idle") && state.rows.length === 0;
 
   const errorNotice =
@@ -329,7 +338,8 @@ function TableView({
   return (
     <DataTable
       {...tableProps}
-      columns={columns}
+      columns={tableColumns}
+      onColumnsChange={onColumnsChange ?? setLocalColumns}
       rows={rows}
       onRowsChange={setRows}
       onAddRow={addRow}
@@ -365,12 +375,12 @@ function RenderView({
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn("overflow-hidden rounded-card border-[length:var(--border-width)] border-ink bg-card shadow-brutal")}>
-      <div className="flex min-h-[55px] flex-wrap items-center justify-between gap-3 border-b border-hairline px-4 py-2">
+    <div className={cn("bg-background text-sm text-foreground")}>
+      <div className="flex min-h-[42px] flex-wrap items-center justify-between gap-3 border-b border-hairline py-1">
         <ViewTabs views={tabs} activeView={active} onViewChange={onViewChange} />
         {toolbar ? <div className="flex flex-wrap items-center gap-2">{toolbar}</div> : null}
       </div>
-      <div className="p-5">{children}</div>
+      <div className="py-5">{children}</div>
     </div>
   );
 }
